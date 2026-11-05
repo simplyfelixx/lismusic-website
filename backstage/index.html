@@ -30,7 +30,7 @@ aside a:hover{background:var(--panel);color:var(--tx)}
 aside a.on{background:var(--raised);color:var(--tx)}
 .badge{background:var(--rd-ink);color:#fff;border-radius:99px;font-size:11px;font-weight:700;padding:1px 7px;min-width:20px;text-align:center}
 aside .unten{margin-top:auto;font-size:12px;color:var(--mu);padding:10px}
-main{padding:28px var(--pad) 100px;max-width:1100px;width:100%}
+main{padding:28px var(--pad) 100px;max-width:1100px;width:100%;min-width:0}
 .kopf{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
 @media(max-width:800px){.app{grid-template-columns:1fr}aside{position:fixed;bottom:0;top:auto;left:0;right:0;height:auto;flex-direction:row;overflow-x:auto;padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:rgba(18,17,15,.96);backdrop-filter:blur(12px);border-right:0;border-top:1px solid var(--line);z-index:20}
 aside .brand,aside .unten{display:none}aside a{flex:1 0 auto;flex-direction:column;gap:2px;font-size:11px;padding:6px 6px;white-space:nowrap;justify-content:center}main{padding-top:20px}}
@@ -62,7 +62,8 @@ aside .brand,aside .unten{display:none}aside a{flex:1 0 auto;flex-direction:colu
 .tabs button{background:transparent;border:1px solid var(--line2);border-radius:99px;padding:4px 12px;font-size:13px;cursor:pointer;color:var(--se)}
 .tabs button.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
 .zwei{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start}
-@media(max-width:800px){.zwei{grid-template-columns:1fr}}
+.zwei>*{min-width:0}
+@media(max-width:800px){.zwei{grid-template-columns:minmax(0,1fr)}}
 .check{display:flex;gap:10px;align-items:flex-start;padding:8px 12px;border-bottom:1px solid var(--line)}
 .check:last-child{border-bottom:0}
 .check input{margin-top:3px;width:18px;height:18px;accent-color:var(--rd);flex:none}
@@ -94,6 +95,32 @@ dialog .knoepfe{display:flex;gap:8px;justify-content:space-between;flex-wrap:wra
 .fehler{color:var(--rd);font-size:14px;margin-top:8px;min-height:1em}
 .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:10px;font-weight:600;z-index:100;box-shadow:0 8px 30px rgba(0,0,0,.4)}
 code{background:var(--raised);padding:1px 6px;border-radius:5px;font-size:13px}
+.topbar{display:flex;margin-bottom:18px;position:relative}
+.topbar input{flex:1;background:var(--panel);border:1px solid var(--line2);border-radius:10px;padding:9px 12px;color:var(--tx);font-size:14px}
+#suchtreffer{position:absolute;top:44px;left:0;right:0;background:var(--panel);border:1px solid var(--line2);border-radius:10px;z-index:30;max-height:60vh;overflow:auto;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+#suchtreffer a{display:flex;justify-content:space-between;gap:10px;padding:9px 12px;text-decoration:none;border-bottom:1px solid var(--line)}
+#suchtreffer a:hover,#suchtreffer a.on{background:var(--raised)}
+.board{display:grid;grid-template-columns:repeat(5,minmax(220px,1fr));gap:12px;overflow-x:auto;padding-bottom:10px}
+.spalte{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;min-height:120px}
+.spalte h3{font-size:13px;color:var(--se);margin:2px 4px 10px;display:flex;justify-content:space-between}
+.kcard{background:var(--raised);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;cursor:pointer}
+.kcard:hover{border-color:var(--line2)}
+.kcard .nx{font-size:12px;margin-top:6px}
+.kcard .pfeile{display:flex;justify-content:space-between;margin-top:8px}
+.zeile.reihe{display:grid;grid-template-columns:48px 1fr 1fr 110px auto;gap:12px;align-items:center}
+@media(max-width:800px){.zeile.reihe{grid-template-columns:48px 1fr auto}.zeile.reihe .extra{display:none}}
+.tree,.tree ul{list-style:none;margin:0;padding-left:26px}
+.tree{padding-left:0;overflow-x:auto}
+.tree li{position:relative;padding:5px 0 5px 20px}
+.tree li::before{content:"";position:absolute;left:0;top:0;bottom:0;border-left:1px solid var(--line2)}
+.tree li::after{content:"";position:absolute;left:0;top:20px;width:16px;border-top:1px solid var(--line2)}
+.tree li:last-child::before{bottom:auto;height:20px}
+.tree>li{padding-left:0}.tree>li::before,.tree>li::after{display:none}
+.node{display:inline-flex;gap:8px;align-items:center;background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:5px 10px;text-decoration:none;font-size:14px}
+a.node:hover{border-color:var(--tx)}
+.node.root{background:var(--rd-ink);border-color:var(--rd-ink);font-weight:700}
+.node.st-veroeffentlicht{border-left:3px solid var(--ok)}.node.st-planung{border-left:3px solid var(--mu)}.node.st-produktion,.node.st-fertig{border-left:3px solid var(--warn)}.node.st-eingereicht{border-left:3px solid var(--rd)}
+.leaf{font-size:13px;color:var(--se)}
 </style>
 </head>
 <body>
@@ -127,6 +154,7 @@ code{background:var(--raised);padding:1px 6px;border-radius:5px;font-size:13px}
 <aside id="menu">
 <div class="brand"><img src="/favicon.svg" alt="">LIS BACKSTAGE</div>
 <a href="#heute" data-v="heute">Heute <span class="badge hide" id="b-heute"></span></a>
+<a href="#pipeline" data-v="pipeline">Pipeline</a>
 <a href="#artists" data-v="artists">Artists</a>
 <a href="#releases" data-v="releases">Releases</a>
 <a href="#content" data-v="content">Content</a>
@@ -135,7 +163,7 @@ code{background:var(--raised);padding:1px 6px;border-radius:5px;font-size:13px}
 <a href="#website" data-v="website">Website <span class="badge hide" id="b-web">!</span></a>
 <div class="unten"><div id="wer"></div><a href="#" id="abmelden" style="padding:6px 0;display:inline">Abmelden</a></div>
 </aside>
-<main id="main"></main>
+<main id="main"><div class="topbar"><input id="suche" type="search" placeholder="Suchen: Artist, Song, Content … (Taste /)" autocomplete="off" aria-label="Suchen"><div id="suchtreffer" class="hide"></div></div><div id="view"></div></main>
 </div>
 
 <dialog id="dlg"></dialog>
@@ -198,7 +226,7 @@ const VORLAGE = [
 
 /* ---------- Supabase ---------- */
 const CFG = window.LIS_CONFIG || {};
-let sb = null, ich = null, S = {artists:[], releases:[], aufgaben:[], content:[], news:[], demos:[], pubs:[]};
+let sb = null, ich = null, S = {artists:[], releases:[], aufgaben:[], content:[], news:[], demos:[], pubs:[], dateien:[], dateienOk:false};
 const bildUrl = new Map();
 
 async function start() {
@@ -220,6 +248,7 @@ async function nachLogin() {
   zeige('v-app');
   await laden();
   route();
+  sucheStart();
 }
 let mfaFaktor = null;
 async function mfaStart() {
@@ -259,6 +288,8 @@ async function laden() {
   ]);
   const fehler = r.find(x => x.error); if (fehler) { toast('Laden fehlgeschlagen: ' + fehler.error.message); return; }
   [S.artists, S.releases, S.aufgaben, S.content, S.news, S.demos, S.pubs] = r.map(x => x.data);
+  const dr = await sb.from('dateien').select('*').order('created_at');   // gibt es erst nach update-02.sql
+  S.dateienOk = !dr.error; S.dateien = dr.data || [];
   await bilderLaden();
   badges();
 }
@@ -305,6 +336,7 @@ function dropzone(el, ordner, onPfad) {
     catch { el.querySelector('.txt').textContent = 'Hat nicht geklappt, nochmal versuchen.'; }
   };
   el.onclick = () => inp.click();
+  inp.onclick = e => e.stopPropagation();
   inp.onchange = () => nimm(inp.files[0]);
   el.ondragover = e => { e.preventDefault(); el.classList.add('ueber'); };
   el.ondragleave = () => el.classList.remove('ueber');
@@ -394,7 +426,7 @@ function aufgabeZeile(x, mitRelease) {
 }
 function contentZeile(c) {
   const r = releaseVon(c.release_id);
-  return `<div class="zeile"><span class="pill">${PLATTFORM[c.plattform]}</span><div class="wachs"><div>${esc(c.idee)}</div><div class="sm mu">${[r?.titel, c.datum ? dt(c.datum) : ''].filter(Boolean).map(esc).join(' · ')}${okUrl(c.link) ? ` · <a href="${esc(c.link)}" target="_blank" rel="noopener">Link</a>` : ''}</div></div><span class="pill ${c.status === 'gepostet' ? 'gruen' : ''}">${CONTENT_STATUS[c.status]}</span><button class="btn g k" data-edit-content="${c.id}" aria-label="Bearbeiten">…</button></div>`;
+  return `<div class="zeile"><span class="pill">${PLATTFORM[c.plattform]}</span><div class="wachs"><div>${esc(c.idee)}</div><div class="sm mu">${[r?.titel, c.datum ? dt(c.datum) : ''].filter(Boolean).map(esc).join(' · ')}${okUrl(c.link) ? ` · <a href="${esc(c.link)}" target="_blank" rel="noopener">Link</a>` : ''}</div></div><span class="pill ${c.status === 'gepostet' ? 'gruen' : ''}">${CONTENT_STATUS[c.status] || 'Idee'}</span><button class="btn g k" data-edit-content="${c.id}" aria-label="Bearbeiten">…</button></div>`;
 }
 
 /* ---------- Releases ---------- */
@@ -425,7 +457,8 @@ function vRelease(id) {
    ${!auf.length ? `<div class="card mu">Noch keine Checkliste. ${r.datum ? 'Die Vorlage legt alle Schritte vom Master bis zu den TikToks mit Fristen an.' : 'Trag zuerst ein Release-Datum ein, dann bekommen die Schritte Fristen.'}</div>` : ''}
    ${gruppen.map(([b, l]) => `<h3 style="margin:16px 0 6px" class="mu">${BEREICH[b]}</h3><div class="liste">${l.map(x => aufgabeZeile(x)).join('')}</div>`).join('')}
    <h2>TikTok & Content</h2><div class="liste">${cont.map(contentZeile).join('') || '<div class="leer">Noch kein Content geplant.</div>'}</div>
-   <p style="margin-top:8px"><button class="btn g k" data-neu="content" data-release="${r.id}">+ Content-Idee</button></p>
+   <p style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><button class="btn g k" data-neu="content" data-release="${r.id}">+ Content-Idee</button><button class="btn g k" data-content-vorschlag="${r.id}">Content-Vorschläge anlegen</button></p>
+   ${dateienHtml(r)}
   </div></div>`;
 }
 async function vorlageAnlegen(rid) {
@@ -596,11 +629,175 @@ function demoForm(x) {
   if (b) b.onclick = () => { d.close(); artistForm({}, { name: x.artist, genre: x.genre, email: x.email, notizen: `Demo: ${x.link}\n${x.nachricht}`.trim(), demoId: x.id }); };
 }
 
+/* ---------- Pipeline: alle Songs auf einen Blick ---------- */
+let pipeAnsicht = 'board';
+try { pipeAnsicht = localStorage.getItem('pipeAnsicht') || 'board'; } catch {}
+function naechste(rid) {
+  const h = iso(heute());
+  const offen = S.aufgaben.filter(x => x.release_id === rid && !x.erledigt).sort((a, b) => (a.faellig || '9999').localeCompare(b.faellig || '9999') || a.sortierung - b.sortierung);
+  return { n: offen[0] || null, offen: offen.length, ueber: offen.filter(x => x.faellig && x.faellig < h).length };
+}
+const nxText = (r, f, nx) => nx.n ? `${nx.ueber ? `<span class="pill rot">${nx.ueber} überfällig</span> ` : ''}${esc(nx.n.titel)}${nx.n.faellig ? ' · ' + dt(nx.n.faellig) : ''}` : f === null ? 'Noch keine Checkliste' : 'Alles erledigt';
+function kcard(r) {
+  const ar = artistVon(r.artist_id), f = fortschritt(r.id), nx = naechste(r.id), keys = Object.keys(RELEASE_STATUS), i = keys.indexOf(r.status);
+  return `<div class="kcard" data-href="#release/${r.id}"><div style="display:flex;gap:10px"><div class="thumb" style="width:40px;height:40px;font-size:18px">${img(r.cover) || '♪'}</div><div style="min-width:0"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.titel)}</div><div class="sm mu">${esc(ar?.name || 'ohne Artist')}${r.datum ? ' · ' + dt(r.datum) : r.datum_text ? ' · ' + esc(r.datum_text) : ''}</div></div></div>
+  ${f !== null ? `<div class="balken" style="margin-top:8px"><i style="width:${f}%"></i></div>` : ''}
+  <div class="nx ${nx.ueber ? '' : 'mu'}">${nxText(r, f, nx)}</div>
+  <div class="pfeile"><button class="btn g k" data-move="${r.id}:-1" ${i <= 0 ? 'disabled' : ''} aria-label="Eine Stufe zurück">‹</button><button class="btn g k" data-move="${r.id}:1" ${i >= keys.length - 1 ? 'disabled' : ''} aria-label="Eine Stufe weiter">›</button></div></div>`;
+}
+const nachDatum = (a, b) => (a.datum || a.datum_text || '9999').localeCompare(b.datum || b.datum_text || '9999');
+function vPipeline() {
+  const keys = Object.keys(RELEASE_STATUS);
+  const tabs = `<div class="tabs">${[['board','Board'],['liste','Liste'],['baum','Mindmap']].map(([k, t]) => `<button data-pv="${k}" class="${pipeAnsicht === k ? 'on' : ''}">${t}</button>`).join('')}</div>`;
+  let body = '';
+  if (!S.releases.length) body = '<div class="leer">Noch keine Songs. Lege bei einem Artist den ersten Release an.</div>';
+  else if (pipeAnsicht === 'board') {
+    body = `<div class="board">${keys.map(k => {
+      const l = S.releases.filter(r => r.status === k).sort(k === 'veroeffentlicht' ? (a, b) => nachDatum(b, a) : nachDatum);
+      return `<div class="spalte"><h3><span>${RELEASE_STATUS[k]}</span><span>${l.length}</span></h3>${l.slice(0, 8).map(kcard).join('') || '<div class="sm mu" style="padding:6px">–</div>'}${l.length > 8 ? `<div class="sm mu" style="padding:6px">+ ${l.length - 8} weitere in der Liste</div>` : ''}</div>`;
+    }).join('')}</div><p class="sm mu">Mit ‹ und › schiebst du einen Song eine Stufe weiter. Ein Klick auf die Karte öffnet den Song.</p>`;
+  } else if (pipeAnsicht === 'liste') {
+    const l = [...S.releases].sort((a, b) => keys.indexOf(a.status) - keys.indexOf(b.status) || nachDatum(a, b));
+    body = `<div class="liste">${l.map(r => { const ar = artistVon(r.artist_id), f = fortschritt(r.id), nx = naechste(r.id);
+      return `<a class="zeile reihe" href="#release/${r.id}"><div class="thumb">${img(r.cover) || '♪'}</div><div style="min-width:0"><div>${esc(r.titel)} <span class="sm mu">${esc(r.typ)}</span></div><div class="sm mu">${esc(ar?.name || 'ohne Artist')} · ${r.datum ? dt(r.datum) : esc(r.datum_text || 'ohne Datum')}</div></div><div class="sm extra">${nxText(r, f, nx)}</div><div class="extra">${f !== null ? `<div class="balken"><i style="width:${f}%"></i></div><div class="sm mu">${f} %</div>` : ''}</div><span class="pill ${r.status === 'veroeffentlicht' ? 'gruen' : ''}">${RELEASE_STATUS[r.status]}</span></a>`; }).join('')}</div>`;
+  } else {
+    const arts = S.artists.filter(a => a.status === 'signed' || S.releases.some(r => r.artist_id === a.id));
+    const lose = S.releases.filter(r => !r.artist_id);
+    const song = r => { const f = fortschritt(r.id), nx = naechste(r.id), c = S.content.filter(x => x.release_id === r.id), cOffen = c.filter(x => x.status !== 'gepostet').length;
+      return `<li><a class="node st-${r.status}" href="#release/${r.id}">${esc(r.titel)} <span class="pill">${RELEASE_STATUS[r.status]}</span>${f !== null ? `<span class="sm mu">${f} %</span>` : ''}</a><ul>
+        <li><span class="leaf">Nächster Schritt: ${nxText(r, f, nx)}</span></li>
+        <li><span class="leaf">Content: ${c.length ? `${c.length} Ideen, ${cOffen} offen` : 'noch nichts geplant'}</span></li></ul></li>`; };
+    body = `<ul class="tree"><li><span class="node root">LIS Music</span><ul>
+      ${arts.map(a => `<li><a class="node" href="#artist/${a.id}">${esc(a.name)} <span class="sm mu">${ARTIST_STATUS[a.status]}</span></a><ul>${S.releases.filter(r => r.artist_id === a.id).sort(nachDatum).map(song).join('') || '<li><span class="leaf">noch keine Songs</span></li>'}</ul></li>`).join('')}
+      ${lose.length ? `<li><span class="node">Ohne Artist</span><ul>${lose.map(song).join('')}</ul></li>` : ''}
+    </ul></li></ul>`;
+  }
+  const gesamt = S.releases.filter(r => r.status !== 'veroeffentlicht').length;
+  return `<div class="kopf"><div><h1>Pipeline</h1><p class="mu">${gesamt} Song${gesamt === 1 ? '' : 's'} in Arbeit, ${S.releases.length - gesamt} veröffentlicht</p></div><button class="btn" data-neu="release">+ Release</button></div>${tabs}${body}`;
+}
+
+/* ---------- Dateien pro Song ---------- */
+const DATEI_ART = {master:'Master', instrumental:'Instrumental', clean:'Clean', stems:'Stems', cover:'Cover', lyrics:'Lyrics', foto:'Foto', video:'Video', vertrag:'Vertrag', sonstiges:'Sonstiges'};
+const mb = b => b > 1e6 ? (b / 1e6).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1e3)) + ' KB';
+function dateienHtml(r) {
+  if (!S.dateienOk) return '<h2>Dateien</h2><div class="card mu">Dafür einmal <code>supabase/update-02.sql</code> im SQL Editor ausführen.</div>';
+  const l = S.dateien.filter(d => d.release_id === r.id);
+  return `<h2>Dateien</h2><div class="liste">${l.map(d => `<div class="zeile"><span class="pill">${DATEI_ART[d.art]}</span><div class="wachs" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(d.name)}${d.groesse ? ` <span class="sm mu">${mb(d.groesse)}</span>` : d.url ? ' <span class="sm mu">Link</span>' : ''}</div><button class="btn g k" data-open-datei="${d.id}">Öffnen</button><button class="btn g k" data-edit-datei="${d.id}" aria-label="Bearbeiten">…</button></div>`).join('') || '<div class="leer">Noch keine Dateien.</div>'}</div>
+  <div class="drop" id="dateidrop" tabindex="0" style="margin-top:8px"><div class="txt">Dateien hierher ziehen oder klicken: Master, Instrumental, Cover, Lyrics … (bis 50 MB je Datei)</div><input type="file" multiple hidden></div>
+  <p><button class="btn g k" data-neu="datei-link" data-release="${r.id}">+ Link (Drive, WeTransfer …)</button></p>`;
+}
+function dateiArt(f) {
+  const n = f.name.toLowerCase(), t = f.type || '';
+  if (t.startsWith('audio') || /\.(wav|mp3|flac|aiff?|m4a)$/.test(n)) return /instr|beat/.test(n) ? 'instrumental' : /clean/.test(n) ? 'clean' : 'master';
+  if (t.startsWith('image')) return /foto|press|promo/.test(n) ? 'foto' : 'cover';
+  if (t.startsWith('video') || /\.(mp4|mov)$/.test(n)) return 'video';
+  if (/\.pdf$/.test(n)) return 'vertrag'; if (/\.zip$/.test(n)) return 'stems'; if (/\.txt$/.test(n)) return 'lyrics';
+  return 'sonstiges';
+}
+async function dateienHochladen(rid, files) {
+  let ok = 0; const txt = () => $('#dateidrop .txt');
+  for (const f of files) {
+    if (f.size > 50 * 1024 * 1024) { toast(`${f.name} ist über 50 MB. Bitte als Link ablegen.`); continue; }
+    if (txt()) txt().textContent = `Lädt ${f.name} hoch …`;
+    const pfad = `dateien/${rid}/${Date.now()}-${f.name.replace(/[^a-zA-Z0-9._-]+/g, '-')}`;
+    const { error } = await sb.storage.from('medien').upload(pfad, f, { contentType: f.type || undefined });
+    if (error) { toast(`${f.name}: ${error.message}`); continue; }
+    const { error: e2 } = await sb.from('dateien').insert({ release_id: rid, art: dateiArt(f), name: f.name, pfad, groesse: f.size });
+    if (e2) { toast('Fehler: ' + e2.message); continue; }
+    ok++;
+  }
+  if (ok) toast(`${ok} Datei${ok > 1 ? 'en' : ''} gespeichert`);
+  await laden(); render();
+}
+function bindDateien() {
+  const el = $('#dateidrop'); if (!el) return;
+  const inp = el.querySelector('input'), rid = +location.hash.split('/')[1];
+  inp.onclick = e => e.stopPropagation();
+  el.onclick = () => inp.click();
+  el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inp.click(); } };
+  inp.onchange = () => { const f = [...inp.files]; inp.value = ''; dateienHochladen(rid, f); };
+  el.ondragover = e => { e.preventDefault(); el.classList.add('ueber'); };
+  el.ondragleave = () => el.classList.remove('ueber');
+  el.ondrop = e => { e.preventDefault(); el.classList.remove('ueber'); dateienHochladen(rid, [...e.dataTransfer.files]); };
+}
+async function dateiOeffnen(id) {
+  const d = S.dateien.find(x => x.id === id); if (!d) return;
+  if (d.url) { window.open(d.url, '_blank', 'noopener'); return; }
+  const w = window.open('', '_blank');
+  const { data, error } = await sb.storage.from('medien').createSignedUrl(d.pfad, 300);
+  if (error || !data) { if (w) w.close(); return toast('Datei konnte nicht geöffnet werden.'); }
+  if (w) { w.opener = null; w.location = data.signedUrl; } else location.href = data.signedUrl;
+}
+function dateiForm(d = {}, vor = {}) {
+  const istLink = d.id ? !d.pfad : true;
+  dialog(`<h2 style="margin-top:0">${d.id ? 'Datei bearbeiten' : 'Link hinzufügen'}</h2>
+    <label class="f">Name<input name="name" required value="${esc(d.name || '')}"></label>
+    <label class="f">Art<select name="art">${opts(DATEI_ART, d.art || 'sonstiges')}</select></label>
+    ${istLink ? `<label class="f">Link<input name="url" type="url" required placeholder="https://" value="${esc(d.url || '')}"></label>` : ''}`,
+    async fd => {
+      const w = { name: fd.get('name').trim(), art: fd.get('art') };
+      if (istLink) w.url = fd.get('url').trim();
+      if (!d.id) w.release_id = vor.release_id;
+      await speichern('dateien', w, d.id);
+    },
+    d.id ? async () => { if (d.pfad) await sb.storage.from('medien').remove([d.pfad]); await loeschen('dateien', d.id); } : null);
+}
+
+/* ---------- Content-Vorschläge pro Song ---------- */
+const CONTENT_VORLAGE = [
+  ['tiktok', -14, 'Hook als 15-Sekunden-Clip, Songtitel als Text-Overlay'],
+  ['instagram', -12, 'Behind the Scenes aus dem Studio (Reel)'],
+  ['instagram', -10, 'Lieblingszeile aus dem Text als Story-Zitat'],
+  ['tiktok', -7, 'Hook im Alltag: Auto, Gym, Spaziergang'],
+  ['instagram', -7, 'Countdown-Story „7 Tage“ mit Pre-Save-Link'],
+  ['tiktok', -3, 'Pre-Save-Aufruf direkt in die Kamera'],
+  ['instagram', -1, 'Countdown-Story „Morgen“'],
+  ['tiktok', 0, 'Release-Tag: Clip mit Snippet und Link'],
+  ['instagram', 0, 'Release-Tag: Story mit Link-Sticker'],
+  ['youtube', 3, 'Visualizer oder Lyric-Video als Short'],
+  ['tiktok', 7, 'Reaktionen und Danke-Clip'],
+];
+async function contentVorschlaege(rid) {
+  const r = releaseVon(rid), vorh = S.content.filter(c => c.release_id === rid).length;
+  if (vorh && !confirm(`Es gibt schon ${vorh} Content-Ideen. Vorschläge trotzdem dazulegen?`)) return;
+  const zeilen = CONTENT_VORLAGE.map(([plattform, tage, idee]) => ({ release_id: rid, artist_id: r.artist_id, plattform, idee, datum: r.datum ? plusTage(r.datum, tage) : null }));
+  const { error } = await sb.from('content').insert(zeilen);
+  if (error) return toast('Fehler: ' + error.message);
+  toast(`${zeilen.length} Content-Ideen angelegt`); await laden(); render();
+}
+
+/* ---------- Schnellsuche ---------- */
+let sucheBereit = false;
+function sucheStart() {
+  if (sucheBereit) return; sucheBereit = true;
+  const inp = $('#suche'), box = $('#suchtreffer'), zu = () => { inp.value = ''; box.classList.add('hide'); };
+  inp.oninput = () => {
+    const q = inp.value.trim().toLowerCase(); if (!q) { box.classList.add('hide'); return; }
+    const t = [], hat = (...x) => x.join(' ').toLowerCase().includes(q);
+    S.artists.forEach(a => hat(a.name, a.genre) && t.push([`#artist/${a.id}`, a.name, 'Artist']));
+    S.releases.forEach(r => hat(r.titel, artistVon(r.artist_id)?.name || '') && t.push([`#release/${r.id}`, r.titel, 'Song · ' + (artistVon(r.artist_id)?.name || 'ohne Artist')]));
+    S.content.forEach(c => hat(c.idee) && t.push(['#content', c.idee, 'Content']));
+    S.news.forEach(n => hat(n.titel) && t.push(['#news', n.titel, 'News']));
+    S.demos.forEach(d => hat(d.artist) && t.push(['#demos', d.artist, 'Demo']));
+    box.innerHTML = t.slice(0, 10).map(([h, a, b], i) => `<a href="${h}" class="${i ? '' : 'on'}"><span>${esc(a)}</span><span class="sm mu">${esc(b)}</span></a>`).join('') || '<div class="leer">Nichts gefunden.</div>';
+    box.classList.remove('hide');
+  };
+  inp.onkeydown = e => {
+    if (e.key === 'Enter') { const a = box.querySelector('a'); if (a) { location.hash = a.getAttribute('href'); zu(); inp.blur(); } }
+    else if (e.key === 'Escape') { zu(); inp.blur(); }
+  };
+  box.onclick = zu;
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && ich && !$('#dlg').open && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) { e.preventDefault(); inp.focus(); }
+  });
+}
+
 /* ---------- Navigation ---------- */
 function render() {
   const h = location.hash.slice(1) || 'heute', [v, id] = h.split('/');
-  const views = { heute: vHeute, artists: vArtists, artist: () => vArtist(+id), releases: vReleases, release: () => vRelease(+id), content: vContent, news: vNews, demos: vDemos, website: vWebsite };
-  $('#main').innerHTML = (views[v] || vHeute)();
+  const views = { heute: vHeute, pipeline: vPipeline, artists: vArtists, artist: () => vArtist(+id), releases: vReleases, release: () => vRelease(+id), content: vContent, news: vNews, demos: vDemos, website: vWebsite };
+  $('#view').innerHTML = (views[v] || vHeute)();
+  bindDateien();
   const aktiv = v === 'artist' ? 'artists' : v === 'release' ? 'releases' : (views[v] ? v : 'heute');
   $$('#menu a[data-v]').forEach(a => a.classList.toggle('on', a.dataset.v === aktiv));
   badges();
@@ -609,6 +806,8 @@ function route() { render(); scrollTo(0, 0); }
 addEventListener('hashchange', () => { if (ich) route(); });
 
 $('#main').addEventListener('click', async e => {
+  const hr = e.target.closest('[data-href]');
+  if (hr && !e.target.closest('button,a,input,select')) { location.hash = hr.dataset.href; return; }
   const t = e.target.closest('button,[data-erledigt]'); if (!t) return;
   const ds = t.dataset;
   if (ds.neu === 'artist') artistForm();
@@ -626,6 +825,18 @@ $('#main').addEventListener('click', async e => {
   else if (ds.af) { artistFilter = ds.af; render(); }
   else if (ds.cf) { contentFilter = ds.cf; render(); }
   else if (ds.df) { demoFilter = ds.df; render(); }
+  else if (ds.neu === 'datei-link') dateiForm({}, { release_id: +ds.release });
+  else if (ds.editDatei) dateiForm(S.dateien.find(x => x.id === +ds.editDatei));
+  else if (ds.openDatei) dateiOeffnen(+ds.openDatei);
+  else if (ds.contentVorschlag) contentVorschlaege(+ds.contentVorschlag);
+  else if (ds.pv) { pipeAnsicht = ds.pv; try { localStorage.setItem('pipeAnsicht', ds.pv); } catch {} render(); }
+  else if (ds.move) {
+    const [id, dir] = ds.move.split(':'), r = releaseVon(+id), keys = Object.keys(RELEASE_STATUS), n = keys[keys.indexOf(r.status) + +dir];
+    if (!n) return;
+    const { error } = await sb.from('releases').update({ status: n, log: logEintrag(r.log, `Status: ${RELEASE_STATUS[r.status]} → ${RELEASE_STATUS[n]}`) }).eq('id', +id);
+    if (error) return toast('Fehler: ' + error.message);
+    toast(`${r.titel}: ${RELEASE_STATUS[n]}`); await laden(); render();
+  }
   else if (t.id === 'pub') veroeffentlichen();
 });
 $('#main').addEventListener('change', async e => {

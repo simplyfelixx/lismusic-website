@@ -23,7 +23,9 @@ Einmalig ca. 30 Minuten. Reihenfolge einhalten.
 1. **SQL Editor → New query**, den kompletten Inhalt von `supabase/update-01.sql` einfügen, **Run**.
 2. Es legt alle Tabellen, die Zugriffsregeln, den Bilder-Speicher und die heutigen Platzhalter von der Website an. Die Datei darf man mehrfach ausführen.
 
-Spätere Änderungen kommen als `update-02.sql`, `update-03.sql` … und werden genauso ausgeführt.
+**Danach gleich `supabase/update-02.sql` ausführen** (Dateien pro Song: Master, Instrumental, Cover-Varianten, Lyrics, Links). Ohne diese Datei zeigt Backstage bei den Songs nur einen Hinweis statt der Datei-Ablage.
+
+Spätere Änderungen kommen als `update-03.sql` … und werden genauso ausgeführt.
 
 ## 3. Accounts für Felix und Lasse
 
@@ -90,6 +92,6 @@ Demos von lismusic.de landen weiter per Netlify Forms im Postfach **und** zusät
 | `backstage/index.html` | Backstage |
 | `config.js` | Supabase-Adresse und öffentlicher Schlüssel |
 | `data/site.json`, `media/` | Was auf der Website steht (schreibt Backstage, nicht von Hand ändern) |
-| `supabase/update-NN.sql` | Datenbank-Änderungen, der Reihe nach ausführen |
+| `supabase/update-NN.sql` | Datenbank-Änderungen, der Reihe nach ausführen (01, dann 02) |
 | `supabase/functions/veroeffentlichen/` | Server-Funktion für den Knopf „Veröffentlichen“ |
 | `.github/workflows/backup.yml` | Automatische Backups |
