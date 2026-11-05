@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>LIS Cockpit</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/admin/manifest.webmanifest">
+<meta name="theme-color" content="#12110f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#12110f;--panel:#1c1a18;--raised:#262421;--line:rgba(239,233,222,.08);--line2:rgba(239,233,222,.16);--tx:#efe9de;--se:#aaa398;--mu:#8a847a;--rd:#FF1F3D;--rd-ink:#E0112F;--ok:#5fd38d;--warn:#f2b84b;--ease:cubic-bezier(.22,1,.36,1);--pad:clamp(16px,3vw,32px)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font:15px/1.5 Manrope,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--rd);outline-offset:2px;border-radius:4px}
+h1,h2{font-family:'Big Shoulders Display',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.01em;line-height:.95}
+h1{font-size:clamp(34px,5vw,52px)}
+h2{font-size:24px;margin:28px 0 12px}
+h3{font-size:16px;font-weight:600}
+.mu{color:var(--se)}.sm{font-size:13px}
+.hide{display:none!important}
+/* Layout */
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+aside{border-right:1px solid var(--line);padding:20px 12px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:4px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:.08em;font-size:13px;padding:0 10px 18px}
+.brand img{width:26px;height:26px}
+aside a{display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:8px;text-decoration:none;color:var(--se);font-weight:500}
+aside a:hover{background:var(--panel);color:var(--tx)}
+aside a.on{background:var(--raised);color:var(--tx)}
+.badge{background:var(--rd-ink);color:#fff;border-radius:99px;font-size:11px;font-weight:700;padding:1px 7px;min-width:20px;text-align:center}
+aside .unten{margin-top:auto;font-size:12px;color:var(--mu);padding:10px}
+main{padding:28px var(--pad) 100px;max-width:1100px;width:100%}
+.kopf{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+@media(max-width:800px){.app{grid-template-columns:1fr}aside{position:fixed;bottom:0;top:auto;left:0;right:0;height:auto;flex-direction:row;overflow-x:auto;padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:rgba(18,17,15,.96);backdrop-filter:blur(12px);border-right:0;border-top:1px solid var(--line);z-index:20}
+aside .brand,aside .unten{display:none}aside a{flex:1 0 auto;flex-direction:column;gap:2px;font-size:11px;padding:6px 6px;white-space:nowrap;justify-content:center}main{padding-top:20px}}
+/* Bausteine */
+.btn{display:inline-flex;align-items:center;gap:6px;background:var(--rd-ink);color:#fff;border:0;border-radius:8px;padding:9px 16px;font-weight:600;cursor:pointer;text-decoration:none;font-size:14px}
+.btn:hover{background:var(--rd)}
+.btn.g{background:transparent;border:1px solid var(--line2);color:var(--tx)}
+.btn.g:hover{border-color:var(--tx)}
+.btn.k{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:default}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.zeile{display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.zeile:last-child{border-bottom:0}
+.zeile .wachs{flex:1;min-width:0}
+.liste{background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.liste a.zeile{text-decoration:none}
+.liste a.zeile:hover{background:var(--raised)}
+.pill{display:inline-block;border:1px solid var(--line2);border-radius:99px;padding:1px 9px;font-size:12px;color:var(--se);white-space:nowrap}
+.pill.rot{border-color:var(--rd-ink);color:var(--rd)}
+.pill.gruen{border-color:rgba(95,211,141,.5);color:var(--ok)}
+.pill.gelb{border-color:rgba(242,184,75,.5);color:var(--warn)}
+.leer{color:var(--mu);padding:16px;text-align:center}
+.thumb{width:48px;height:48px;border-radius:8px;background:var(--raised);object-fit:cover;flex:none;display:grid;place-items:center;font-family:'Big Shoulders Display';font-size:22px;color:var(--mu);overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.big-thumb{width:100%;aspect-ratio:1;border-radius:10px;background:var(--raised);display:grid;place-items:center;overflow:hidden;font-family:'Big Shoulders Display';font-size:64px;color:var(--mu)}
+.big-thumb img{width:100%;height:100%;object-fit:cover}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tabs button{background:transparent;border:1px solid var(--line2);border-radius:99px;padding:4px 12px;font-size:13px;cursor:pointer;color:var(--se)}
+.tabs button.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.zwei{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start}
+@media(max-width:800px){.zwei{grid-template-columns:1fr}}
+.check{display:flex;gap:10px;align-items:flex-start;padding:8px 12px;border-bottom:1px solid var(--line)}
+.check:last-child{border-bottom:0}
+.check input{margin-top:3px;width:18px;height:18px;accent-color:var(--rd);flex:none}
+.check.fertig .t{text-decoration:line-through;color:var(--mu)}
+.check .t{flex:1}
+.balken{height:6px;background:var(--raised);border-radius:99px;overflow:hidden}
+.balken i{display:block;height:100%;background:var(--rd)}
+/* Formulare */
+label.f{display:block;margin-bottom:12px;font-size:13px;color:var(--se)}
+label.f input,label.f select,label.f textarea{display:block;width:100%;margin-top:4px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;padding:9px 11px;color:var(--tx);font-size:15px}
+label.f textarea{min-height:90px;resize:vertical}
+label.cb{display:flex;gap:8px;align-items:center;margin-bottom:12px;font-size:14px}
+label.cb input{width:18px;height:18px;accent-color:var(--rd)}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+@media(max-width:560px){.f2{grid-template-columns:1fr}}
+dialog{background:var(--panel);color:var(--tx);border:1px solid var(--line2);border-radius:14px;padding:0;width:min(640px,calc(100vw - 24px));max-height:calc(100vh - 24px);margin:auto}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+dialog form{padding:20px}
+dialog .knoepfe{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap;margin-top:8px;position:sticky;bottom:0;background:var(--panel);padding-top:10px}
+.drop{border:2px dashed var(--line2);border-radius:12px;padding:16px;text-align:center;cursor:pointer;color:var(--se);display:flex;gap:14px;align-items:center;margin-bottom:12px;transition:border-color .15s}
+.drop.ueber{border-color:var(--rd);color:var(--tx)}
+.drop img{width:84px;height:84px;object-fit:cover;border-radius:8px;flex:none}
+.drop .ph{width:84px;height:84px;border-radius:8px;background:var(--raised);flex:none}
+/* Anmeldung */
+.login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.login .card{width:min(400px,100%);padding:28px}
+.login .logo{width:44px;height:44px;margin-bottom:14px;display:block}
+.qr{background:#fff;border-radius:8px;padding:8px;width:200px;height:200px;display:block;margin:12px auto}
+.fehler{color:var(--rd);font-size:14px;margin-top:8px;min-height:1em}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:10px;font-weight:600;z-index:100;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+code{background:var(--raised);padding:1px 6px;border-radius:5px;font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- Einrichtung fehlt -->
+<div class="login hide" id="v-setup"><div class="card"><img class="logo" src="/favicon.svg" alt=""><h1>Cockpit</h1>
+<p class="mu" style="margin-top:10px">Das Cockpit ist noch nicht mit der Datenbank verbunden. Trag in <code>config.js</code> die Supabase-Adresse und den öffentlichen Schlüssel ein (siehe <code>ANLEITUNG-COCKPIT.md</code>).</p></div></div>
+
+<!-- Anmeldung -->
+<div class="login hide" id="v-login"><form class="card" id="f-login"><img class="logo" src="/favicon.svg" alt=""><h1>Cockpit</h1>
+<p class="mu" style="margin:6px 0 18px">LIS Music intern</p>
+<label class="f">E-Mail<input id="email" type="email" autocomplete="username" required></label>
+<label class="f">Passwort<input id="pw" type="password" autocomplete="current-password" required></label>
+<button class="btn" style="width:100%;justify-content:center">Anmelden</button><p class="fehler" id="e-login"></p></form></div>
+
+<!-- Zwei-Faktor -->
+<div class="login hide" id="v-mfa"><form class="card" id="f-mfa"><img class="logo" src="/favicon.svg" alt=""><h1>Code</h1>
+<div id="mfa-neu" class="hide"><p class="mu" style="margin-top:8px">Einmalig: Scanne den QR-Code mit einer Authenticator-App (z. B. Google Authenticator, 2FAS oder 1Password).</p><img class="qr" id="mfa-qr" alt="QR-Code für die Authenticator-App"><p class="sm mu" style="text-align:center;word-break:break-all">Oder Schlüssel eintippen: <code id="mfa-secret"></code></p></div>
+<p class="mu" style="margin:8px 0 14px">Gib den 6-stelligen Code aus der App ein.</p>
+<label class="f">Code<input id="mfa-code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required></label>
+<button class="btn" style="width:100%;justify-content:center">Bestätigen</button><p class="fehler" id="e-mfa"></p>
+<p style="margin-top:12px;text-align:center"><a href="#" id="abmelden2" class="sm mu">Abmelden</a></p></form></div>
+
+<!-- Kein Zugriff -->
+<div class="login hide" id="v-kein"><div class="card"><img class="logo" src="/favicon.svg" alt=""><h1>Kein Zugriff</h1>
+<p class="mu" style="margin-top:10px">Dein Account ist angemeldet, steht aber noch nicht im Team. Felix trägt dich im Supabase-SQL-Editor ein (siehe Anleitung).</p>
+<p style="margin-top:16px"><a href="#" id="abmelden3" class="btn g">Abmelden</a></p></div></div>
+
+<!-- Cockpit -->
+<div class="app hide" id="v-app">
+<aside id="menu">
+<div class="brand"><img src="/favicon.svg" alt="">LIS COCKPIT</div>
+<a href="#heute" data-v="heute">Heute <span class="badge hide" id="b-heute"></span></a>
+<a href="#artists" data-v="artists">Artists</a>
+<a href="#releases" data-v="releases">Releases</a>
+<a href="#content" data-v="content">Content</a>
+<a href="#news" data-v="news">News</a>
+<a href="#demos" data-v="demos">Demos <span class="badge hide" id="b-demos"></span></a>
+<a href="#website" data-v="website">Website <span class="badge hide" id="b-web">!</span></a>
+<div class="unten"><div id="wer"></div><a href="#" id="abmelden" style="padding:6px 0;display:inline">Abmelden</a></div>
+</aside>
+<main id="main"></main>
+</div>
+
+<dialog id="dlg"></dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" integrity="sha256-hZaWX+kY5lZgChtWjToWj1wNPSKmAIhrtvRKZVXbAec=" crossorigin="anonymous"></script>
+<script src="/config.js"></script>
+<script>
+'use strict';
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const okUrl = u => /^https?:\/\//i.test(String(u || '')) ? u : '';
+const heute = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
+const iso = d => { const z = new Date(d); return `${z.getFullYear()}-${String(z.getMonth()+1).padStart(2,'0')}-${String(z.getDate()).padStart(2,'0')}`; };
+const plusTage = (datum, n) => { const d = new Date(datum + 'T12:00:00'); d.setDate(d.getDate() + n); return iso(d); };
+const tageBis = datum => Math.round((new Date(datum + 'T12:00:00') - heute()) / 864e5 - .5);
+const dt = datum => datum ? new Date(datum + 'T12:00:00').toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'numeric'}) : '';
+const relTag = datum => { const n = tageBis(datum); return n === 0 ? 'heute' : n === 1 ? 'morgen' : n === -1 ? 'gestern' : n < 0 ? `vor ${-n} Tagen` : `in ${n} Tagen`; };
+const slugify = s => String(s).toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60) || 'artist';
+function toast(t) { const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.append(d); setTimeout(() => d.remove(), 2600); }
+function zeige(id) { ['v-setup','v-login','v-mfa','v-kein','v-app'].forEach(v => $('#' + v).classList.toggle('hide', v !== id)); }
+
+/* ---------- Texte ---------- */
+const ARTIST_STATUS = {demo:'Demo', gehoert:'Gehört', gespraech:'Gespräch', vertrag:'Vertragsentwurf', signed:'Signed', pausiert:'Pausiert', absage:'Absage'};
+const RELEASE_STATUS = {planung:'Planung', produktion:'Produktion', fertig:'Fertig', eingereicht:'Bei DistroKid', veroeffentlicht:'Veröffentlicht'};
+const BEREICH = {track:'Track', cover:'Cover', metadaten:'Metadaten', rechte:'Rechte & Geld', werbung:'Werbemittel', social:'Social', sonstiges:'Sonstiges'};
+const PLATTFORM = {tiktok:'TikTok', instagram:'Instagram', youtube:'YouTube', sonstiges:'Sonstiges'};
+const CONTENT_STATUS = {idee:'Idee', gedreht:'Gedreht', geplant:'Geplant', gepostet:'Gepostet'};
+const DEMO_STATUS = {neu:'Neu', gehoert:'Gehört', abgelehnt:'Abgelehnt', uebernommen:'Als Artist übernommen'};
+const LINKS_ARTIST = [['spotify','Spotify'],['instagram','Instagram'],['tiktok','TikTok'],['youtube','YouTube'],['apple','Apple Music']];
+const LINKS_RELEASE = [['presave','Pre-Save / Smartlink'],['spotify','Spotify'],['apple','Apple Music'],['youtube','YouTube']];
+
+/* Release-Checkliste (Fristen in Tagen relativ zum Release-Tag), siehe Release-Checkliste im Projekt */
+const VORLAGE = [
+  ['track',-42,'Mix und Master fertig (WAV, 24 Bit / 44,1 kHz)'],
+  ['track',-42,'Instrumental, ggf. Clean-Version und Stems sichern'],
+  ['rechte',-42,'Split-Sheet von allen unterschrieben'],
+  ['rechte',-42,'Beat-Lizenz bzw. Producer-Vereinbarung, Samples geklärt'],
+  ['cover',-35,'Cover fertig: 3000 × 3000 px, JPG, RGB, keine Logos/Preise/URLs'],
+  ['cover',-35,'Cover-Varianten 9:16 (Story) und 16:9 (YouTube)'],
+  ['metadaten',-35,'Titel, Feature-Artists, Songwriter mit echten Namen, Producer, Credits'],
+  ['metadaten',-35,'Genre, Sprache, Explicit ja/nein, Lyrics'],
+  ['metadaten',-28,'Bei DistroKid hochladen'],
+  ['metadaten',-28,'ISRC und UPC ins Cockpit eintragen'],
+  ['rechte',-28,'Splits bei DistroKid eintragen'],
+  ['rechte',-21,'Werk bei der GEMA anmelden (falls Mitglied)'],
+  ['werbung',-21,'Spotify-Pitch über Spotify for Artists (spätestens 7 Tage vorher)'],
+  ['werbung',-21,'Pre-Save-Link (HyperFollow) live und im Cockpit eintragen'],
+  ['werbung',-21,'Pressefoto (hoch und quer) und Kurz-Bio aktuell'],
+  ['social',-14,'5–10 TikTok/Reels-Clips mit dem Hook fertig'],
+  ['social',-14,'Spotify Canvas (9:16 Loop) hochladen'],
+  ['social',-14,'Erste Snippets posten'],
+  ['werbung',-7,'Release auf lismusic.de vorbereiten (Cover, Links)'],
+  ['social',-7,'Countdown-Stories 7, 3 und 1 Tag vorher'],
+  ['werbung',-7,'Newsletter-Mail vorbereiten'],
+  ['social',0,'Release-Post und Story mit Link'],
+  ['werbung',0,'News auf lismusic.de veröffentlichen, Newsletter raus'],
+  ['sonstiges',7,'Zahlen in Spotify for Artists ansehen, beste Clips nachlegen'],
+  ['sonstiges',28,'Fazit und nächsten Release planen'],
+];
+
+/* ---------- Supabase ---------- */
+const CFG = window.LIS_CONFIG || {};
+let sb = null, ich = null, S = {artists:[], releases:[], aufgaben:[], content:[], news:[], demos:[], pubs:[]};
+const bildUrl = new Map();
+
+async function start() {
+  if (!CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY || !window.supabase) return zeige('v-setup');
+  sb = window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return zeige('v-login');
+  await nachLogin();
+}
+async function nachLogin() {
+  const { data: aal, error } = await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (error) { zeige('v-login'); return; }
+  if (aal.currentLevel !== 'aal2') return mfaStart();
+  const { data: { user } } = await sb.auth.getUser();
+  const { data: t } = await sb.from('team').select('name,rolle').eq('user_id', user.id).maybeSingle();
+  if (!t || t.rolle !== 'label') return zeige('v-kein');
+  ich = { id: user.id, name: t.name || user.email };
+  $('#wer').textContent = ich.name;
+  zeige('v-app');
+  await laden();
+  route();
+}
+let mfaFaktor = null;
+async function mfaStart() {
+  zeige('v-mfa'); $('#mfa-code').value = ''; $('#e-mfa').textContent = '';
+  const { data: f } = await sb.auth.mfa.listFactors();
+  const fertig = (f?.totp || []).find(x => x.status === 'verified');
+  if (fertig) { mfaFaktor = fertig.id; $('#mfa-neu').classList.add('hide'); }
+  else {
+    for (const x of (f?.all || []).filter(x => x.status !== 'verified')) await sb.auth.mfa.unenroll({ factorId: x.id });
+    const { data, error } = await sb.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'LIS Cockpit ' + Date.now() });
+    if (error) { $('#e-mfa').textContent = error.message; return; }
+    mfaFaktor = data.id; $('#mfa-qr').src = data.totp.qr_code; $('#mfa-secret').textContent = data.totp.secret;
+    $('#mfa-neu').classList.remove('hide');
+  }
+  $('#mfa-code').focus();
+}
+$('#f-login').onsubmit = async e => {
+  e.preventDefault(); $('#e-login').textContent = '';
+  const { error } = await sb.auth.signInWithPassword({ email: $('#email').value.trim(), password: $('#pw').value });
+  if (error) { $('#e-login').textContent = 'Anmeldung fehlgeschlagen. E-Mail oder Passwort prüfen.'; return; }
+  await nachLogin();
+};
+$('#f-mfa').onsubmit = async e => {
+  e.preventDefault(); $('#e-mfa').textContent = '';
+  const { error } = await sb.auth.mfa.challengeAndVerify({ factorId: mfaFaktor, code: $('#mfa-code').value.trim() });
+  if (error) { $('#e-mfa').textContent = 'Code stimmt nicht. Bitte den aktuellen Code eingeben.'; return; }
+  await nachLogin();
+};
+['#abmelden','#abmelden2','#abmelden3'].forEach(s => $(s).onclick = async e => { e.preventDefault(); await sb.auth.signOut(); location.hash = ''; zeige('v-login'); });
+
+async function laden() {
+  const q = (t, o) => sb.from(t).select('*').order(o[0], { ascending: o[1] !== false });
+  const r = await Promise.all([
+    q('artists', ['sortierung']), q('releases', ['datum']), q('aufgaben', ['faellig']), q('content', ['datum']),
+    q('news', ['datum', false]), q('demos', ['created_at', false]),
+    sb.from('veroeffentlichungen').select('*').order('zeit', { ascending: false }).limit(10),
+  ]);
+  const fehler = r.find(x => x.error); if (fehler) { toast('Laden fehlgeschlagen: ' + fehler.error.message); return; }
+  [S.artists, S.releases, S.aufgaben, S.content, S.news, S.demos, S.pubs] = r.map(x => x.data);
+  await bilderLaden();
+  badges();
+}
+async function bilderLaden() {
+  const pfade = [...S.artists.map(a => a.foto), ...S.releases.map(r => r.cover)].filter(p => p && !bildUrl.has(p));
+  if (!pfade.length) return;
+  const { data } = await sb.storage.from('medien').createSignedUrls(pfade, 60 * 60 * 12);
+  (data || []).forEach(x => x.signedUrl && bildUrl.set(x.path, x.signedUrl));
+}
+const img = (p, alt) => p && bildUrl.get(p) ? `<img src="${esc(bildUrl.get(p))}" alt="${esc(alt || '')}">` : '';
+const artistVon = id => S.artists.find(a => a.id === id);
+const releaseVon = id => S.releases.find(r => r.id === id);
+async function speichern(tab, werte, id) {
+  const q = id ? sb.from(tab).update(werte).eq('id', id) : sb.from(tab).insert(werte);
+  const { data, error } = await q.select().single();
+  if (error) { toast('Speichern fehlgeschlagen: ' + error.message); throw error; }
+  return data;
+}
+async function loeschen(tab, id) {
+  const { error } = await sb.from(tab).delete().eq('id', id);
+  if (error) { toast('Löschen fehlgeschlagen: ' + error.message); throw error; }
+}
+const logEintrag = (alt, text) => [...(alt || []), { t: new Date().toISOString(), wer: ich.name, text }].slice(-200);
+
+/* Bild verkleinern (max. 1600 px, WebP) und hochladen */
+async function bildHochladen(datei, ordner) {
+  const bmp = await createImageBitmap(datei);
+  const f = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+  const c = document.createElement('canvas'); c.width = Math.round(bmp.width * f); c.height = Math.round(bmp.height * f);
+  c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+  const blob = await new Promise(r => c.toBlob(r, 'image/webp', .86));
+  const pfad = `${ordner}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`;
+  const { error } = await sb.storage.from('medien').upload(pfad, blob, { contentType: 'image/webp' });
+  if (error) { toast('Upload fehlgeschlagen: ' + error.message); throw error; }
+  bildUrl.set(pfad, URL.createObjectURL(blob));
+  return pfad;
+}
+function dropzone(el, ordner, onPfad) {
+  const inp = el.querySelector('input[type=file]');
+  const nimm = async datei => {
+    if (!datei || !/^image\//.test(datei.type)) return toast('Bitte ein Bild (JPG, PNG, WebP) nehmen.');
+    el.querySelector('.txt').textContent = 'Lädt hoch …';
+    try { const p = await bildHochladen(datei, ordner); onPfad(p); el.querySelector('.vor').outerHTML = `<img class="vor" src="${esc(bildUrl.get(p))}" alt="">`; el.querySelector('.txt').textContent = 'Fertig. Zum Ersetzen neues Bild reinziehen.'; }
+    catch { el.querySelector('.txt').textContent = 'Hat nicht geklappt, nochmal versuchen.'; }
+  };
+  el.onclick = () => inp.click();
+  inp.onchange = () => nimm(inp.files[0]);
+  el.ondragover = e => { e.preventDefault(); el.classList.add('ueber'); };
+  el.ondragleave = () => el.classList.remove('ueber');
+  el.ondrop = e => { e.preventDefault(); el.classList.remove('ueber'); nimm(e.dataTransfer.files[0]); };
+}
+const dropHtml = (pfad, text) => `<div class="drop" tabindex="0">${pfad && bildUrl.get(pfad) ? `<img class="vor" src="${esc(bildUrl.get(pfad))}" alt="">` : '<div class="ph vor"></div>'}<div class="txt">${esc(text)}</div><input type="file" accept="image/*" hidden></div>`;
+
+/* ---------- Heute ---------- */
+function heuteListe() {
+  const h = iso(heute()), in7 = plusTage(h, 7), p = [];
+  for (const a of S.aufgaben) if (!a.erledigt && a.faellig && a.faellig <= in7) {
+    const r = releaseVon(a.release_id), ar = artistVon(a.artist_id || r?.artist_id);
+    p.push({ datum: a.faellig, art: 'aufgabe', a, text: a.titel, sub: [ar?.name, r?.titel].filter(Boolean).join(' · '), link: r ? `#release/${r.id}` : ar ? `#artist/${ar.id}` : '#releases' });
+  }
+  for (const d of S.demos) if (d.status === 'neu') p.push({ datum: d.created_at.slice(0, 10), art: 'demo', text: `Neue Demo: ${d.artist}`, sub: d.genre, link: '#demos' });
+  for (const a of S.artists) if (a.wv && a.wv <= h) p.push({ datum: a.wv, art: 'wv', text: `Nachhaken: ${a.name}`, sub: ARTIST_STATUS[a.status], link: `#artist/${a.id}` });
+  for (const r of S.releases) if (r.datum && r.datum >= h && r.datum <= in7) p.push({ datum: r.datum, art: 'release', text: `Release: ${r.titel}`, sub: artistVon(r.artist_id)?.name || '', link: `#release/${r.id}` });
+  for (const c of S.content) if (c.status !== 'gepostet' && c.datum && c.datum <= in7) p.push({ datum: c.datum, art: 'content', text: `${PLATTFORM[c.plattform]}: ${c.idee}`, sub: CONTENT_STATUS[c.status], link: '#content' });
+  return p.sort((x, y) => x.datum.localeCompare(y.datum));
+}
+function webOffen() {
+  const letzte = S.pubs[0]?.zeit || '1970';
+  return [...S.artists, ...S.releases, ...S.news].some(x => (x.updated_at || x.created_at) > letzte);
+}
+function badges() {
+  const h = iso(heute()), n = heuteListe().filter(x => x.datum <= h).length, d = S.demos.filter(x => x.status === 'neu').length;
+  $('#b-heute').textContent = n; $('#b-heute').classList.toggle('hide', !n);
+  $('#b-demos').textContent = d; $('#b-demos').classList.toggle('hide', !d);
+  $('#b-web').classList.toggle('hide', !webOffen());
+}
+function vHeute() {
+  const h = iso(heute()), p = heuteListe();
+  const faellig = p.filter(x => x.datum <= h), bald = p.filter(x => x.datum > h);
+  const zeile = x => `<div class="zeile">${x.art === 'aufgabe' ? `<input type="checkbox" data-erledigt="${x.a.id}" aria-label="Erledigt" style="width:18px;height:18px;accent-color:var(--rd)">` : ''}
+    <a class="wachs" href="${x.link}" style="text-decoration:none"><div>${esc(x.text)}</div><div class="sm mu">${esc(x.sub || '')}</div></a>
+    ${x.art === 'demo' ? '<span class="pill rot">neu</span>' : `<span class="pill ${x.datum < h ? 'rot' : x.datum === h ? 'gelb' : ''}">${x.datum < h ? 'überfällig' : relTag(x.datum)}</span>`}</div>`;
+  const naechster = S.releases.filter(r => r.datum && r.datum >= h).sort((a, b) => a.datum.localeCompare(b.datum))[0];
+  return `<div class="kopf"><div><h1>Heute</h1><p class="mu">${new Date().toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' })}</p></div>
+    ${webOffen() ? '<a class="btn g" href="#website">Website hat unveröffentlichte Änderungen</a>' : ''}</div>
+    ${naechster ? `<a class="card" href="#release/${naechster.id}" style="display:flex;gap:14px;align-items:center;text-decoration:none;margin-bottom:20px"><div class="thumb" style="width:64px;height:64px">${img(naechster.cover) || '♪'}</div><div class="wachs"><div class="sm mu">Nächster Release · ${relTag(naechster.datum)}</div><h3 style="font-size:20px">${esc(naechster.titel)}</h3><div class="mu">${esc(artistVon(naechster.artist_id)?.name || '')} · ${dt(naechster.datum)}</div></div></a>` : ''}
+    <h2>Fällig</h2><div class="liste">${faellig.map(zeile).join('') || '<div class="leer">Nichts fällig. Stark.</div>'}</div>
+    <h2>Nächste 7 Tage</h2><div class="liste">${bald.map(zeile).join('') || '<div class="leer">Nichts geplant.</div>'}</div>`;
+}
+
+/* ---------- Artists ---------- */
+let artistFilter = 'alle';
+function vArtists() {
+  const liste = S.artists.filter(a => artistFilter === 'alle' || (artistFilter === 'signed' ? a.status === 'signed' : a.status !== 'signed'));
+  return `<div class="kopf"><h1>Artists</h1><button class="btn" data-neu="artist">+ Artist</button></div>
+  <div class="tabs">${[['alle','Alle'],['signed','Signed'],['pipeline','In Gesprächen']].map(([k, t]) => `<button data-af="${k}" class="${artistFilter === k ? 'on' : ''}">${t}</button>`).join('')}</div>
+  <div class="grid">${liste.map(a => { const rs = S.releases.filter(r => r.artist_id === a.id), offen = S.aufgaben.filter(x => !x.erledigt && (x.artist_id === a.id || rs.some(r => r.id === x.release_id))).length;
+    return `<a class="card" href="#artist/${a.id}" style="text-decoration:none;display:flex;gap:12px;align-items:center"><div class="thumb">${img(a.foto) || esc(a.name[0] || '?')}</div><div class="wachs"><h3>${esc(a.name)}</h3><div class="sm mu">${esc(a.genre)}${a.genre ? ' · ' : ''}${rs.length} Release${rs.length === 1 ? '' : 's'}${offen ? ` · ${offen} offen` : ''}</div><div style="margin-top:4px"><span class="pill ${a.status === 'signed' ? 'gruen' : ''}">${ARTIST_STATUS[a.status]}</span> ${a.oeffentlich ? '' : '<span class="pill">nicht auf Website</span>'}</div></div></a>`; }).join('') || '<div class="leer">Noch keine Artists.</div>'}</div>`;
+}
+function fortschritt(rid) { const a = S.aufgaben.filter(x => x.release_id === rid); return a.length ? Math.round(a.filter(x => x.erledigt).length / a.length * 100) : null; }
+function releaseZeile(r) {
+  const f = fortschritt(r.id);
+  return `<a class="zeile" href="#release/${r.id}"><div class="thumb">${img(r.cover) || '♪'}</div><div class="wachs"><div>${esc(r.titel)} <span class="sm mu">${esc(r.typ)}</span></div><div class="sm mu">${esc(artistVon(r.artist_id)?.name || 'ohne Artist')} · ${r.datum ? dt(r.datum) : esc(r.datum_text || 'ohne Datum')}</div>${f !== null ? `<div class="balken" style="margin-top:6px;max-width:220px"><i style="width:${f}%"></i></div>` : ''}</div><span class="pill ${r.status === 'veroeffentlicht' ? 'gruen' : ''}">${RELEASE_STATUS[r.status]}</span></a>`;
+}
+function vArtist(id) {
+  const a = artistVon(id); if (!a) return '<p class="leer">Artist nicht gefunden.</p>';
+  const rs = S.releases.filter(r => r.artist_id === a.id), h = iso(heute());
+  const geplant = rs.filter(r => r.status !== 'veroeffentlicht'), raus = rs.filter(r => r.status === 'veroeffentlicht');
+  const auf = S.aufgaben.filter(x => !x.erledigt && (x.artist_id === a.id || rs.some(r => r.id === x.release_id))).sort((x, y) => (x.faellig || '9').localeCompare(y.faellig || '9'));
+  const cont = S.content.filter(c => c.artist_id === a.id || rs.some(r => r.id === c.release_id));
+  const links = LINKS_ARTIST.filter(([k]) => okUrl(a.links?.[k])).map(([k, t]) => `<a class="pill" href="${esc(a.links[k])}" target="_blank" rel="noopener">${t}</a>`).join(' ');
+  return `<p><a href="#artists" class="sm mu">← Artists</a></p>
+  <div class="kopf"><h1>${esc(a.name)}</h1><div style="display:flex;gap:8px"><button class="btn g" data-edit-artist="${a.id}">Bearbeiten</button><button class="btn" data-neu="release" data-artist="${a.id}">+ Release</button></div></div>
+  <div class="zwei"><div><div class="big-thumb">${img(a.foto, a.name) || esc(a.name[0] || '?')}</div>
+    <div class="card" style="margin-top:12px"><div><span class="pill ${a.status === 'signed' ? 'gruen' : ''}">${ARTIST_STATUS[a.status]}</span> ${a.oeffentlich ? '<span class="pill">auf Website</span>' : '<span class="pill">nicht auf Website</span>'}</div>
+    ${a.genre ? `<p class="mu" style="margin-top:8px">${esc(a.genre)}</p>` : ''}${links ? `<p style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">${links}</p>` : ''}
+    ${a.buerg_name || a.email || a.tel ? `<p class="sm" style="margin-top:10px">${esc(a.buerg_name)}<br>${a.email ? `<a href="mailto:${esc(a.email)}">${esc(a.email)}</a>` : ''}<br>${esc(a.tel)}</p>` : ''}
+    ${a.wv ? `<p class="sm" style="margin-top:8px">Nachhaken: <span class="pill ${a.wv <= h ? 'rot' : ''}">${dt(a.wv)}</span></p>` : ''}
+    ${a.notizen ? `<p class="sm mu" style="margin-top:10px;white-space:pre-wrap">${esc(a.notizen)}</p>` : ''}</div></div>
+  <div>
+    <h2 style="margin-top:0">Geplante Songs</h2><div class="liste">${geplant.map(releaseZeile).join('') || '<div class="leer">Nichts geplant.</div>'}</div>
+    <h2>Offene Aufgaben</h2><div class="liste">${auf.slice(0, 12).map(x => aufgabeZeile(x, true)).join('') || '<div class="leer">Alles erledigt.</div>'}</div>
+    <h2>TikTok & Content</h2><div class="liste">${cont.map(contentZeile).join('') || '<div class="leer">Noch kein Content geplant.</div>'}</div>
+    <p style="margin-top:8px"><button class="btn g k" data-neu="content" data-artist="${a.id}">+ Content-Idee</button></p>
+    ${raus.length ? `<h2>Veröffentlicht</h2><div class="liste">${raus.map(releaseZeile).join('')}</div>` : ''}
+    ${(a.log || []).length ? `<h2>Verlauf</h2><div class="liste">${a.log.slice(-8).reverse().map(l => `<div class="zeile sm"><span class="mu">${new Date(l.t).toLocaleDateString('de-DE')}</span><span class="wachs">${esc(l.text)}</span><span class="mu">${esc(l.wer)}</span></div>`).join('')}</div>` : ''}
+  </div></div>`;
+}
+function aufgabeZeile(x, mitRelease) {
+  const h = iso(heute()), r = releaseVon(x.release_id);
+  return `<div class="check ${x.erledigt ? 'fertig' : ''}"><input type="checkbox" data-erledigt="${x.id}" ${x.erledigt ? 'checked' : ''} aria-label="Erledigt"><div class="t">${esc(x.titel)}${mitRelease && r ? `<div class="sm mu">${esc(r.titel)}</div>` : ''}</div>
+  ${x.faellig ? `<span class="pill ${!x.erledigt && x.faellig < h ? 'rot' : ''}">${dt(x.faellig)}</span>` : ''}<button class="btn g k" data-edit-aufgabe="${x.id}" aria-label="Bearbeiten">…</button></div>`;
+}
+function contentZeile(c) {
+  const r = releaseVon(c.release_id);
+  return `<div class="zeile"><span class="pill">${PLATTFORM[c.plattform]}</span><div class="wachs"><div>${esc(c.idee)}</div><div class="sm mu">${[r?.titel, c.datum ? dt(c.datum) : ''].filter(Boolean).map(esc).join(' · ')}${okUrl(c.link) ? ` · <a href="${esc(c.link)}" target="_blank" rel="noopener">Link</a>` : ''}</div></div><span class="pill ${c.status === 'gepostet' ? 'gruen' : ''}">${CONTENT_STATUS[c.status]}</span><button class="btn g k" data-edit-content="${c.id}" aria-label="Bearbeiten">…</button></div>`;
+}
+
+/* ---------- Releases ---------- */
+function vReleases() {
+  const h = iso(heute());
+  const kommend = S.releases.filter(r => r.status !== 'veroeffentlicht').sort((a, b) => (a.datum || '9999').localeCompare(b.datum || '9999'));
+  const raus = S.releases.filter(r => r.status === 'veroeffentlicht').sort((a, b) => (b.datum || '').localeCompare(a.datum || ''));
+  return `<div class="kopf"><h1>Releases</h1><button class="btn" data-neu="release">+ Release</button></div>
+  <h2 style="margin-top:0">Geplant</h2><div class="liste">${kommend.map(releaseZeile).join('') || '<div class="leer">Nichts geplant.</div>'}</div>
+  <h2>Veröffentlicht</h2><div class="liste">${raus.map(releaseZeile).join('') || '<div class="leer">Noch nichts veröffentlicht.</div>'}</div>`;
+}
+function vRelease(id) {
+  const r = releaseVon(id); if (!r) return '<p class="leer">Release nicht gefunden.</p>';
+  const ar = artistVon(r.artist_id), auf = S.aufgaben.filter(x => x.release_id === r.id).sort((a, b) => (a.faellig || '9').localeCompare(b.faellig || '9') || a.sortierung - b.sortierung);
+  const f = fortschritt(r.id), cont = S.content.filter(c => c.release_id === r.id);
+  const gruppen = Object.keys(BEREICH).map(b => [b, auf.filter(x => x.bereich === b)]).filter(([, l]) => l.length);
+  const links = LINKS_RELEASE.filter(([k]) => okUrl(r.links?.[k])).map(([k, t]) => `<a class="pill" href="${esc(r.links[k])}" target="_blank" rel="noopener">${t}</a>`).join(' ');
+  return `<p><a href="${ar ? `#artist/${ar.id}` : '#releases'}" class="sm mu">← ${esc(ar?.name || 'Releases')}</a></p>
+  <div class="kopf"><div><h1>${esc(r.titel)}</h1><p class="mu">${esc(r.typ)} · ${esc(ar?.name || 'ohne Artist')} · ${r.datum ? `${dt(r.datum)} (${relTag(r.datum)})` : esc(r.datum_text || 'ohne Datum')}</p></div><button class="btn g" data-edit-release="${r.id}">Bearbeiten</button></div>
+  <div class="zwei"><div><div class="big-thumb">${img(r.cover, 'Cover') || '♪'}</div>
+   <div class="card" style="margin-top:12px"><span class="pill ${r.status === 'veroeffentlicht' ? 'gruen' : ''}">${RELEASE_STATUS[r.status]}</span> ${r.oeffentlich ? '<span class="pill">auf Website</span>' : '<span class="pill">nicht auf Website</span>'}
+   ${r.isrc || r.upc ? `<p class="sm" style="margin-top:8px">${r.isrc ? `ISRC <code>${esc(r.isrc)}</code><br>` : ''}${r.upc ? `UPC <code>${esc(r.upc)}</code>` : ''}</p>` : ''}
+   ${links ? `<p style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">${links}</p>` : ''}
+   ${r.notizen ? `<p class="sm mu" style="margin-top:10px;white-space:pre-wrap">${esc(r.notizen)}</p>` : ''}</div></div>
+  <div><div class="kopf" style="margin:0 0 8px"><h2 style="margin:0">Checkliste ${f !== null ? `<span class="mu" style="font-size:18px">${f} %</span>` : ''}</h2>
+    <div style="display:flex;gap:6px">${!auf.length ? `<button class="btn k" data-vorlage="${r.id}">Checkliste anlegen</button>` : ''}<button class="btn g k" data-neu="aufgabe" data-release="${r.id}">+ Aufgabe</button></div></div>
+   ${f !== null ? `<div class="balken" style="margin-bottom:12px"><i style="width:${f}%"></i></div>` : ''}
+   ${!auf.length ? `<div class="card mu">Noch keine Checkliste. ${r.datum ? 'Die Vorlage legt alle Schritte vom Master bis zu den TikToks mit Fristen an.' : 'Trag zuerst ein Release-Datum ein, dann bekommen die Schritte Fristen.'}</div>` : ''}
+   ${gruppen.map(([b, l]) => `<h3 style="margin:16px 0 6px" class="mu">${BEREICH[b]}</h3><div class="liste">${l.map(x => aufgabeZeile(x)).join('')}</div>`).join('')}
+   <h2>TikTok & Content</h2><div class="liste">${cont.map(contentZeile).join('') || '<div class="leer">Noch kein Content geplant.</div>'}</div>
+   <p style="margin-top:8px"><button class="btn g k" data-neu="content" data-release="${r.id}">+ Content-Idee</button></p>
+  </div></div>`;
+}
+async function vorlageAnlegen(rid) {
+  const r = releaseVon(rid);
+  const zeilen = VORLAGE.map(([bereich, tage, titel], i) => ({ release_id: rid, bereich, tage, titel, sortierung: i, faellig: r.datum ? plusTage(r.datum, tage) : null }));
+  const { data, error } = await sb.from('aufgaben').insert(zeilen).select();
+  if (error) return toast('Fehler: ' + error.message);
+  S.aufgaben.push(...data); toast('Checkliste angelegt'); render();
+}
+
+/* ---------- Content ---------- */
+let contentFilter = 'offen';
+function vContent() {
+  const l = S.content.filter(c => contentFilter === 'alle' || (contentFilter === 'offen' ? c.status !== 'gepostet' : c.plattform === contentFilter))
+    .sort((a, b) => (a.datum || '9999').localeCompare(b.datum || '9999'));
+  return `<div class="kopf"><h1>Content</h1><button class="btn" data-neu="content">+ Idee</button></div>
+  <div class="tabs">${[['offen','Offen'],['tiktok','TikTok'],['instagram','Instagram'],['youtube','YouTube'],['alle','Alle']].map(([k, t]) => `<button data-cf="${k}" class="${contentFilter === k ? 'on' : ''}">${t}</button>`).join('')}</div>
+  <div class="liste">${l.map(c => { const r = releaseVon(c.release_id), a = artistVon(c.artist_id || r?.artist_id); return contentZeile(c).replace('<div class="sm mu">', `<div class="sm mu">${a ? esc(a.name) + ' · ' : ''}`); }).join('') || '<div class="leer">Nichts hier.</div>'}</div>`;
+}
+
+/* ---------- News ---------- */
+function vNews() {
+  return `<div class="kopf"><h1>News</h1><button class="btn" data-neu="news">+ News</button></div>
+  <div class="liste">${S.news.map(n => `<div class="zeile"><span class="sm mu" style="width:90px">${dt(n.datum)}</span><div class="wachs"><div>${esc(n.titel)}</div><div class="sm mu">${esc(n.kategorie)}${n.oeffentlich ? '' : ' · Entwurf'}</div></div><button class="btn g k" data-edit-news="${n.id}">Bearbeiten</button></div>`).join('') || '<div class="leer">Noch keine News.</div>'}</div>`;
+}
+
+/* ---------- Demos ---------- */
+let demoFilter = 'neu';
+function vDemos() {
+  const l = S.demos.filter(d => demoFilter === 'alle' || d.status === demoFilter);
+  return `<div class="kopf"><h1>Demos</h1></div>
+  <div class="tabs">${[['neu','Neu'],['gehoert','Gehört'],['uebernommen','Übernommen'],['abgelehnt','Abgelehnt'],['alle','Alle']].map(([k, t]) => `<button data-df="${k}" class="${demoFilter === k ? 'on' : ''}">${t}</button>`).join('')}</div>
+  <div class="liste">${l.map(d => `<div class="zeile" style="align-items:flex-start"><div class="wachs"><div><b>${esc(d.artist)}</b> <span class="sm mu">${esc(d.genre)} · ${new Date(d.created_at).toLocaleDateString('de-DE')}</span></div>
+    ${okUrl(d.link) ? `<div class="sm"><a href="${esc(d.link)}" target="_blank" rel="noopener noreferrer">${esc(d.link)}</a></div>` : ''}<div class="sm"><a href="mailto:${esc(d.email)}">${esc(d.email)}</a></div>
+    ${d.nachricht ? `<p class="sm mu" style="margin-top:6px;white-space:pre-wrap">${esc(d.nachricht)}</p>` : ''}${d.notiz ? `<p class="sm" style="margin-top:6px">Notiz: ${esc(d.notiz)}</p>` : ''}</div>
+    <div style="text-align:right"><span class="pill ${d.status === 'neu' ? 'rot' : ''}">${DEMO_STATUS[d.status]}</span>${d.bewertung ? `<div class="sm" style="margin-top:4px">${'★'.repeat(d.bewertung)}${'☆'.repeat(5 - d.bewertung)}</div>` : ''}<div style="margin-top:6px"><button class="btn g k" data-edit-demo="${d.id}">Bewerten</button></div></div></div>`).join('') || '<div class="leer">Keine Demos in dieser Liste.</div>'}</div>
+  <p class="sm mu" style="margin-top:12px">Demos kommen über das Formular auf lismusic.de rein.</p>`;
+}
+
+/* ---------- Website ---------- */
+function vWebsite() {
+  const a = S.artists.filter(x => x.oeffentlich).length, r = S.releases.filter(x => x.oeffentlich).length, n = S.news.filter(x => x.oeffentlich).length;
+  return `<div class="kopf"><div><h1>Website</h1><p class="mu">lismusic.de zeigt, was du hier veröffentlichst.</p></div><a class="btn g" href="/" target="_blank" rel="noopener">Website ansehen</a></div>
+  <div class="card"><p>Auf der Website: <b>${a}</b> Artists, <b>${r}</b> Releases, <b>${n}</b> News. Was „nicht auf Website“ ist, bleibt intern.</p>
+  <p class="mu sm" style="margin-top:6px">${webOffen() ? 'Es gibt Änderungen, die noch nicht auf der Website sind.' : 'Die Website ist auf dem neuesten Stand.'}</p>
+  <p style="margin-top:14px"><button class="btn" id="pub">Jetzt veröffentlichen</button></p><p class="sm mu" style="margin-top:8px">Nach ca. 1 Minute ist alles live.</p></div>
+  <h2>Zuletzt veröffentlicht</h2><div class="liste">${S.pubs.map(p => `<div class="zeile sm"><span>${new Date(p.zeit).toLocaleString('de-DE')}</span><span class="wachs mu">${esc(p.hinweis)}</span>${p.commit_sha ? `<code>${esc(p.commit_sha.slice(0, 7))}</code>` : ''}</div>`).join('') || '<div class="leer">Noch nie.</div>'}</div>`;
+}
+async function veroeffentlichen() {
+  const b = $('#pub'); b.disabled = true; b.textContent = 'Wird veröffentlicht …';
+  const { data, error } = await sb.functions.invoke('veroeffentlichen', { body: {} });
+  if (error) { let t = error.message; try { t = (await error.context.json()).error || t; } catch {} toast('Fehler: ' + t); b.disabled = false; b.textContent = 'Jetzt veröffentlichen'; return; }
+  toast(data.unveraendert ? 'Website war schon aktuell' : 'Veröffentlicht, in ca. 1 Minute live');
+  await laden(); render();
+}
+
+/* ---------- Formulare ---------- */
+const opts = (o, wert) => Object.entries(o).map(([k, t]) => `<option value="${k}" ${k === wert ? 'selected' : ''}>${esc(t)}</option>`).join('');
+const artistOpts = wert => `<option value="">– ohne –</option>` + S.artists.map(a => `<option value="${a.id}" ${a.id === wert ? 'selected' : ''}>${esc(a.name)}</option>`).join('');
+const releaseOpts = wert => `<option value="">– ohne –</option>` + S.releases.map(r => `<option value="${r.id}" ${r.id === wert ? 'selected' : ''}>${esc(r.titel)} (${esc(artistVon(r.artist_id)?.name || '–')})</option>`).join('');
+function dialog(html, onSubmit, onDelete) {
+  const d = $('#dlg');
+  d.innerHTML = `<form method="dialog">${html}<div class="knoepfe"><div>${onDelete ? '<button type="button" class="btn g" data-del>Löschen</button>' : ''}</div><div style="display:flex;gap:8px"><button type="button" class="btn g" data-zu>Abbrechen</button><button class="btn" value="ok">Speichern</button></div></div></form>`;
+  const f = d.querySelector('form');
+  d.querySelector('[data-zu]').onclick = () => d.close();
+  if (onDelete) d.querySelector('[data-del]').onclick = async () => { if (!confirm('Wirklich löschen?')) return; await onDelete(); d.close(); await laden(); render(); };
+  f.onsubmit = async e => { e.preventDefault(); const b = f.querySelector('[value=ok]'); b.disabled = true;
+    try { await onSubmit(new FormData(f), f); d.close(); await laden(); render(); } catch { b.disabled = false; } };
+  d.showModal();
+  return d;
+}
+const linksAus = (fd, liste) => Object.fromEntries(liste.map(([k]) => [k, String(fd.get('l_' + k) || '').trim()]).filter(([, v]) => okUrl(v)));
+const linkFelder = (liste, werte) => `<div class="f2">${liste.map(([k, t]) => `<label class="f">${t}<input name="l_${k}" type="url" placeholder="https://" value="${esc(werte?.[k] || '')}"></label>`).join('')}</div>`;
+
+function artistForm(a = {}, vorbelegt = {}) {
+  let foto = a.foto || null;
+  const d = dialog(`<h2 style="margin-top:0">${a.id ? 'Artist bearbeiten' : 'Neuer Artist'}</h2>
+    ${dropHtml(foto, 'Foto hierher ziehen oder klicken')}
+    <div class="f2"><label class="f">Künstlername<input name="name" required value="${esc(a.name || vorbelegt.name || '')}"></label><label class="f">Genre<input name="genre" value="${esc(a.genre || vorbelegt.genre || '')}"></label></div>
+    <label class="f">Bio (für die Website)<textarea name="bio">${esc(a.bio || '')}</textarea></label>
+    ${linkFelder(LINKS_ARTIST, a.links)}
+    <label class="cb"><input type="checkbox" name="oeffentlich" ${a.oeffentlich ? 'checked' : ''}> Auf der Website zeigen</label>
+    <h3 style="margin:16px 0 8px">Intern</h3>
+    <div class="f2"><label class="f">Status<select name="status">${opts(ARTIST_STATUS, a.status || 'gehoert')}</select></label><label class="f">Nachhaken am<input type="date" name="wv" value="${esc(a.wv || '')}"></label>
+    <label class="f">Bürgerlicher Name<input name="buerg_name" value="${esc(a.buerg_name || '')}"></label><label class="f">E-Mail<input type="email" name="email" value="${esc(a.email || vorbelegt.email || '')}"></label>
+    <label class="f">Telefon<input name="tel" value="${esc(a.tel || '')}"></label><label class="f">Reihenfolge auf Website<input type="number" name="sortierung" value="${esc(a.sortierung ?? 0)}"></label></div>
+    <label class="f">Notizen<textarea name="notizen">${esc(a.notizen || vorbelegt.notizen || '')}</textarea></label>`,
+    async fd => {
+      const w = { name: fd.get('name').trim(), genre: fd.get('genre').trim(), bio: fd.get('bio').trim(), foto, links: linksAus(fd, LINKS_ARTIST), oeffentlich: !!fd.get('oeffentlich'),
+        status: fd.get('status'), wv: fd.get('wv') || null, buerg_name: fd.get('buerg_name').trim(), email: fd.get('email').trim(), tel: fd.get('tel').trim(), notizen: fd.get('notizen').trim(), sortierung: +fd.get('sortierung') || 0 };
+      if (!a.id) { let s = slugify(w.name), i = 2; while (S.artists.some(x => x.slug === s)) s = slugify(w.name) + '-' + i++; w.slug = s; w.log = logEintrag([], 'Angelegt'); }
+      else if (a.status !== w.status) w.log = logEintrag(a.log, `Status: ${ARTIST_STATUS[a.status]} → ${ARTIST_STATUS[w.status]}`);
+      const neu = await speichern('artists', w, a.id);
+      if (vorbelegt.demoId) await speichern('demos', { status: 'uebernommen', artist_id: neu.id }, vorbelegt.demoId);
+      if (!a.id) location.hash = `#artist/${neu.id}`;
+    },
+    a.id ? () => loeschen('artists', a.id) : null);
+  dropzone(d.querySelector('.drop'), 'artists', p => foto = p);
+}
+function releaseForm(r = {}, vorbelegt = {}) {
+  let cover = r.cover || null;
+  const d = dialog(`<h2 style="margin-top:0">${r.id ? 'Release bearbeiten' : 'Neuer Release'}</h2>
+    ${dropHtml(cover, 'Cover hierher ziehen oder klicken')}
+    <div class="f2"><label class="f">Titel<input name="titel" required value="${esc(r.titel || '')}"></label><label class="f">Artist<select name="artist_id">${artistOpts(r.artist_id ?? vorbelegt.artist_id)}</select></label>
+    <label class="f">Typ<select name="typ">${opts({Single:'Single', EP:'EP', Album:'Album'}, r.typ || 'Single')}</select></label><label class="f">Status<select name="status">${opts(RELEASE_STATUS, r.status || 'planung')}</select></label>
+    <label class="f">Release-Tag<input type="date" name="datum" value="${esc(r.datum || '')}"></label><label class="f">Ohne festes Datum anzeigen als<input name="datum_text" placeholder="z. B. 2027" value="${esc(r.datum_text || '')}"></label>
+    <label class="f">ISRC<input name="isrc" value="${esc(r.isrc || '')}"></label><label class="f">UPC<input name="upc" value="${esc(r.upc || '')}"></label></div>
+    ${linkFelder(LINKS_RELEASE, r.links)}
+    <label class="cb"><input type="checkbox" name="oeffentlich" ${r.oeffentlich ? 'checked' : ''}> Auf der Website zeigen</label>
+    <label class="f">Notizen (intern)<textarea name="notizen">${esc(r.notizen || '')}</textarea></label>`,
+    async fd => {
+      const w = { titel: fd.get('titel').trim(), artist_id: +fd.get('artist_id') || null, typ: fd.get('typ'), status: fd.get('status'), datum: fd.get('datum') || null, datum_text: fd.get('datum_text').trim(),
+        isrc: fd.get('isrc').trim(), upc: fd.get('upc').trim(), links: linksAus(fd, LINKS_RELEASE), oeffentlich: !!fd.get('oeffentlich'), notizen: fd.get('notizen').trim(), cover };
+      if (r.id && r.status !== w.status) w.log = logEintrag(r.log, `Status: ${RELEASE_STATUS[r.status]} → ${RELEASE_STATUS[w.status]}`);
+      const neu = await speichern('releases', w, r.id);
+      // Datum geändert: Fristen der Checkliste mitziehen
+      if (r.id && w.datum && w.datum !== r.datum) {
+        const auf = S.aufgaben.filter(x => x.release_id === r.id && x.tage !== null && !x.erledigt);
+        if (auf.length && confirm(`Release-Tag geändert. Fristen von ${auf.length} offenen Aufgaben anpassen?`))
+          await Promise.all(auf.map(x => sb.from('aufgaben').update({ faellig: plusTage(w.datum, x.tage) }).eq('id', x.id)));
+      }
+      if (!r.id) location.hash = `#release/${neu.id}`;
+    },
+    r.id ? () => loeschen('releases', r.id) : null);
+  dropzone(d.querySelector('.drop'), 'covers', p => cover = p);
+}
+function aufgabeForm(x = {}, vorbelegt = {}) {
+  dialog(`<h2 style="margin-top:0">${x.id ? 'Aufgabe' : 'Neue Aufgabe'}</h2>
+    <label class="f">Was<input name="titel" required value="${esc(x.titel || '')}"></label>
+    <div class="f2"><label class="f">Bereich<select name="bereich">${opts(BEREICH, x.bereich || 'sonstiges')}</select></label><label class="f">Fällig am<input type="date" name="faellig" value="${esc(x.faellig || '')}"></label></div>
+    <label class="f">Release<select name="release_id">${releaseOpts(x.release_id ?? vorbelegt.release_id)}</select></label>`,
+    async fd => {
+      const w = { titel: fd.get('titel').trim(), bereich: fd.get('bereich'), faellig: fd.get('faellig') || null, release_id: +fd.get('release_id') || null };
+      if (x.id && w.faellig !== x.faellig) w.tage = null; // manuell gesetzt: nicht mehr automatisch verschieben
+      await speichern('aufgaben', w, x.id);
+    },
+    x.id ? () => loeschen('aufgaben', x.id) : null);
+}
+function contentForm(c = {}, vorbelegt = {}) {
+  dialog(`<h2 style="margin-top:0">${c.id ? 'Content' : 'Neue Content-Idee'}</h2>
+    <label class="f">Idee<textarea name="idee" required placeholder="z. B. Hook im Auto mitsingen, Studio-Snippet, Trend X">${esc(c.idee || '')}</textarea></label>
+    <div class="f2"><label class="f">Plattform<select name="plattform">${opts(PLATTFORM, c.plattform || 'tiktok')}</select></label><label class="f">Status<select name="status">${opts(CONTENT_STATUS, c.status || 'idee')}</select></label>
+    <label class="f">Datum<input type="date" name="datum" value="${esc(c.datum || '')}"></label><label class="f">Link zum Post<input type="url" name="link" placeholder="https://" value="${esc(c.link || '')}"></label>
+    <label class="f">Release<select name="release_id">${releaseOpts(c.release_id ?? vorbelegt.release_id)}</select></label><label class="f">Artist<select name="artist_id">${artistOpts(c.artist_id ?? vorbelegt.artist_id)}</select></label></div>`,
+    async fd => {
+      await speichern('content', { idee: fd.get('idee').trim(), plattform: fd.get('plattform'), status: fd.get('status'), datum: fd.get('datum') || null,
+        link: okUrl(fd.get('link').trim()) || '', release_id: +fd.get('release_id') || null, artist_id: +fd.get('artist_id') || null }, c.id);
+    },
+    c.id ? () => loeschen('content', c.id) : null);
+}
+function newsForm(n = {}) {
+  dialog(`<h2 style="margin-top:0">${n.id ? 'News bearbeiten' : 'Neue News'}</h2>
+    <label class="f">Titel<input name="titel" required value="${esc(n.titel || '')}"></label>
+    <div class="f2"><label class="f">Datum<input type="date" name="datum" required value="${esc(n.datum || iso(heute()))}"></label><label class="f">Kategorie<input name="kategorie" list="kats" value="${esc(n.kategorie || 'Label')}"><datalist id="kats"><option>Label</option><option>Release</option><option>Demo</option><option>Live</option></datalist></label></div>
+    <label class="f">Text (optional)<textarea name="text">${esc(n.text || '')}</textarea></label>
+    <label class="cb"><input type="checkbox" name="oeffentlich" ${n.oeffentlich !== false ? 'checked' : ''}> Auf der Website zeigen</label>`,
+    async fd => { await speichern('news', { titel: fd.get('titel').trim(), datum: fd.get('datum'), kategorie: fd.get('kategorie').trim() || 'Label', text: fd.get('text').trim(), oeffentlich: !!fd.get('oeffentlich') }, n.id); },
+    n.id ? () => loeschen('news', n.id) : null);
+}
+function demoForm(x) {
+  const d = dialog(`<h2 style="margin-top:0">${esc(x.artist)}</h2>${okUrl(x.link) ? `<p><a href="${esc(x.link)}" target="_blank" rel="noopener noreferrer">Track anhören</a></p>` : ''}
+    <div class="f2" style="margin-top:12px"><label class="f">Status<select name="status">${opts(DEMO_STATUS, x.status)}</select></label><label class="f">Bewertung<select name="bewertung"><option value="">–</option>${[1,2,3,4,5].map(i => `<option ${x.bewertung === i ? 'selected' : ''}>${i}</option>`).join('')}</select></label></div>
+    <label class="f">Notiz<textarea name="notiz">${esc(x.notiz)}</textarea></label>
+    ${x.artist_id ? '' : '<p><button type="button" class="btn g" data-zuartist>Als Artist anlegen</button></p>'}`,
+    async fd => { await speichern('demos', { status: fd.get('status'), bewertung: +fd.get('bewertung') || null, notiz: fd.get('notiz').trim() }, x.id); },
+    () => loeschen('demos', x.id));
+  const b = d.querySelector('[data-zuartist]');
+  if (b) b.onclick = () => { d.close(); artistForm({}, { name: x.artist, genre: x.genre, email: x.email, notizen: `Demo: ${x.link}\n${x.nachricht}`.trim(), demoId: x.id }); };
+}
+
+/* ---------- Navigation ---------- */
+function render() {
+  const h = location.hash.slice(1) || 'heute', [v, id] = h.split('/');
+  const views = { heute: vHeute, artists: vArtists, artist: () => vArtist(+id), releases: vReleases, release: () => vRelease(+id), content: vContent, news: vNews, demos: vDemos, website: vWebsite };
+  $('#main').innerHTML = (views[v] || vHeute)();
+  const aktiv = v === 'artist' ? 'artists' : v === 'release' ? 'releases' : (views[v] ? v : 'heute');
+  $$('#menu a[data-v]').forEach(a => a.classList.toggle('on', a.dataset.v === aktiv));
+  badges();
+}
+function route() { render(); scrollTo(0, 0); }
+addEventListener('hashchange', () => { if (ich) route(); });
+
+$('#main').addEventListener('click', async e => {
+  const t = e.target.closest('button,[data-erledigt]'); if (!t) return;
+  const ds = t.dataset;
+  if (ds.neu === 'artist') artistForm();
+  else if (ds.neu === 'release') releaseForm({}, { artist_id: +ds.artist || null });
+  else if (ds.neu === 'aufgabe') aufgabeForm({}, { release_id: +ds.release || null });
+  else if (ds.neu === 'content') contentForm({}, { release_id: +ds.release || null, artist_id: +ds.artist || null });
+  else if (ds.neu === 'news') newsForm();
+  else if (ds.editArtist) artistForm(artistVon(+ds.editArtist));
+  else if (ds.editRelease) releaseForm(releaseVon(+ds.editRelease));
+  else if (ds.editAufgabe) aufgabeForm(S.aufgaben.find(x => x.id === +ds.editAufgabe));
+  else if (ds.editContent) contentForm(S.content.find(x => x.id === +ds.editContent));
+  else if (ds.editNews) newsForm(S.news.find(x => x.id === +ds.editNews));
+  else if (ds.editDemo) demoForm(S.demos.find(x => x.id === +ds.editDemo));
+  else if (ds.vorlage) vorlageAnlegen(+ds.vorlage);
+  else if (ds.af) { artistFilter = ds.af; render(); }
+  else if (ds.cf) { contentFilter = ds.cf; render(); }
+  else if (ds.df) { demoFilter = ds.df; render(); }
+  else if (t.id === 'pub') veroeffentlichen();
+});
+$('#main').addEventListener('change', async e => {
+  const t = e.target; if (!t.dataset.erledigt) return;
+  const id = +t.dataset.erledigt, x = S.aufgaben.find(a => a.id === id);
+  const w = { erledigt: t.checked, erledigt_am: t.checked ? new Date().toISOString() : null };
+  const { error } = await sb.from('aufgaben').update(w).eq('id', id);
+  if (error) { t.checked = !t.checked; return toast('Fehler: ' + error.message); }
+  Object.assign(x, w); setTimeout(render, 250);
+});
+
+start();
+</script>
+</body></html>

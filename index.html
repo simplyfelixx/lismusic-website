@@ -70,6 +70,10 @@ nav.main a.on::after{content:"";position:absolute;left:0;right:0;bottom:-8px;hei
 .art .r{position:absolute;top:20px;right:20px;font-size:13px;color:var(--se)}
 .art .ini{position:absolute;inset:0;display:grid;place-items:center;font-family:'Big Shoulders Display';font-size:220px;font-weight:700;color:rgba(239,233,222,.04);transition:color .3s var(--ease)}
 .art:hover .ini{color:rgba(255,31,61,.35)}
+.art img.bg,.cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.art img.bg{opacity:.6}
+.art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(18,17,15,.85))}
+.art .n,.art .r{z-index:1}
 .news-row{display:grid;grid-template-columns:120px 1fr auto;gap:24px;align-items:baseline;padding:24px 0;border-bottom:1px solid var(--line)}
 .news-row:hover h3{color:var(--rd)}
 .news-row h3{font-size:clamp(22px,3vw,34px);font-weight:500;transition:color .15s var(--ease)}
@@ -118,7 +122,7 @@ footer{border-top:1px solid var(--line);padding:clamp(48px,8vw,96px) var(--pad) 
 <section class="page" id="p-home">
 <div class="hero"><svg class="clock" viewBox="0 0 100 100"><use href="#ring"/><rect class="hand" id="hh" x="47" y="33" width="6" height="16" rx="1" fill="currentColor"/><rect class="hand" id="mh" x="47.5" y="24" width="5" height="25" rx="1" fill="currentColor"/></svg><div class="in"><h1 >Life is<span class="serif">short.</span></h1><p >Independent Label aus Halstenbek bei Hamburg. Wir bringen neue Artists raus mit fairen Deals.</p><div class="btnrow" style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="#demo">Demo schicken</a><a class="btn g" href="#artists">Artists ansehen</a></div></div></div>
 <div class="roster" id="roster"></div>
-<div class="sec"><div class="count"><div><div class="kick">Nächster Release</div><h2 style="font-size:clamp(40px,6vw,80px)">Artist Eins<br><span class="serif mu">Songtitel</span></h2></div><div class="cd" id="cd"></div></div></div>
+<div class="sec" id="next"><div class="count"><div><div class="kick">Nächster Release</div><h2 style="font-size:clamp(40px,6vw,80px)" id="nextT">Artist Eins<br><span class="serif mu">Songtitel</span></h2></div><div class="cd" id="cd"></div></div></div>
 <div class="sec"><div class="kick">News</div><div id="newsHome"></div><a class="btn g" href="#news" style="margin-top:32px">Alle News</a></div>
 </section>
 
@@ -154,35 +158,53 @@ footer{border-top:1px solid var(--line);padding:clamp(48px,8vw,96px) var(--pad) 
 <div><h4>Info</h4><a href="#about">Über uns</a><a href="#kontakt">Kontakt</a><a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a></div></div>
 <div class="fbot"><span>© 2026 LIS Music · Life Is Short</span><span>Halstenbek, Hamburg</span></div></footer>
 
+<script src="/config.js"></script>
 <script>
-const A=[['Artist Eins','Rap'],['Artist Zwei','R&B'],['Artist Drei','Pop'],['Artist Vier','Rap']];
-const R=[['Songtitel','Artist Eins','Single','01.12.2026'],['EP-Titel','Artist Zwei','EP','2027'],['Songtitel','Artist Drei','Single','2027']];
-const N=[['04.11.2026','LIS Music ist gestartet','Label'],['20.11.2026','Erste Single kommt am 01.12.','Release'],['01.11.2026','Wir suchen neue Artists','Demo']];
+// Inhalte kommen aus data/site.json (wird im Cockpit unter /admin gepflegt und veröffentlicht)
 const $=s=>document.querySelector(s);
-$('#roster').innerHTML=A.map((a,i)=>`<a href="#artist-${i}">${a[0]}</a>`).join('');
-$('#artGrid').innerHTML=A.map((a,i)=>`<a class="art" href="#artist-${i}"><span class="ini">${a[0].split(' ')[1][0]}</span><span class="r">${a[1]}</span><span class="n">${a[0]}</span></a>`).join('');
-$('#relGrid').innerHTML=R.map(r=>`<div class="item"><div class="cover"><span class="tag">${r[2]}</span><svg><use href="#logo"/></svg></div><h3>${r[0]}</h3><p>${r[1]} · ${r[3]}</p></div>`).join('');
-const nr=n=>`<a class="news-row" href="#news"><span class="mu">${n[0]}</span><h3>${n[1]}</h3><span class="mu">${n[2]}</span></a>`;
-$('#newsHome').innerHTML=N.map(nr).join('');$('#newsAll').innerHTML=N.concat(N).map(nr).join('');
-function artist(i){const a=A[i];$('#artDetail').innerHTML=`<h1 class="ph">${a[0]}</h1><div class="wrap two" style="padding-bottom:96px"><div class="art" style="cursor:default"><span class="ini">${a[0].split(' ')[1][0]}</span></div><div><div class="kick">${a[1]}</div><p class="big">Platzhalter für die Bio. <em>Wer, woher, was macht den Sound aus.</em></p><div style="margin-top:32px"><div class="feat"><span>Spotify</span><span class="mu">bald</span></div><div class="feat"><span>Instagram</span><span class="mu">@platzhalter</span></div><div class="feat"><span>Booking</span><a href="#kontakt">Anfragen</a></div></div><a class="btn g" href="#artists" style="margin-top:24px">Alle Artists</a></div></div>`}
-function route(){let h=location.hash.slice(1)||'home';let id=h;if(h.startsWith('artist-')){artist(+h.split('-')[1]);id='artist'}
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const url=u=>/^(https?:\/\/|\/media\/)/i.test(String(u||''))?u:'';
+const dt=d=>d?d.split('-').reverse().join('.'):'';
+let D={artists:[],releases:[],news:[]};
+const LINKS=[['spotify','Spotify'],['apple','Apple Music'],['instagram','Instagram'],['tiktok','TikTok'],['youtube','YouTube']];
+function ini(n){const w=String(n).trim().split(/\s+/);return esc((w[w.length-1]||'?')[0]||'?')}
+function render(){
+const A=D.artists,R=D.releases,N=D.news;
+$('#roster').innerHTML=A.map(a=>`<a href="#artist-${esc(a.slug)}">${esc(a.name)}</a>`).join('');
+$('#artGrid').innerHTML=A.map(a=>`<a class="art" href="#artist-${esc(a.slug)}">${url(a.foto)?`<img class="bg" src="${esc(a.foto)}" alt="" loading="lazy">`:`<span class="ini">${ini(a.name)}</span>`}<span class="r">${esc(a.genre)}</span><span class="n">${esc(a.name)}</span></a>`).join('');
+$('#relGrid').innerHTML=R.map(r=>{const l=url(r.links&&(r.links.presave||r.links.spotify));return `<${l?`a href="${esc(l)}" target="_blank" rel="noopener"`:'div'} class="item"><div class="cover"><span class="tag">${esc(r.typ)}</span>${url(r.cover)?`<img src="${esc(r.cover)}" alt="Cover ${esc(r.titel)}" loading="lazy">`:'<svg><use href="#logo"/></svg>'}</div><h3>${esc(r.titel)}</h3><p>${esc(r.artist)} · ${r.datum?dt(r.datum):esc(r.datum_text||'bald')}</p></${l?'a':'div'}>`}).join('');
+const nr=n=>`<a class="news-row" href="#news"><span class="mu">${dt(n.datum)}</span><h3>${esc(n.titel)}</h3><span class="mu">${esc(n.kategorie)}</span></a>`;
+$('#newsHome').innerHTML=N.slice(0,3).map(nr).join('');$('#newsAll').innerHTML=N.map(nr).join('');
+// Nächster Release mit festem Datum in der Zukunft, sonst Bereich ausblenden
+const h=new Date().toISOString().slice(0,10),nx=R.filter(r=>r.datum&&r.datum>=h).sort((a,b)=>a.datum.localeCompare(b.datum))[0];
+$('#next').hidden=!nx;if(nx){$('#nextT').innerHTML=`${esc(nx.artist)}<br><span class="serif mu">${esc(nx.titel)}</span>`;ziel=new Date(nx.datum+'T00:00:00')}
+route()}
+function artist(slug){const a=D.artists.find(x=>x.slug===slug);if(!a)return false;
+const links=LINKS.filter(([k])=>url(a.links&&a.links[k])).map(([k,t])=>`<div class="feat"><span>${t}</span><a href="${esc(a.links[k])}" target="_blank" rel="noopener">Öffnen</a></div>`).join('');
+$('#artDetail').innerHTML=`<h1 class="ph">${esc(a.name)}</h1><div class="wrap two" style="padding-bottom:96px"><div class="art" style="cursor:default">${url(a.foto)?`<img class="bg" src="${esc(a.foto)}" alt="${esc(a.name)}" style="opacity:1">`:`<span class="ini">${ini(a.name)}</span>`}</div><div><div class="kick">${esc(a.genre)}</div><p class="big">${a.bio?esc(a.bio):'Bio folgt.'}</p><div style="margin-top:32px">${links}<div class="feat"><span>Booking</span><a href="#kontakt">Anfragen</a></div></div><a class="btn g" href="#artists" style="margin-top:24px">Alle Artists</a></div></div>`;return true}
+function route(){let h=location.hash.slice(1)||'home';let id=h;if(h.startsWith('artist-')){id=artist(h.slice(7))?'artist':'artists'}
 if(!document.getElementById('p-'+id))id='home';
 document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id==='p-'+id));
 document.querySelectorAll('nav.main a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+(id==='artist'?'artists':id)));
 $('#nav').classList.remove('open');scrollTo(0,0)}
 
 addEventListener('hashchange',route);route();
+fetch('/data/site.json',{cache:'no-cache'}).then(r=>r.json()).then(j=>{D=j;render()}).catch(()=>{});
 $('#bg').onclick=()=>$('#nav').classList.toggle('open');
 addEventListener('scroll',()=>$('#hdr').classList.toggle('s',scrollY>20),{passive:true});
 // Die Uhr zeigt die echte Uhrzeit in Deutschland: die Uhr läuft
 function tick(){const t=new Intl.DateTimeFormat('de-DE',{timeZone:'Europe/Berlin',hour:'numeric',minute:'numeric',second:'numeric',hour12:false}).formatToParts(new Date()),g=k=>+t.find(x=>x.type===k).value;
 const m=g('minute')+g('second')/60,h=g('hour')%12+m/60;$('#mh').style.transform=`rotate(${m*6}deg)`;$('#hh').style.transform=`rotate(${h*30}deg)`;$('.clock').setAttribute('aria-label',`Uhrzeit ${g('hour')}:${String(g('minute')).padStart(2,'0')}`)}tick();setInterval(tick,10000);
-const t=new Date('2026-12-01T00:00:00'),p=n=>String(n).padStart(2,'0');
-function cd(){let s=Math.max(0,(t-new Date())/1000|0);$('#cd').innerHTML=[[s/86400|0,'Tage'],[s%86400/3600|0,'Std'],[s%3600/60|0,'Min'],[s%60,'Sek']].map(x=>`<div><b>${p(x[0])}</b><small>${x[1]}</small></div>`).join('')}cd();setInterval(cd,1000);
+let ziel=null;const p=n=>String(n).padStart(2,'0');
+function cd(){if(!ziel)return;let s=Math.max(0,(ziel-new Date())/1000|0);$('#cd').innerHTML=[[s/86400|0,'Tage'],[s%86400/3600|0,'Std'],[s%3600/60|0,'Min'],[s%60,'Sek']].map(x=>`<div><b>${p(x[0])}</b><small>${x[1]}</small></div>`).join('')}cd();setInterval(cd,1000);
 // Netlify Forms: per fetch absenden, Bestätigung auf der Seite zeigen
-document.querySelectorAll('form.nf').forEach(f=>f.addEventListener('submit',e=>{e.preventDefault();
+// Demo zusätzlich direkt ins Cockpit (Supabase), falls eingerichtet. Netlify Forms bleibt für die Mail.
+function insCockpit(f){const C=window.LIS_CONFIG||{};if(f.name!=='demo'||!C.SUPABASE_URL||!C.SUPABASE_ANON_KEY||f.querySelector('[name=bot-field]').value)return Promise.resolve();
+const g=n=>(f.querySelector(`[name=${n}]`)||{}).value||'';
+return fetch(C.SUPABASE_URL.replace(/\/$/,'')+'/rest/v1/demos',{method:'POST',headers:{apikey:C.SUPABASE_ANON_KEY,Authorization:'Bearer '+C.SUPABASE_ANON_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({artist:g('artist').trim(),email:g('email').trim(),genre:g('genre'),link:g('link').trim(),nachricht:g('nachricht').trim()})}).catch(()=>{})}
+document.querySelectorAll('form.nf').forEach(f=>f.addEventListener('submit',e=>{e.preventDefault();const cockpit=insCockpit(f);
 fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(f)).toString()})
-.then(r=>{if(!r.ok)throw 0;f.innerHTML='<p class="big">'+f.dataset.ok+'</p>'})
+.then(async r=>{if(!r.ok)throw 0;await cockpit;f.innerHTML='<p class="big">'+f.dataset.ok+'</p>'})
 .catch(()=>alert('Senden hat nicht geklappt. Schreib uns bitte an hallo@lismusic.de.'))}));
 </script>
 </body></html>

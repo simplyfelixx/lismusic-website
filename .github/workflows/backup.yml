@@ -1,0 +1,81 @@
+# Automatisches Datenbank-Backup des LIS Cockpits
+# Läuft 2× täglich, sichert alle Cockpit-Tabellen, verschlüsselt (GPG, AES256),
+# und legt sie im PRIVATEN Repo „lismusic-backups“ ab (dieses Website-Repo ist öffentlich).
+# Jedes Backup wird 14 Tage aufbewahrt. Hält nebenbei das Supabase-Gratisprojekt aktiv.
+# Einrichtung: ANLEITUNG-COCKPIT.md, Abschnitt „Backups“.
+name: Cockpit-Backup
+
+on:
+  schedule:
+    - cron: '0 4,16 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Prüfen, ob eingerichtet
+        id: pruef
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        run: |
+          if [ -z "${SUPABASE_URL}" ]; then echo "Backup noch nicht eingerichtet, übersprungen."; echo "los=nein" >> "$GITHUB_OUTPUT"; else echo "los=ja" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Datenbank aus Supabase exportieren
+        if: steps.pruef.outputs.los == 'ja'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          set -euo pipefail
+          headers=(-H "apikey: ${SUPABASE_SERVICE_KEY}")
+          case "${SUPABASE_SERVICE_KEY}" in sb_*) ;; *) headers+=(-H "Authorization: Bearer ${SUPABASE_SERVICE_KEY}") ;; esac
+          hole() {
+            local tab="$1" seite=0 gr=1000 n code
+            echo '[]' > "$tab.json"
+            while :; do
+              code=$(curl -sS --retry 3 -w '%{http_code}' "${SUPABASE_URL%/}/rest/v1/${tab}?select=*&order=$2&limit=${gr}&offset=$((seite*gr))" "${headers[@]}" -o teil.json || echo 000)
+              if [ "$code" != 200 ]; then echo "::error::Tabelle ${tab} nicht lesbar (HTTP ${code}): $(head -c 200 teil.json)"; exit 1; fi
+              n=$(jq length teil.json)
+              jq -s '.[0] + .[1]' "$tab.json" teil.json > neu.json && mv neu.json "$tab.json"
+              [ "$n" -lt "$gr" ] && break
+              seite=$((seite+1))
+            done
+            rm -f teil.json; echo "${tab}: $(jq length "$tab.json") Zeilen"
+          }
+          tabs="team artists releases aufgaben content news demos veroeffentlichungen"
+          for t in $tabs; do case $t in team) hole $t user_id ;; *) hole $t id ;; esac; done
+          stamp=$(TZ=Europe/Berlin date +%Y-%m-%d_%H-%M)
+          args=(); for t in $tabs; do args+=(--slurpfile "$t" "$t.json"); done
+          jq -n --arg t "$(date -u +%FT%TZ)" "${args[@]}" \
+            '{app:"LIS Cockpit", exportiert:$t, team:$team[0], artists:$artists[0], releases:$releases[0], aufgaben:$aufgaben[0], content:$content[0], news:$news[0], demos:$demos[0], veroeffentlichungen:$veroeffentlichungen[0]}' \
+            > "lis-cockpit-backup-${stamp}.json"
+          for t in $tabs; do rm -f "$t.json"; done
+
+      - name: Verschlüsselt im privaten Backup-Repo ablegen
+        if: steps.pruef.outputs.los == 'ja'
+        env:
+          BACKUP_PASSWORD: ${{ secrets.BACKUP_PASSWORD }}
+          BACKUP_REPO_TOKEN: ${{ secrets.BACKUP_REPO_TOKEN }}
+          BACKUP_REPO: ${{ vars.BACKUP_REPO || 'simplyfelixx/lismusic-backups' }}
+        run: |
+          set -euo pipefail
+          if [ -z "${BACKUP_PASSWORD}" ] || [ -z "${BACKUP_REPO_TOKEN}" ]; then echo "::error::Secrets BACKUP_PASSWORD und BACKUP_REPO_TOKEN fehlen."; exit 1; fi
+          f=$(ls lis-cockpit-backup-*.json)
+          gpg --batch --yes --pinentry-mode loopback --passphrase "$BACKUP_PASSWORD" --symmetric --cipher-algo AES256 -o "$f.gpg" "$f"
+          rm -f "$f"
+          url="https://x-access-token:${BACKUP_REPO_TOKEN}@github.com/${BACKUP_REPO}.git"
+          git init -q ablage && cd ablage
+          git config user.name "backup-bot"; git config user.email "backup-bot@users.noreply.github.com"
+          if git fetch -q --depth 1 "$url" backups 2>/dev/null; then git checkout -q FETCH_HEAD -- . 2>/dev/null || true; fi
+          mv "../$f.gpg" .
+          grenze=$(TZ=Europe/Berlin date -d '14 days ago' +%Y-%m-%d)
+          for x in lis-cockpit-backup-*.json.gpg; do d=${x#lis-cockpit-backup-}; d=${d:0:10}; [[ "$d" < "$grenze" ]] && rm -f "$x"; done
+          git checkout -q --orphan backups
+          git add -A && git commit -qm "Backup $(TZ=Europe/Berlin date '+%d.%m.%Y %H:%M')"
+          git push -q -f "$url" backups
+          echo "Abgelegt: $(ls | wc -l) Backups"
