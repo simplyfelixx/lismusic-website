@@ -3,107 +3,106 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>LIS Music · Life Is Short</title>
 <meta name="description" content="LIS Music ist ein Independent Label aus Halstenbek bei Hamburg. Neue Artists, faire Deals.">
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0E0A14;--panel:#1E1530;--line:#2E2440;--tx:#F2F2F2;--mu:#A79BBD;--pu:#B57BFF;--rd:#FF1F3D;--pad:clamp(16px,4vw,56px)}
+/* Überarbeitet nach unslop von Damir Sokolovsky (@heydamir), CC BY 4.0 */
+:root{--bg:#12110f;--panel:#1c1a18;--raised:#262421;--line:rgba(239,233,222,.08);--line2:rgba(239,233,222,.16);--tx:#efe9de;--se:#aaa398;--mu:#8a847a;--rd:#FF1F3D;--rd-ink:#E0112F;--ease:cubic-bezier(.22,1,.36,1);--pad:clamp(16px,4vw,56px)}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--tx);font:16px/1.55 Manrope,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 a{color:inherit;text-decoration:none}
-::selection{background:var(--rd);color:#fff}
-h1,h2,.disp{font-family:'Big Shoulders Display',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:.9}
+:focus-visible{outline:2px solid var(--rd);outline-offset:4px;border-radius:4px}
+::selection{background:var(--rd-ink);color:#fff}
+h1,h2,.disp{font-family:'Big Shoulders Display',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.01em;line-height:.9}
 .serif{font-family:'Instrument Serif',serif;font-weight:400;text-transform:none;font-style:italic;letter-spacing:0}
-.mu{color:var(--mu)}
+.mu{color:var(--se)}
 .wrap{padding:0 var(--pad)}
-header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px var(--pad);transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
-header.s{background:rgba(14,10,20,.82);backdrop-filter:blur(12px);border-color:var(--line)}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.1em;font-size:14px}
+header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px var(--pad);transition:background-color .3s var(--ease),border-color .3s var(--ease);border-bottom:1px solid transparent}
+header.s{background:rgba(18,17,15,.9);backdrop-filter:blur(12px);border-color:var(--line)}
+.brand{display:flex;align-items:center;gap:8px;font-weight:600;letter-spacing:.08em;font-size:14px}
 .brand svg{width:28px;height:28px;color:var(--rd)}
-nav.main{display:flex;gap:26px;font-size:14px;font-weight:500}
-nav.main a{color:var(--mu);position:relative;transition:color .2s}
+nav.main{display:flex;gap:24px;font-size:14px;font-weight:500}
+nav.main a{color:var(--se);position:relative;transition:color .15s var(--ease)}
 nav.main a:hover,nav.main a.on{color:var(--tx)}
-nav.main a.on::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:var(--rd)}
-.cta{border:1px solid var(--line);padding:9px 16px;border-radius:99px;font-size:13px;font-weight:600;transition:.2s}
-.cta:hover{border-color:var(--rd);background:var(--rd)}
+nav.main a.on::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:2px;background:var(--rd)}
+.cta{border:1px solid var(--line2);padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;transition:background-color .15s var(--ease),border-color .15s var(--ease)}
+.cta:hover{border-color:var(--rd-ink);background:var(--rd-ink)}
 .burger{display:none;background:none;border:0;color:var(--tx);font:600 14px Manrope;cursor:pointer}
 @media(max-width:900px){nav.main,.cta.d{display:none}.burger{display:block}
- nav.main.open{display:flex;position:fixed;inset:60px 0 0 0;background:var(--bg);flex-direction:column;padding:30px var(--pad);gap:18px;font-size:28px}}
+ nav.main.open{display:flex;position:fixed;inset:60px 0 0 0;background:var(--bg);flex-direction:column;padding:32px var(--pad);gap:16px;font-size:28px}}
 .page{display:none;min-height:100vh;padding-top:80px}
-.page.on{display:block;animation:pin .6s cubic-bezier(.2,.7,.2,1)}
-@keyframes pin{from{opacity:0;transform:translateY(14px)}}
-.rv{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s cubic-bezier(.2,.7,.2,1)}
-.rv.in{opacity:1;transform:none}
-.sec{padding:clamp(60px,10vw,120px) var(--pad);border-top:1px solid var(--line)}
-.kick{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--mu);margin-bottom:22px;text-transform:uppercase;letter-spacing:.12em}
+.page.on{display:block;animation:pin .4s var(--ease)}
+@keyframes pin{from{opacity:0;transform:translateY(8px)}}
+.sec{padding:clamp(64px,10vw,128px) var(--pad);border-top:1px solid var(--line)}
+.kick{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:var(--se);margin-bottom:24px}
 .kick::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--rd)}
-.ph{font-size:clamp(56px,11vw,150px);padding:clamp(40px,8vw,90px) var(--pad) clamp(30px,5vw,60px)}
-.btn{display:inline-flex;align-items:center;gap:10px;background:var(--rd);color:#fff;padding:14px 22px;border-radius:99px;font-weight:800;font-size:14px;border:0;cursor:pointer;transition:transform .2s}
-.btn:hover{transform:translateY(-2px)}
-.btn.g{background:transparent;border:1px solid var(--line)}
+.ph{font-size:clamp(56px,11vw,150px);padding:clamp(40px,8vw,96px) var(--pad) clamp(32px,5vw,64px)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--rd-ink);color:#fff;height:48px;padding:0 20px;border-radius:10px;font-weight:600;font-size:14px;border:1px solid transparent;cursor:pointer;transition:background-color .15s var(--ease),border-color .15s var(--ease),transform .12s var(--ease)}
+.btn:hover{background:#c40d28}
+.btn:active{transform:scale(.98)}
+.btn.g{background:var(--raised);border-color:var(--line2);color:var(--tx)}
 .btn.g:hover{border-color:var(--tx)}
 .hero{--f:clamp(80px,15vw,240px);min-height:calc(100vh - 80px);display:grid;place-items:center;text-align:center;position:relative;overflow:hidden;padding:0 var(--pad);max-width:1180px;margin:0 auto}.hero .in{position:relative;z-index:1}.hero .btnrow{justify-content:center}
 .hero h1{font-size:var(--f)}
 .hero h1 .serif{color:var(--tx);display:block;font-size:1.1em;line-height:.75}
-.hero p{color:var(--mu);max-width:440px;margin:26px auto 28px;font-size:17px}
+.hero p{color:var(--se);max-width:440px;margin:24px auto 32px;font-size:18px;line-height:1.6}
 .clock{position:absolute;left:50%;top:50%;width:calc(var(--f) * 1.1);height:auto;aspect-ratio:1/1;transform:translate(-50%,-50%);color:var(--rd);opacity:.9}
-.hand{transform-origin:50px 46px;transition:transform .15s linear}
-.marq{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;white-space:nowrap}
-.marq div{display:inline-block;animation:mq 40s linear infinite;font-family:'Big Shoulders Display';font-weight:800;font-size:clamp(34px,5vw,64px);text-transform:uppercase}
-.marq span{color:transparent;-webkit-text-stroke:1px var(--mu);margin:0 26px}
-.marq b{margin:0 26px;color:var(--rd)}
-@keyframes mq{to{transform:translateX(-50%)}}
-.count{display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:30px}
-.cd{display:flex;gap:clamp(14px,3vw,40px)}
+@media(max-width:640px){.clock{top:calc(50% - 72px)}}
+.hand{transform-origin:50px 46px;transition:transform .5s var(--ease)}
+.roster{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 32px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px var(--pad);font-family:'Big Shoulders Display';font-weight:700;font-size:clamp(32px,5vw,64px);text-transform:uppercase;line-height:1}
+.roster a{color:var(--se);transition:color .15s var(--ease)}
+.roster a:hover{color:var(--tx)}
+.count{display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:32px}
+.cd{display:flex;gap:clamp(16px,3vw,40px)}
 .cd div{text-align:left}
-.cd b{display:block;font-family:'Big Shoulders Display';font-weight:900;font-size:clamp(56px,10vw,140px);line-height:.85;font-variant-numeric:tabular-nums}
+.cd b{display:block;font-family:'Big Shoulders Display';font-weight:700;font-size:clamp(56px,10vw,140px);line-height:.85;font-variant-numeric:tabular-nums}
 .cd small{color:var(--mu);font-size:13px}
 .g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
-.cover{aspect-ratio:1;border-radius:6px;background:var(--panel);position:relative;overflow:hidden;display:grid;place-items:center;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
-.cover svg{width:40%;color:var(--line);transition:color .4s,transform .8s}
-.item:hover .cover{transform:translateY(-6px)}
-.item:hover .cover svg{color:var(--rd);transform:rotate(30deg)}
-.item h3{font-size:20px;margin-top:14px;font-weight:600}
-.item p{color:var(--mu);font-size:14px}
-.tag{position:absolute;top:12px;left:12px;font-size:12px;font-weight:600;background:var(--bg);padding:4px 10px;border-radius:99px}
-.art{position:relative;aspect-ratio:3/4;background:linear-gradient(180deg,var(--panel),#120c1c);border-radius:6px;overflow:hidden;display:flex;align-items:flex-end;padding:20px;cursor:pointer}
-.art::before{content:"";position:absolute;inset:0;background:var(--rd);opacity:0;mix-blend-mode:multiply;transition:opacity .4s}
-.art:hover::before{opacity:.5}
-.art .n{position:relative;font-family:'Big Shoulders Display';font-weight:800;font-size:44px;text-transform:uppercase;line-height:.9}
-.art .r{position:absolute;top:18px;right:18px;font-size:13px;color:var(--mu)}
-.art .ini{position:absolute;inset:0;display:grid;place-items:center;font-family:'Big Shoulders Display';font-size:220px;font-weight:900;color:rgba(255,255,255,.03)}
-.news-row{display:grid;grid-template-columns:120px 1fr auto;gap:24px;align-items:baseline;padding:26px 0;border-bottom:1px solid var(--line);transition:padding .3s}
-.news-row:hover{padding-left:12px}
+.cover{aspect-ratio:1;border-radius:8px;background:var(--panel);border:1px solid var(--line);position:relative;overflow:hidden;display:grid;place-items:center}
+.cover svg{width:40%;color:var(--raised);transition:color .3s var(--ease)}
+.item:hover .cover svg{color:var(--rd)}
+.item h3{font-size:20px;margin-top:16px;font-weight:600}
+.item p{color:var(--se);font-size:14px}
+.tag{position:absolute;top:12px;left:12px;font-size:12px;font-weight:500;background:var(--bg);color:var(--se);padding:4px 8px;border-radius:6px}
+.art{position:relative;aspect-ratio:3/4;background:linear-gradient(180deg,var(--panel),#161513);border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex;align-items:flex-end;padding:20px;cursor:pointer;transition:border-color .2s var(--ease)}
+.art:hover{border-color:var(--line2)}
+.art .n{position:relative;font-family:'Big Shoulders Display';font-weight:700;font-size:44px;text-transform:uppercase;line-height:.9}
+.art .r{position:absolute;top:20px;right:20px;font-size:13px;color:var(--se)}
+.art .ini{position:absolute;inset:0;display:grid;place-items:center;font-family:'Big Shoulders Display';font-size:220px;font-weight:700;color:rgba(239,233,222,.04);transition:color .3s var(--ease)}
+.art:hover .ini{color:rgba(255,31,61,.35)}
+.news-row{display:grid;grid-template-columns:120px 1fr auto;gap:24px;align-items:baseline;padding:24px 0;border-bottom:1px solid var(--line)}
 .news-row:hover h3{color:var(--rd)}
-.news-row h3{font-size:clamp(22px,3vw,34px);font-weight:600;transition:color .2s}
-@media(max-width:640px){.news-row{grid-template-columns:1fr}}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,90px)}
+.news-row h3{font-size:clamp(22px,3vw,34px);font-weight:500;transition:color .15s var(--ease)}
+.news-row .mu{font-size:14px;font-variant-numeric:tabular-nums}
+@media(max-width:640px){.news-row{grid-template-columns:1fr;gap:8px}}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,96px)}
 @media(max-width:800px){.two{grid-template-columns:1fr}}
 .big{font-size:clamp(26px,3.4vw,44px);line-height:1.2;font-weight:500}
-.big em{font-family:'Instrument Serif';color:var(--pu)}
-.feat{border-top:1px solid var(--line);padding:22px 0;display:flex;justify-content:space-between;gap:20px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:clamp(20px,3vw,34px)}
+.big em{font-family:'Instrument Serif';color:var(--se)}
+.feat{border-top:1px solid var(--line);padding:20px 0;display:flex;justify-content:space-between;gap:20px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:clamp(20px,3vw,32px)}
 .team{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
-.team .ph2{aspect-ratio:4/5;background:var(--panel);border-radius:6px;margin-bottom:16px;display:grid;place-items:center;font-family:'Big Shoulders Display';font-size:120px;color:var(--line);font-weight:900}
-.team h3{font-size:26px}
-.team ul{list-style:none;margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
-.team li{font-size:12px;border:1px solid var(--line);padding:4px 10px;border-radius:99px;color:var(--mu)}
-form{display:grid;gap:14px}
-label{font-size:13px;color:var(--mu);display:grid;gap:6px}
-input,textarea,select{background:transparent;border:1px solid var(--line);color:var(--tx);padding:14px 16px;border-radius:10px;font:15px Manrope;width:100%}
-input:focus,textarea:focus,select:focus{outline:0;border-color:var(--pu)}
+.team .ph2{aspect-ratio:4/5;background:var(--panel);border:1px solid var(--line);border-radius:8px;margin-bottom:16px;display:grid;place-items:center;font-family:'Big Shoulders Display';font-size:120px;color:var(--raised);font-weight:700}
+.team h3{font-size:24px;font-weight:600}
+.team ul{list-style:none;margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+.team li{font-size:12px;border:1px solid var(--line2);padding:4px 8px;border-radius:6px;color:var(--se)}
+form{display:grid;gap:16px}
+label{font-size:13px;color:var(--se);display:grid;gap:8px}
+input,textarea,select{background:var(--panel);border:1px solid var(--line2);color:var(--tx);padding:12px 16px;border-radius:10px;font:15px Manrope;width:100%;transition:border-color .15s var(--ease)}
+input::placeholder,textarea::placeholder{color:var(--mu)}
+input:focus,textarea:focus,select:focus{outline:0;border-color:var(--rd)}
 .hp{position:absolute;left:-9999px}
-.legal{max-width:760px}.legal h3{margin:28px 0 8px}.legal p{color:var(--mu)}
-footer{border-top:1px solid var(--line);padding:clamp(50px,8vw,90px) var(--pad) 30px}
-.fbig{font-size:clamp(60px,14vw,220px);line-height:.85;margin-bottom:50px}
+.legal{max-width:760px}.legal h3{margin:28px 0 8px;font-weight:600}.legal p{color:var(--se)}
+footer{border-top:1px solid var(--line);padding:clamp(48px,8vw,96px) var(--pad) 32px}
+.fbig{font-size:clamp(60px,14vw,220px);line-height:.85;margin-bottom:48px}
 .fbig .serif{color:var(--rd)}
-.fgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:30px}
+.fgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px}
 @media(max-width:800px){.fgrid{grid-template-columns:1fr 1fr}}
-.fgrid h4{font-size:13px;color:var(--mu);font-weight:600;margin-bottom:12px}
-.fgrid a{display:block;margin-bottom:6px;transition:color .2s}.fgrid a:hover{color:var(--rd)}
-.nl{display:flex;gap:8px;margin-top:12px}.nl input{border-radius:99px}
-.fbot{display:flex;justify-content:space-between;margin-top:50px;color:var(--mu);font-size:13px;flex-wrap:wrap;gap:10px}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+.fgrid h4{font-size:13px;color:var(--mu);font-weight:500;margin-bottom:12px}
+.fgrid a{display:block;margin-bottom:8px;transition:color .15s var(--ease)}.fgrid a:hover{color:var(--rd)}
+.nl{display:flex;gap:8px;margin-top:12px}.nl input{height:48px}
+.fbot{display:flex;justify-content:space-between;margin-top:48px;color:var(--mu);font-size:13px;flex-wrap:wrap;gap:12px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body>
 <svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="ring" viewBox="0 0 100 100"><path fill="currentColor" fill-rule="evenodd" d="M50 8 A40 40 0 0 1 88 58 C86 70 74 70 72 78 C70 90 66 96 60 96 C54 96 54 86 52 80 C46 74 20 78 14 62 A40 40 0 0 1 50 8 Z M50 18 A30 30 0 0 1 78 56 C76 64 69 66 65 71 C62 76 54 74 50 72 C42 68 29 70 24 58 A30 30 0 0 1 50 18 Z"/></symbol>
@@ -117,39 +116,39 @@ footer{border-top:1px solid var(--line);padding:clamp(50px,8vw,90px) var(--pad) 
 
 <main>
 <section class="page" id="p-home">
-<div class="hero"><svg class="clock" viewBox="0 0 100 100"><use href="#ring"/><g class="hand" id="hand"><use href="#hand"/></g></svg><div class="in"><h1 class="rv">Life is<span class="serif">short.</span></h1><p class="rv">Independent Label aus Halstenbek bei Hamburg. Wir bringen neue Artists raus mit fairen Deals.</p><div class="rv btnrow" style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="#demo">Demo schicken</a><a class="btn g" href="#artists" style="background:var(--bg)">Artists ansehen</a></div></div></div>
-<div class="marq"><div>Artist Eins<b>●</b><span>Artist Zwei</span><b>●</b>Artist Drei<b>●</b><span>Artist Vier</span><b>●</b>Artist Eins<b>●</b><span>Artist Zwei</span><b>●</b>Artist Drei<b>●</b><span>Artist Vier</span><b>●</b></div></div>
-<div class="sec"><div class="count rv"><div><div class="kick">Nächster Release</div><h2 style="font-size:clamp(40px,6vw,80px)">Artist Eins<br><span class="serif mu">Songtitel</span></h2></div><div class="cd" id="cd"></div></div></div>
-<div class="sec"><div class="kick rv">News</div><div id="newsHome"></div><a class="btn g rv" href="#news" style="margin-top:30px">Alle News</a></div>
+<div class="hero"><svg class="clock" viewBox="0 0 100 100"><use href="#ring"/><g class="hand" id="hand"><use href="#hand"/></g></svg><div class="in"><h1 >Life is<span class="serif">short.</span></h1><p >Independent Label aus Halstenbek bei Hamburg. Wir bringen neue Artists raus mit fairen Deals.</p><div class="btnrow" style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="#demo">Demo schicken</a><a class="btn g" href="#artists">Artists ansehen</a></div></div></div>
+<div class="roster" id="roster"></div>
+<div class="sec"><div class="count"><div><div class="kick">Nächster Release</div><h2 style="font-size:clamp(40px,6vw,80px)">Artist Eins<br><span class="serif mu">Songtitel</span></h2></div><div class="cd" id="cd"></div></div></div>
+<div class="sec"><div class="kick">News</div><div id="newsHome"></div><a class="btn g" href="#news" style="margin-top:32px">Alle News</a></div>
 </section>
 
-<section class="page" id="p-artists"><h1 class="ph">Artists</h1><div class="wrap" style="padding-bottom:100px"><div class="g3" id="artGrid"></div></div></section>
+<section class="page" id="p-artists"><h1 class="ph">Artists</h1><div class="wrap" style="padding-bottom:96px"><div class="g3" id="artGrid"></div></div></section>
 <section class="page" id="p-artist"><div id="artDetail"></div></section>
 
-<section class="page" id="p-releases"><h1 class="ph">Releases</h1><div class="wrap" style="padding-bottom:100px"><div class="g3" id="relGrid"></div></div></section>
+<section class="page" id="p-releases"><h1 class="ph">Releases</h1><div class="wrap" style="padding-bottom:96px"><div class="g3" id="relGrid"></div></div></section>
 
-<section class="page" id="p-news"><h1 class="ph">News</h1><div class="wrap" style="padding-bottom:100px" id="newsAll"></div></section>
+<section class="page" id="p-news"><h1 class="ph">News</h1><div class="wrap" style="padding-bottom:96px" id="newsAll"></div></section>
 
 
 <section class="page" id="p-about"><h1 class="ph">Über <span class="serif" style="color:var(--rd)">uns</span></h1>
-<div class="wrap" style="padding-bottom:80px"><p class="big rv" style="max-width:900px">Wir sind Felix und Lasse aus Halstenbek. Wir haben LIS Music gegründet, weil kleine Artists <em>faire Deals und echte Arbeit</em> verdienen.</p></div>
-<div class="sec"><div class="team"><div class="rv"><div class="ph2">F</div><h3>Felix</h3><p class="mu">Labelleitung</p><ul><li>A&amp;R</li><li>Songwriting</li><li>Social Media</li><li>Booking</li><li>Finanzen</li><li>Verträge</li><li>Vertrieb</li></ul></div><div class="rv"><div class="ph2">L</div><h3>Lasse</h3><p class="mu">Labelleitung</p><ul><li>A&amp;R</li><li>Producer</li><li>Recording</li><li>Mix und Master</li></ul></div></div></div>
-<div class="sec two"><div class="rv"><div class="kick">Standort</div><p class="big">Halstenbek, Kreis Pinneberg. <em>20 Minuten bis Hamburg.</em></p></div><div class="panel rv"><p class="mu">Platzhalter für Karte oder Foto.</p></div></div></section>
+<div class="wrap" style="padding-bottom:80px"><p class="big" style="max-width:900px">Wir sind Felix und Lasse aus Halstenbek. Wir haben LIS Music gegründet, weil kleine Artists <em>faire Deals und echte Arbeit</em> verdienen.</p></div>
+<div class="sec"><div class="team"><div><div class="ph2">F</div><h3>Felix</h3><p class="mu">Labelleitung</p><ul><li>A&amp;R</li><li>Songwriting</li><li>Social Media</li><li>Booking</li><li>Finanzen</li><li>Verträge</li><li>Vertrieb</li></ul></div><div><div class="ph2">L</div><h3>Lasse</h3><p class="mu">Labelleitung</p><ul><li>A&amp;R</li><li>Producer</li><li>Recording</li><li>Mix und Master</li></ul></div></div></div>
+<div class="sec two"><div><div class="kick">Standort</div><p class="big">Halstenbek, Kreis Pinneberg. <em>20 Minuten bis Hamburg.</em></p></div><div class="panel"><p class="mu">Platzhalter für Karte oder Foto.</p></div></div></section>
 
 <section class="page" id="p-demo"><h1 class="ph">Demo</h1>
-<div class="wrap two" style="padding-bottom:100px"><div class="rv"><p class="big">Schick uns deinen Track. <em>Wir hören alles.</em></p><p class="mu" style="margin-top:20px">Am besten ein Link zu SoundCloud, Dropbox oder Google Drive. Wir melden uns innerhalb von zwei Wochen.</p></div>
-<form class="rv nf" name="demo" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-ok="Danke, ist angekommen."><input type="hidden" name="form-name" value="demo"><label class="hp">Nicht ausfüllen<input name="bot-field"></label><label>Artist-Name<input name="artist" required></label><label>E-Mail<input name="email" type="email" required></label><label>Genre<select name="genre"><option>Rap</option><option>Pop</option><option>R&amp;B</option><option>Anderes</option></select></label><label>Link zum Track<input name="link" type="url" placeholder="https://" required></label><label>Kurz über dich<textarea name="nachricht" rows="4"></textarea></label><button class="btn">Demo senden</button></form></div></section>
+<div class="wrap two" style="padding-bottom:96px"><div><p class="big">Schick uns deinen Track. <em>Wir hören alles.</em></p><p class="mu" style="margin-top:20px">Am besten ein Link zu SoundCloud, Dropbox oder Google Drive. Wir melden uns innerhalb von zwei Wochen.</p></div>
+<form class="nf" name="demo" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-ok="Danke, ist angekommen."><input type="hidden" name="form-name" value="demo"><label class="hp">Nicht ausfüllen<input name="bot-field"></label><label>Artist-Name<input name="artist" required></label><label>E-Mail<input name="email" type="email" required></label><label>Genre<select name="genre"><option>Rap</option><option>Pop</option><option>R&amp;B</option><option>Anderes</option></select></label><label>Link zum Track<input name="link" type="url" placeholder="https://" required></label><label>Kurz über dich<textarea name="nachricht" rows="4"></textarea></label><button class="btn">Demo senden</button></form></div></section>
 
 <section class="page" id="p-kontakt"><h1 class="ph">Kontakt</h1>
-<div class="wrap two" style="padding-bottom:100px"><div class="rv"><div class="feat"><span>Allgemein</span><a href="#">hallo@lismusic.de</a></div><div class="feat"><span>Booking</span><a href="#">booking@lismusic.de</a></div><div class="feat"><span>Instagram</span><a href="#">@lismusic</a></div></div>
-<form class="rv nf" name="kontakt" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-ok="Danke, wir melden uns."><input type="hidden" name="form-name" value="kontakt"><label class="hp">Nicht ausfüllen<input name="bot-field"></label><label>Name<input name="name" required></label><label>E-Mail<input name="email" type="email" required></label><label>Nachricht<textarea name="nachricht" rows="5" required></textarea></label><button class="btn">Senden</button></form></div></section>
+<div class="wrap two" style="padding-bottom:96px"><div><div class="feat"><span>Allgemein</span><a href="#">hallo@lismusic.de</a></div><div class="feat"><span>Booking</span><a href="#">booking@lismusic.de</a></div><div class="feat"><span>Instagram</span><a href="#">@lismusic</a></div></div>
+<form class="nf" name="kontakt" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-ok="Danke, wir melden uns."><input type="hidden" name="form-name" value="kontakt"><label class="hp">Nicht ausfüllen<input name="bot-field"></label><label>Name<input name="name" required></label><label>E-Mail<input name="email" type="email" required></label><label>Nachricht<textarea name="nachricht" rows="5" required></textarea></label><button class="btn">Senden</button></form></div></section>
 
-<section class="page" id="p-impressum"><h1 class="ph">Impressum</h1><div class="wrap legal" style="padding-bottom:100px"><h3>Angaben gemäß § 5 DDG</h3><p>LIS Music GbR, Felix Nachname und Lasse Nachname<br>Straße Nr., 25469 Halstenbek</p><h3>Kontakt</h3><p>hallo@lismusic.de</p><p style="margin-top:20px">Platzhalter. Vor dem Livegang mit einem Impressum-Generator prüfen.</p></div></section>
-<section class="page" id="p-datenschutz"><h1 class="ph">Datenschutz</h1><div class="wrap legal" style="padding-bottom:100px"><p>Platzhalter. Vor dem Livegang mit einem Datenschutz-Generator erstellen (Hosting, Formulare, Newsletter, eingebettete Inhalte).</p></div></section>
+<section class="page" id="p-impressum"><h1 class="ph">Impressum</h1><div class="wrap legal" style="padding-bottom:96px"><h3>Angaben gemäß § 5 DDG</h3><p>LIS Music GbR, Felix Nachname und Lasse Nachname<br>Straße Nr., 25469 Halstenbek</p><h3>Kontakt</h3><p>hallo@lismusic.de</p><p style="margin-top:20px">Platzhalter. Vor dem Livegang mit einem Impressum-Generator prüfen.</p></div></section>
+<section class="page" id="p-datenschutz"><h1 class="ph">Datenschutz</h1><div class="wrap legal" style="padding-bottom:96px"><p>Platzhalter. Vor dem Livegang mit einem Datenschutz-Generator erstellen (Hosting, Formulare, Newsletter, eingebettete Inhalte).</p></div></section>
 </main>
 
 <footer><div class="fbig disp">Die Uhr <span class="serif">läuft.</span></div>
-<div class="fgrid"><div><h4>Newsletter</h4><p class="mu">Ein Mail pro Release, sonst nichts.</p><form class="nl nf" name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-ok="Eingetragen."><input type="hidden" name="form-name" value="newsletter"><label class="hp">Nicht ausfüllen<input name="bot-field"></label><input name="email" type="email" placeholder="deine@mail.de" required><button class="btn">OK</button></form></div>
+<div class="fgrid"><div><h4>Newsletter</h4><p class="mu">Ein Mail pro Release, sonst nichts.</p><form class="nl nf" name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-ok="Eingetragen."><input type="hidden" name="form-name" value="newsletter"><label class="hp">Nicht ausfüllen<input name="bot-field"></label><input name="email" type="email" placeholder="deine@mail.de" required><button class="btn">Eintragen</button></form></div>
 <div><h4>Label</h4><a href="#artists">Artists</a><a href="#releases">Releases</a><a href="#news">News</a></div>
 <div><h4>Social</h4><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">YouTube</a><a href="#">Spotify</a></div>
 <div><h4>Info</h4><a href="#about">Über uns</a><a href="#kontakt">Kontakt</a><a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a></div></div>
@@ -160,21 +159,23 @@ const A=[['Artist Eins','Rap'],['Artist Zwei','R&B'],['Artist Drei','Pop'],['Art
 const R=[['Songtitel','Artist Eins','Single','01.12.2026'],['EP-Titel','Artist Zwei','EP','2027'],['Songtitel','Artist Drei','Single','2027']];
 const N=[['04.11.2026','LIS Music ist gestartet','Label'],['20.11.2026','Erste Single kommt am 01.12.','Release'],['01.11.2026','Wir suchen neue Artists','Demo']];
 const $=s=>document.querySelector(s);
-$('#artGrid').innerHTML=A.map((a,i)=>`<a class="art rv" href="#artist-${i}"><span class="ini">${a[0].split(' ')[1][0]}</span><span class="r">${a[1]}</span><span class="n">${a[0]}</span></a>`).join('');
-$('#relGrid').innerHTML=R.map(r=>`<div class="item rv"><div class="cover"><span class="tag">${r[2]}</span><svg><use href="#logo"/></svg></div><h3>${r[0]}</h3><p>${r[1]} · ${r[3]}</p></div>`).join('');
-const nr=n=>`<a class="news-row rv" href="#news"><span class="mu">${n[0]}</span><h3>${n[1]}</h3><span class="mu">${n[2]}</span></a>`;
+$('#roster').innerHTML=A.map((a,i)=>`<a href="#artist-${i}">${a[0]}</a>`).join('');
+$('#artGrid').innerHTML=A.map((a,i)=>`<a class="art" href="#artist-${i}"><span class="ini">${a[0].split(' ')[1][0]}</span><span class="r">${a[1]}</span><span class="n">${a[0]}</span></a>`).join('');
+$('#relGrid').innerHTML=R.map(r=>`<div class="item"><div class="cover"><span class="tag">${r[2]}</span><svg><use href="#logo"/></svg></div><h3>${r[0]}</h3><p>${r[1]} · ${r[3]}</p></div>`).join('');
+const nr=n=>`<a class="news-row" href="#news"><span class="mu">${n[0]}</span><h3>${n[1]}</h3><span class="mu">${n[2]}</span></a>`;
 $('#newsHome').innerHTML=N.map(nr).join('');$('#newsAll').innerHTML=N.concat(N).map(nr).join('');
-function artist(i){const a=A[i];$('#artDetail').innerHTML=`<h1 class="ph">${a[0]}</h1><div class="wrap two" style="padding-bottom:100px"><div class="art rv" style="cursor:default"><span class="ini">${a[0].split(' ')[1][0]}</span></div><div class="rv"><div class="kick">${a[1]}</div><p class="big">Platzhalter für die Bio. <em>Wer, woher, was macht den Sound aus.</em></p><div style="margin-top:30px"><div class="feat"><span>Spotify</span><span class="mu">bald</span></div><div class="feat"><span>Instagram</span><span class="mu">@platzhalter</span></div><div class="feat"><span>Booking</span><a href="#kontakt">Anfragen</a></div></div><a class="btn g" href="#artists" style="margin-top:24px">Alle Artists</a></div></div>`}
+function artist(i){const a=A[i];$('#artDetail').innerHTML=`<h1 class="ph">${a[0]}</h1><div class="wrap two" style="padding-bottom:96px"><div class="art" style="cursor:default"><span class="ini">${a[0].split(' ')[1][0]}</span></div><div><div class="kick">${a[1]}</div><p class="big">Platzhalter für die Bio. <em>Wer, woher, was macht den Sound aus.</em></p><div style="margin-top:32px"><div class="feat"><span>Spotify</span><span class="mu">bald</span></div><div class="feat"><span>Instagram</span><span class="mu">@platzhalter</span></div><div class="feat"><span>Booking</span><a href="#kontakt">Anfragen</a></div></div><a class="btn g" href="#artists" style="margin-top:24px">Alle Artists</a></div></div>`}
 function route(){let h=location.hash.slice(1)||'home';let id=h;if(h.startsWith('artist-')){artist(+h.split('-')[1]);id='artist'}
 if(!document.getElementById('p-'+id))id='home';
 document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id==='p-'+id));
 document.querySelectorAll('nav.main a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+(id==='artist'?'artists':id)));
-$('#nav').classList.remove('open');scrollTo(0,0);setTimeout(obs,50)}
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
-function obs(){document.querySelectorAll('.page.on .rv:not(.in), footer .rv:not(.in)').forEach(e=>io.observe(e))}
+$('#nav').classList.remove('open');scrollTo(0,0)}
+
 addEventListener('hashchange',route);route();
 $('#bg').onclick=()=>$('#nav').classList.toggle('open');
-addEventListener('scroll',()=>{$('#hdr').classList.toggle('s',scrollY>20);const h=$('#hand');if(h)h.style.transform=`rotate(${scrollY*.35}deg)`},{passive:true});
+addEventListener('scroll',()=>$('#hdr').classList.toggle('s',scrollY>20),{passive:true});
+// Der Zeiger zeigt die echte Minute: die Uhr läuft
+function tick(){const h=$('#hand'),d=new Date();if(h)h.style.transform=`rotate(${(d.getMinutes()+d.getSeconds()/60)*6}deg)`}tick();setInterval(tick,10000);
 const t=new Date('2026-12-01T00:00:00'),p=n=>String(n).padStart(2,'0');
 function cd(){let s=Math.max(0,(t-new Date())/1000|0);$('#cd').innerHTML=[[s/86400|0,'Tage'],[s%86400/3600|0,'Std'],[s%3600/60|0,'Min'],[s%60,'Sek']].map(x=>`<div><b>${p(x[0])}</b><small>${x[1]}</small></div>`).join('')}cd();setInterval(cd,1000);
 // Netlify Forms: per fetch absenden, Bestätigung auf der Seite zeigen
