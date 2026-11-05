@@ -1,0 +1,19 @@
+{
+ "aktualisiert": "2026-11-05T00:00:00.000Z",
+ "artists": [
+  {"slug": "artist-eins", "name": "Artist Eins", "genre": "Rap", "bio": "", "foto": null, "links": {}},
+  {"slug": "artist-zwei", "name": "Artist Zwei", "genre": "R&B", "bio": "", "foto": null, "links": {}},
+  {"slug": "artist-drei", "name": "Artist Drei", "genre": "Pop", "bio": "", "foto": null, "links": {}},
+  {"slug": "artist-vier", "name": "Artist Vier", "genre": "Rap", "bio": "", "foto": null, "links": {}}
+ ],
+ "releases": [
+  {"titel": "Songtitel", "typ": "Single", "datum": "2026-12-01", "datum_text": "", "artist": "Artist Eins", "artist_slug": "artist-eins", "cover": null, "links": {}},
+  {"titel": "EP-Titel", "typ": "EP", "datum": null, "datum_text": "2027", "artist": "Artist Zwei", "artist_slug": "artist-zwei", "cover": null, "links": {}},
+  {"titel": "Songtitel", "typ": "Single", "datum": null, "datum_text": "2027", "artist": "Artist Drei", "artist_slug": "artist-drei", "cover": null, "links": {}}
+ ],
+ "news": [
+  {"datum": "2026-11-20", "titel": "Erste Single kommt am 01.12.", "kategorie": "Release", "text": ""},
+  {"datum": "2026-11-04", "titel": "LIS Music ist gestartet", "kategorie": "Label", "text": ""},
+  {"datum": "2026-11-01", "titel": "Wir suchen neue Artists", "kategorie": "Demo", "text": ""}
+ ]
+}
