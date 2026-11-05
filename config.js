@@ -3,6 +3,6 @@
 // Beide Werte sind öffentlich gedacht; geschützt wird alles durch die Zugriffsregeln in der Datenbank.
 // Solange sie leer sind, läuft die Website wie bisher und Backstage zeigt eine Einrichtungs-Hilfe.
 window.LIS_CONFIG = {
-  SUPABASE_URL: '',
+  SUPABASE_URL: 'https://ukwlvsybubfybjiywhib.supabase.co',
   SUPABASE_ANON_KEY: ''
 };
