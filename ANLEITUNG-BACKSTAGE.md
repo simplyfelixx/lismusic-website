@@ -14,8 +14,9 @@ Einmalig ca. 30 Minuten. Reihenfolge einhalten.
 
 1. Auf [supabase.com](https://supabase.com) mit der neuen E-Mail registrieren.
 2. **New project**: Name `lismusic`, Region **Central EU (Frankfurt)**, ein starkes Datenbank-Passwort (in den Passwort-Manager).
-3. **Authentication → Sign In / Providers**: „Allow new users to sign up“ **ausschalten**. Nur ihr legt Accounts an.
-4. **Authentication → Multi-Factor**: TOTP (Authenticator App) muss aktiv sein (ist es normalerweise).
+3. Beim Anlegen unter **Security**: **Enable Data API** an, **Automatically expose new tables** aus, **Enable automatic RLS** an. Die SQL-Datei vergibt die nötigen Rechte selbst und schaltet die Zugriffsregeln ein.
+4. **Authentication → Sign In / Providers**: „Allow new users to sign up“ **ausschalten**. Nur ihr legt Accounts an.
+5. **Authentication → Multi-Factor**: TOTP (Authenticator App) muss aktiv sein (ist es normalerweise).
 
 ## 2. Datenbank einrichten
 

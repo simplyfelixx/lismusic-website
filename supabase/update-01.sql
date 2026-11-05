@@ -176,6 +176,11 @@ revoke all on public.team, public.artists, public.releases, public.aufgaben, pub
 grant select, insert, update, delete on public.artists, public.releases, public.aufgaben, public.content, public.news, public.demos to authenticated;
 grant select on public.team, public.veroeffentlichungen to authenticated;
 
+-- Die Server-Funktion (service_role) braucht ebenfalls ausdrückliche Rechte, falls "Automatically expose new tables" aus ist
+grant select on public.artists, public.releases, public.news to service_role;
+grant select, insert, update, delete on public.team, public.artists, public.releases, public.aufgaben, public.content, public.news, public.demos, public.veroeffentlichungen to service_role;
+grant usage on all sequences in schema public to service_role;
+
 -- Demo-Formular: jeder darf eine neue Demo EINTRAGEN, aber nichts lesen oder ändern
 drop policy if exists "demo eintragen" on public.demos;
 create policy "demo eintragen" on public.demos for insert to anon
