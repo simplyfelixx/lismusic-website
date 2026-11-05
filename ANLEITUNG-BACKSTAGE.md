@@ -25,7 +25,9 @@ Einmalig ca. 30 Minuten. Reihenfolge einhalten.
 
 **Danach gleich `supabase/update-02.sql` ausführen** (Dateien pro Song: Master, Instrumental, Cover-Varianten, Lyrics, Links). Ohne diese Datei zeigt Backstage bei den Songs nur einen Hinweis statt der Datei-Ablage.
 
-Spätere Änderungen kommen als `update-03.sql` … und werden genauso ausgeführt.
+**Dann `supabase/update-03.sql`** (Bibliothek: Beats per Link oder Datei mit BPM, Texte). Ohne diese Datei zeigt der Menüpunkt Bibliothek nur einen Hinweis.
+
+Spätere Änderungen kommen als `update-04.sql` … und werden genauso ausgeführt.
 
 ## 3. Accounts für Felix und Lasse
 
