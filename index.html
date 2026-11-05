@@ -48,7 +48,7 @@ nav.main a.on::after{content:"";position:absolute;left:0;right:0;bottom:-8px;hei
 .hero p{color:var(--se);max-width:440px;margin:24px auto 32px;font-size:18px;line-height:1.6}
 .clock{position:absolute;left:50%;top:50%;width:calc(var(--f) * 1.1);height:auto;aspect-ratio:1/1;transform:translate(-50%,-50%);color:var(--rd);opacity:.9}
 @media(max-width:640px){.clock{top:calc(50% - 72px)}}
-.hand{transform-origin:50px 46px;transition:transform .5s var(--ease)}
+.hand{transform-origin:50px 46px}
 .roster{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 32px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px var(--pad);font-family:'Big Shoulders Display';font-weight:700;font-size:clamp(32px,5vw,64px);text-transform:uppercase;line-height:1}
 .roster a{color:var(--se);transition:color .15s var(--ease)}
 .roster a:hover{color:var(--tx)}
@@ -116,7 +116,7 @@ footer{border-top:1px solid var(--line);padding:clamp(48px,8vw,96px) var(--pad) 
 
 <main>
 <section class="page" id="p-home">
-<div class="hero"><svg class="clock" viewBox="0 0 100 100"><use href="#ring"/><g class="hand" id="hand"><use href="#hand"/></g></svg><div class="in"><h1 >Life is<span class="serif">short.</span></h1><p >Independent Label aus Halstenbek bei Hamburg. Wir bringen neue Artists raus mit fairen Deals.</p><div class="btnrow" style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="#demo">Demo schicken</a><a class="btn g" href="#artists">Artists ansehen</a></div></div></div>
+<div class="hero"><svg class="clock" viewBox="0 0 100 100"><use href="#ring"/><rect class="hand" id="hh" x="47" y="33" width="6" height="16" rx="1" fill="currentColor"/><rect class="hand" id="mh" x="47.5" y="24" width="5" height="25" rx="1" fill="currentColor"/></svg><div class="in"><h1 >Life is<span class="serif">short.</span></h1><p >Independent Label aus Halstenbek bei Hamburg. Wir bringen neue Artists raus mit fairen Deals.</p><div class="btnrow" style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="#demo">Demo schicken</a><a class="btn g" href="#artists">Artists ansehen</a></div></div></div>
 <div class="roster" id="roster"></div>
 <div class="sec"><div class="count"><div><div class="kick">Nächster Release</div><h2 style="font-size:clamp(40px,6vw,80px)">Artist Eins<br><span class="serif mu">Songtitel</span></h2></div><div class="cd" id="cd"></div></div></div>
 <div class="sec"><div class="kick">News</div><div id="newsHome"></div><a class="btn g" href="#news" style="margin-top:32px">Alle News</a></div>
@@ -174,8 +174,9 @@ $('#nav').classList.remove('open');scrollTo(0,0)}
 addEventListener('hashchange',route);route();
 $('#bg').onclick=()=>$('#nav').classList.toggle('open');
 addEventListener('scroll',()=>$('#hdr').classList.toggle('s',scrollY>20),{passive:true});
-// Der Zeiger zeigt die echte Minute: die Uhr läuft
-function tick(){const h=$('#hand'),d=new Date();if(h)h.style.transform=`rotate(${(d.getMinutes()+d.getSeconds()/60)*6}deg)`}tick();setInterval(tick,10000);
+// Die Uhr zeigt die echte Uhrzeit in Deutschland: die Uhr läuft
+function tick(){const t=new Intl.DateTimeFormat('de-DE',{timeZone:'Europe/Berlin',hour:'numeric',minute:'numeric',second:'numeric',hour12:false}).formatToParts(new Date()),g=k=>+t.find(x=>x.type===k).value;
+const m=g('minute')+g('second')/60,h=g('hour')%12+m/60;$('#mh').style.transform=`rotate(${m*6}deg)`;$('#hh').style.transform=`rotate(${h*30}deg)`;$('.clock').setAttribute('aria-label',`Uhrzeit ${g('hour')}:${String(g('minute')).padStart(2,'0')}`)}tick();setInterval(tick,10000);
 const t=new Date('2026-12-01T00:00:00'),p=n=>String(n).padStart(2,'0');
 function cd(){let s=Math.max(0,(t-new Date())/1000|0);$('#cd').innerHTML=[[s/86400|0,'Tage'],[s%86400/3600|0,'Std'],[s%3600/60|0,'Min'],[s%60,'Sek']].map(x=>`<div><b>${p(x[0])}</b><small>${x[1]}</small></div>`).join('')}cd();setInterval(cd,1000);
 // Netlify Forms: per fetch absenden, Bestätigung auf der Seite zeigen
