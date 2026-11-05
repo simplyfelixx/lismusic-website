@@ -8,9 +8,9 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# Cockpit: nicht in Suchmaschinen, nicht cachen, strenge Inhaltsregeln
+# Backstage: nicht in Suchmaschinen, nicht cachen, strenge Inhaltsregeln
 [[headers]]
-  for = "/admin/*"
+  for = "/backstage/*"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
     Cache-Control = "no-cache"
@@ -33,3 +33,9 @@
   to = "/"
   status = 404
   force = true
+
+# Alte Adresse /admin führt nach /backstage
+[[redirects]]
+  from = "/admin/*"
+  to = "/backstage/"
+  status = 301

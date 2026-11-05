@@ -33,7 +33,7 @@ async function gh(path: string, init: RequestInit = {}) {
       Authorization: `Bearer ${Deno.env.get('GITHUB_TOKEN')}`,
       Accept: 'application/vnd.github+json',
       'X-GitHub-Api-Version': '2022-11-28',
-      'User-Agent': 'lismusic-cockpit',
+      'User-Agent': 'lismusic-backstage',
       ...(init.body ? { 'Content-Type': 'application/json' } : {}),
     },
   });
@@ -63,7 +63,7 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
   if (req.method !== 'POST') return json({ error: 'Nur POST' }, 405);
   try {
-    if (!Deno.env.get('GITHUB_TOKEN')) return json({ error: 'Secret GITHUB_TOKEN fehlt (siehe ANLEITUNG-COCKPIT.md).' }, 500);
+    if (!Deno.env.get('GITHUB_TOKEN')) return json({ error: 'Secret GITHUB_TOKEN fehlt (siehe ANLEITUNG-BACKSTAGE.md).' }, 500);
 
     // 1. Darf die Person das? (Label-Mitglied, mit 2FA angemeldet)
     const auth = req.headers.get('Authorization') || '';
@@ -140,7 +140,7 @@ Deno.serve(async (req) => {
     const commit = await gh('/git/commits', {
       method: 'POST',
       body: JSON.stringify({
-        message: 'Inhalte aus dem Cockpit veröffentlicht',
+        message: 'Inhalte aus Backstage veröffentlicht',
         tree: neuerBaum.sha,
         parents: [ref.object.sha],
         author: { ...AUTOR, date: jetzt },

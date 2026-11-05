@@ -1,9 +1,9 @@
-# Automatisches Datenbank-Backup des LIS Cockpits
-# Läuft 2× täglich, sichert alle Cockpit-Tabellen, verschlüsselt (GPG, AES256),
+# Automatisches Datenbank-Backup des LIS Backstages
+# Läuft 2× täglich, sichert alle Backstage-Tabellen, verschlüsselt (GPG, AES256),
 # und legt sie im PRIVATEN Repo „lismusic-backups“ ab (dieses Website-Repo ist öffentlich).
 # Jedes Backup wird 14 Tage aufbewahrt. Hält nebenbei das Supabase-Gratisprojekt aktiv.
-# Einrichtung: ANLEITUNG-COCKPIT.md, Abschnitt „Backups“.
-name: Cockpit-Backup
+# Einrichtung: ANLEITUNG-BACKSTAGE.md, Abschnitt „Backups“.
+name: Backstage-Backup
 
 on:
   schedule:
@@ -52,8 +52,8 @@ jobs:
           stamp=$(TZ=Europe/Berlin date +%Y-%m-%d_%H-%M)
           args=(); for t in $tabs; do args+=(--slurpfile "$t" "$t.json"); done
           jq -n --arg t "$(date -u +%FT%TZ)" "${args[@]}" \
-            '{app:"LIS Cockpit", exportiert:$t, team:$team[0], artists:$artists[0], releases:$releases[0], aufgaben:$aufgaben[0], content:$content[0], news:$news[0], demos:$demos[0], veroeffentlichungen:$veroeffentlichungen[0]}' \
-            > "lis-cockpit-backup-${stamp}.json"
+            '{app:"LIS Backstage", exportiert:$t, team:$team[0], artists:$artists[0], releases:$releases[0], aufgaben:$aufgaben[0], content:$content[0], news:$news[0], demos:$demos[0], veroeffentlichungen:$veroeffentlichungen[0]}' \
+            > "lis-backstage-backup-${stamp}.json"
           for t in $tabs; do rm -f "$t.json"; done
 
       - name: Verschlüsselt im privaten Backup-Repo ablegen
@@ -65,7 +65,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "${BACKUP_PASSWORD}" ] || [ -z "${BACKUP_REPO_TOKEN}" ]; then echo "::error::Secrets BACKUP_PASSWORD und BACKUP_REPO_TOKEN fehlen."; exit 1; fi
-          f=$(ls lis-cockpit-backup-*.json)
+          f=$(ls lis-backstage-backup-*.json)
           gpg --batch --yes --pinentry-mode loopback --passphrase "$BACKUP_PASSWORD" --symmetric --cipher-algo AES256 -o "$f.gpg" "$f"
           rm -f "$f"
           url="https://x-access-token:${BACKUP_REPO_TOKEN}@github.com/${BACKUP_REPO}.git"
@@ -74,7 +74,7 @@ jobs:
           if git fetch -q --depth 1 "$url" backups 2>/dev/null; then git checkout -q FETCH_HEAD -- . 2>/dev/null || true; fi
           mv "../$f.gpg" .
           grenze=$(TZ=Europe/Berlin date -d '14 days ago' +%Y-%m-%d)
-          for x in lis-cockpit-backup-*.json.gpg; do d=${x#lis-cockpit-backup-}; d=${d:0:10}; [[ "$d" < "$grenze" ]] && rm -f "$x"; done
+          for x in lis-backstage-backup-*.json.gpg; do d=${x#lis-backstage-backup-}; d=${d:0:10}; [[ "$d" < "$grenze" ]] && rm -f "$x"; done
           git checkout -q --orphan backups
           git add -A && git commit -qm "Backup $(TZ=Europe/Berlin date '+%d.%m.%Y %H:%M')"
           git push -q -f "$url" backups

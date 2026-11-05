@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<title>LIS Cockpit</title>
+<title>LIS Backstage</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="manifest" href="/admin/manifest.webmanifest">
+<link rel="manifest" href="/backstage/manifest.webmanifest">
 <meta name="theme-color" content="#12110f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -99,11 +99,11 @@ code{background:var(--raised);padding:1px 6px;border-radius:5px;font-size:13px}
 <body>
 
 <!-- Einrichtung fehlt -->
-<div class="login hide" id="v-setup"><div class="card"><img class="logo" src="/favicon.svg" alt=""><h1>Cockpit</h1>
-<p class="mu" style="margin-top:10px">Das Cockpit ist noch nicht mit der Datenbank verbunden. Trag in <code>config.js</code> die Supabase-Adresse und den öffentlichen Schlüssel ein (siehe <code>ANLEITUNG-COCKPIT.md</code>).</p></div></div>
+<div class="login hide" id="v-setup"><div class="card"><img class="logo" src="/favicon.svg" alt=""><h1>Backstage</h1>
+<p class="mu" style="margin-top:10px">Backstage ist noch nicht mit der Datenbank verbunden. Trag in <code>config.js</code> die Supabase-Adresse und den öffentlichen Schlüssel ein (siehe <code>ANLEITUNG-BACKSTAGE.md</code>).</p></div></div>
 
 <!-- Anmeldung -->
-<div class="login hide" id="v-login"><form class="card" id="f-login"><img class="logo" src="/favicon.svg" alt=""><h1>Cockpit</h1>
+<div class="login hide" id="v-login"><form class="card" id="f-login"><img class="logo" src="/favicon.svg" alt=""><h1>Backstage</h1>
 <p class="mu" style="margin:6px 0 18px">LIS Music intern</p>
 <label class="f">E-Mail<input id="email" type="email" autocomplete="username" required></label>
 <label class="f">Passwort<input id="pw" type="password" autocomplete="current-password" required></label>
@@ -122,10 +122,10 @@ code{background:var(--raised);padding:1px 6px;border-radius:5px;font-size:13px}
 <p class="mu" style="margin-top:10px">Dein Account ist angemeldet, steht aber noch nicht im Team. Felix trägt dich im Supabase-SQL-Editor ein (siehe Anleitung).</p>
 <p style="margin-top:16px"><a href="#" id="abmelden3" class="btn g">Abmelden</a></p></div></div>
 
-<!-- Cockpit -->
+<!-- Backstage -->
 <div class="app hide" id="v-app">
 <aside id="menu">
-<div class="brand"><img src="/favicon.svg" alt="">LIS COCKPIT</div>
+<div class="brand"><img src="/favicon.svg" alt="">LIS BACKSTAGE</div>
 <a href="#heute" data-v="heute">Heute <span class="badge hide" id="b-heute"></span></a>
 <a href="#artists" data-v="artists">Artists</a>
 <a href="#releases" data-v="releases">Releases</a>
@@ -178,11 +178,11 @@ const VORLAGE = [
   ['metadaten',-35,'Titel, Feature-Artists, Songwriter mit echten Namen, Producer, Credits'],
   ['metadaten',-35,'Genre, Sprache, Explicit ja/nein, Lyrics'],
   ['metadaten',-28,'Bei DistroKid hochladen'],
-  ['metadaten',-28,'ISRC und UPC ins Cockpit eintragen'],
+  ['metadaten',-28,'ISRC und UPC in Backstage eintragen'],
   ['rechte',-28,'Splits bei DistroKid eintragen'],
   ['rechte',-21,'Werk bei der GEMA anmelden (falls Mitglied)'],
   ['werbung',-21,'Spotify-Pitch über Spotify for Artists (spätestens 7 Tage vorher)'],
-  ['werbung',-21,'Pre-Save-Link (HyperFollow) live und im Cockpit eintragen'],
+  ['werbung',-21,'Pre-Save-Link (HyperFollow) live und in Backstage eintragen'],
   ['werbung',-21,'Pressefoto (hoch und quer) und Kurz-Bio aktuell'],
   ['social',-14,'5–10 TikTok/Reels-Clips mit dem Hook fertig'],
   ['social',-14,'Spotify Canvas (9:16 Loop) hochladen'],
@@ -229,7 +229,7 @@ async function mfaStart() {
   if (fertig) { mfaFaktor = fertig.id; $('#mfa-neu').classList.add('hide'); }
   else {
     for (const x of (f?.all || []).filter(x => x.status !== 'verified')) await sb.auth.mfa.unenroll({ factorId: x.id });
-    const { data, error } = await sb.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'LIS Cockpit ' + Date.now() });
+    const { data, error } = await sb.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'LIS Backstage ' + Date.now() });
     if (error) { $('#e-mfa').textContent = error.message; return; }
     mfaFaktor = data.id; $('#mfa-qr').src = data.totp.qr_code; $('#mfa-secret').textContent = data.totp.secret;
     $('#mfa-neu').classList.remove('hide');

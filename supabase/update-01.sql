@@ -1,4 +1,4 @@
--- LIS Music Cockpit · update-01: Grundgerüst
+-- LIS Music Backstage · update-01: Grundgerüst
 -- Im Supabase-Dashboard unter "SQL Editor" komplett einfügen und "Run" klicken.
 -- Darf mehrfach ausgeführt werden (legt nur an, was fehlt).
 --

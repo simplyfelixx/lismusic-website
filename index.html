@@ -160,7 +160,7 @@ footer{border-top:1px solid var(--line);padding:clamp(48px,8vw,96px) var(--pad) 
 
 <script src="/config.js"></script>
 <script>
-// Inhalte kommen aus data/site.json (wird im Cockpit unter /admin gepflegt und veröffentlicht)
+// Inhalte kommen aus data/site.json (wird in Backstage unter /backstage gepflegt und veröffentlicht)
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const url=u=>/^(https?:\/\/|\/media\/)/i.test(String(u||''))?u:'';
@@ -198,13 +198,13 @@ const m=g('minute')+g('second')/60,h=g('hour')%12+m/60;$('#mh').style.transform=
 let ziel=null;const p=n=>String(n).padStart(2,'0');
 function cd(){if(!ziel)return;let s=Math.max(0,(ziel-new Date())/1000|0);$('#cd').innerHTML=[[s/86400|0,'Tage'],[s%86400/3600|0,'Std'],[s%3600/60|0,'Min'],[s%60,'Sek']].map(x=>`<div><b>${p(x[0])}</b><small>${x[1]}</small></div>`).join('')}cd();setInterval(cd,1000);
 // Netlify Forms: per fetch absenden, Bestätigung auf der Seite zeigen
-// Demo zusätzlich direkt ins Cockpit (Supabase), falls eingerichtet. Netlify Forms bleibt für die Mail.
-function insCockpit(f){const C=window.LIS_CONFIG||{};if(f.name!=='demo'||!C.SUPABASE_URL||!C.SUPABASE_ANON_KEY||f.querySelector('[name=bot-field]').value)return Promise.resolve();
+// Demo zusätzlich direkt in Backstage (Supabase), falls eingerichtet. Netlify Forms bleibt für die Mail.
+function insBackstage(f){const C=window.LIS_CONFIG||{};if(f.name!=='demo'||!C.SUPABASE_URL||!C.SUPABASE_ANON_KEY||f.querySelector('[name=bot-field]').value)return Promise.resolve();
 const g=n=>(f.querySelector(`[name=${n}]`)||{}).value||'';
 return fetch(C.SUPABASE_URL.replace(/\/$/,'')+'/rest/v1/demos',{method:'POST',headers:{apikey:C.SUPABASE_ANON_KEY,Authorization:'Bearer '+C.SUPABASE_ANON_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({artist:g('artist').trim(),email:g('email').trim(),genre:g('genre'),link:g('link').trim(),nachricht:g('nachricht').trim()})}).catch(()=>{})}
-document.querySelectorAll('form.nf').forEach(f=>f.addEventListener('submit',e=>{e.preventDefault();const cockpit=insCockpit(f);
+document.querySelectorAll('form.nf').forEach(f=>f.addEventListener('submit',e=>{e.preventDefault();const backstage=insBackstage(f);
 fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(f)).toString()})
-.then(async r=>{if(!r.ok)throw 0;await cockpit;f.innerHTML='<p class="big">'+f.dataset.ok+'</p>'})
+.then(async r=>{if(!r.ok)throw 0;await backstage;f.innerHTML='<p class="big">'+f.dataset.ok+'</p>'})
 .catch(()=>alert('Senden hat nicht geklappt. Schreib uns bitte an hallo@lismusic.de.'))}));
 </script>
 </body></html>

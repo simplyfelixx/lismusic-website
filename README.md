@@ -6,6 +6,6 @@ Kontakt: team@lismusic.de
 Live: https://lismusic.de
 
 
-## Cockpit
+## Backstage
 
-Unter `/admin` liegt das Label-Cockpit (Artists, Releases mit Checkliste, Content-Plan, News, Demos). Inhalte der Website kommen aus `data/site.json`, das das Cockpit beim Veröffentlichen schreibt. Einrichtung: [ANLEITUNG-COCKPIT.md](ANLEITUNG-COCKPIT.md).
+Unter `/backstage` liegt Backstage, der interne Bereich des Labels (Artists, Releases mit Checkliste, Content-Plan, News, Demos). Inhalte der Website kommen aus `data/site.json`, das das Cockpit beim Veröffentlichen schreibt. Einrichtung: [ANLEITUNG-BACKSTAGE.md](ANLEITUNG-BACKSTAGE.md).

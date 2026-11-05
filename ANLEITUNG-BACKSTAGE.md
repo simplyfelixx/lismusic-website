@@ -1,6 +1,6 @@
-# LIS Cockpit einrichten
+# LIS Backstage einrichten
 
-Das Cockpit läuft unter **lismusic.de/admin**. Dort pflegt ihr Artists, Releases mit Checkliste, den Content-Plan (TikTok & Co.), News und Demos. Mit **Website → Jetzt veröffentlichen** landen Artists, Releases und News auf lismusic.de.
+Backstage läuft unter **lismusic.de/backstage**. Dort pflegt ihr Artists, Releases mit Checkliste, den Content-Plan (TikTok & Co.), News und Demos. Mit **Website → Jetzt veröffentlichen** landen Artists, Releases und News auf lismusic.de.
 
 So hängt es zusammen:
 
@@ -36,20 +36,20 @@ from auth.users where email in ('felix@lismusic.de', 'lasse@lismusic.de')
 on conflict (user_id) do nothing;
 ```
 
-Wer nicht in `team` steht, sieht im Cockpit nichts, auch wenn er sich anmelden kann.
+Wer nicht in `team` steht, sieht in Backstage nichts, auch wenn er sich anmelden kann.
 
-## 4. Cockpit mit Supabase verbinden
+## 4. Backstage mit Supabase verbinden
 
 In **Project Settings → API** stehen die **Project URL** und der **anon / publishable key**. Beide in `config.js` eintragen (oder Claude schicken, der trägt sie ein). Diese beiden Werte sind öffentlich gedacht, geschützt wird alles durch die Regeln in der Datenbank. Den **service_role / secret key** niemals in `config.js` oder irgendwo ins Repo schreiben.
 
-Danach `lismusic.de/admin` öffnen, anmelden und den QR-Code mit einer Authenticator-App scannen (Google Authenticator, 2FAS, 1Password …). Ab dann fragt das Cockpit bei jeder Anmeldung den 6-stelligen Code ab.
+Danach `lismusic.de/backstage` öffnen, anmelden und den QR-Code mit einer Authenticator-App scannen (Google Authenticator, 2FAS, 1Password …). Ab dann fragt das Cockpit bei jeder Anmeldung den 6-stelligen Code ab.
 
-Tipp fürs Handy: `lismusic.de/admin` im Browser öffnen → Teilen → „Zum Home-Bildschirm“.
+Tipp fürs Handy: `lismusic.de/backstage` im Browser öffnen → Teilen → „Zum Home-Bildschirm“.
 
 ## 5. Knopf „Veröffentlichen“ einrichten
 
 1. **GitHub-Token erstellen**: [github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new)
-   - Name `lis-cockpit-veroeffentlichen`, Ablauf 1 Jahr (Erinnerung in den Kalender)
+   - Name `lis-backstage-veroeffentlichen`, Ablauf 1 Jahr (Erinnerung in den Kalender)
    - Repository access: **Only select repositories → lismusic-website**
    - Permissions → Repository → **Contents: Read and write**
 2. In Supabase **Edge Functions → Secrets**: `GITHUB_TOKEN` = der Token.
@@ -69,26 +69,26 @@ Die Datenbank wird 2× täglich gesichert, verschlüsselt, und 14 Tage aufbewahr
    - `SUPABASE_SERVICE_KEY`: der **service_role / secret key** aus Supabase (bleibt nur hier geheim)
    - `BACKUP_PASSWORD`: ein langes Passwort (in den Passwort-Manager, ohne kein Wiederherstellen)
    - `BACKUP_REPO_TOKEN`: der zweite Token
-4. Unter **Actions → Cockpit-Backup → Run workflow** einmal testen.
+4. Unter **Actions → Backstage-Backup → Run workflow** einmal testen.
 
 Das Backup hält nebenbei das Supabase-Gratisprojekt aktiv (Supabase pausiert Gratisprojekte nach 7 Tagen ohne Aktivität). Die Website selbst ist davon nicht betroffen, sie liest nur `data/site.json`.
 
 Wiederherstellen: Backup-Datei aus dem Branch `backups` laden und entschlüsseln mit
-`gpg -d lis-cockpit-backup-….json.gpg > backup.json`.
+`gpg -d lis-backstage-backup-….json.gpg > backup.json`.
 
 Hochgeladene Bilder liegen im Supabase-Speicher `medien`. Die veröffentlichten Bilder liegen zusätzlich in diesem Repo unter `media/`.
 
 ## 7. Demo-Formular
 
-Demos von lismusic.de landen weiter per Netlify Forms im Postfach **und** zusätzlich im Cockpit unter **Demos**, sobald `config.js` ausgefüllt ist. Gäste dürfen dort nur eintragen, nicht lesen.
+Demos von lismusic.de landen weiter per Netlify Forms im Postfach **und** zusätzlich in Backstage unter **Demos**, sobald `config.js` ausgefüllt ist. Gäste dürfen dort nur eintragen, nicht lesen.
 
 ## Was wo liegt
 
 | Datei | Wofür |
 |-|-|
-| `admin/index.html` | Das Cockpit |
+| `backstage/index.html` | Backstage |
 | `config.js` | Supabase-Adresse und öffentlicher Schlüssel |
-| `data/site.json`, `media/` | Was auf der Website steht (schreibt das Cockpit, nicht von Hand ändern) |
+| `data/site.json`, `media/` | Was auf der Website steht (schreibt Backstage, nicht von Hand ändern) |
 | `supabase/update-NN.sql` | Datenbank-Änderungen, der Reihe nach ausführen |
 | `supabase/functions/veroeffentlichen/` | Server-Funktion für den Knopf „Veröffentlichen“ |
 | `.github/workflows/backup.yml` | Automatische Backups |
