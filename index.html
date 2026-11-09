@@ -40,12 +40,29 @@ nav.main a.on::after{content:"";position:absolute;left:0;right:0;bottom:-8px;hei
 .btn{display:inline-flex;align-items:center;gap:8px;background:var(--rd-ink);color:#fff;height:48px;padding:0 20px;border-radius:10px;font-weight:600;font-size:14px;border:1px solid transparent;cursor:pointer;transition:background-color .15s ease,border-color .15s ease,transform .16s var(--ease)}
 .btn:active,.cta:active,.burger:active{transform:scale(.97)}
 .btn.g{background:var(--raised);border-color:var(--line2);color:var(--tx)}
-.hero{--f:clamp(80px,15vw,240px);min-height:calc(100vh - 80px);display:grid;place-items:center;text-align:center;position:relative;overflow:hidden;padding:0 var(--pad);max-width:1180px;margin:0 auto}.hero .in{position:relative;z-index:1}.hero .btnrow{justify-content:center}
-.hero h1{font-size:var(--f)}
-.hero h1 .serif{color:var(--tx);display:block;font-size:1.1em;line-height:.75}
-.hero p{color:var(--se);max-width:440px;margin:24px auto 32px;font-size:18px;line-height:1.6}
-.clock{position:absolute;left:50%;top:50%;width:calc(var(--f) * 1.1);height:auto;aspect-ratio:1/1;transform:translate(-50%,-50%);color:var(--rd);opacity:.9}
-@media(max-width:640px){.clock{top:calc(50% - 72px)}}
+/* Startseite: Release-Bühne. Der nächste Release steht groß im Bild, ohne Termin zeigt die Bühne den Claim */
+.stage{position:relative;min-height:100svh;margin-top:-80px;overflow:hidden;display:grid;grid-template-rows:1fr auto}
+.stage .glow{position:absolute;inset:0;background:radial-gradient(60% 70% at 72% 45%,rgba(224,17,47,.16),transparent 70%);pointer-events:none}
+.clock{position:absolute;width:min(118svh,92vw);right:max(-22vw,-260px);top:50%;transform:translateY(-54%);color:var(--rd)}
+.stage .foto{position:absolute;top:0;right:0;width:62%;height:100%;object-fit:cover;opacity:.6;-webkit-mask-image:linear-gradient(90deg,transparent,#000 45%);mask-image:linear-gradient(90deg,transparent,#000 45%)}
+.stage.has-foto .clock{opacity:.35}
+.stage .in{position:relative;z-index:1;align-self:center;padding:120px var(--pad) 40px}
+.stage .line{font-size:clamp(18px,1.6vw,24px);color:var(--se)}
+.stage .line .serif{color:var(--tx);font-size:1.25em}
+.stage .line i{font-style:normal;color:var(--rd);margin:0 10px}
+.stage h1{font-size:clamp(84px,13.5vw,240px)}
+.stage .line+h1{margin-top:18px;text-wrap:balance}
+.stage h1 .serif{color:var(--tx);display:block;font-size:1.1em;line-height:.75}
+.stage .ttl{font-size:clamp(48px,5.5vw,96px);line-height:.95;margin-top:4px}
+.stage .lead{color:var(--se);max-width:440px;margin-top:28px;font-size:18px;line-height:1.6}
+.stage .cd{margin-top:clamp(24px,3vw,40px)}
+.stage .cd b{font-size:clamp(44px,5vw,88px)}
+.stage .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:clamp(28px,3vw,40px)}
+.strip{position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));border-top:1px solid var(--line2);background:rgba(18,17,15,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.strip a{padding:20px var(--pad) 22px;border-right:1px solid var(--line);display:grid;gap:2px}
+.strip a:last-child{border-right:0}
+.strip small{font-size:12px;color:var(--mu)}.strip b{font-weight:600;transition:color .15s ease}.strip span{font-size:13px;color:var(--se)}
+@media(max-width:900px){.clock{width:130vw;right:-55vw;top:30%;opacity:.55}.stage .foto{width:100%;opacity:.4}.strip a{border-bottom:1px solid var(--line)}}
 .hand{transform-origin:50px 46px}
 .clock.intro .hand{transition:transform .8s var(--ease-io)}
 .roster{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 32px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px var(--pad);font-family:'Big Shoulders Display';font-weight:700;font-size:clamp(32px,5vw,64px);text-transform:uppercase;line-height:1}
@@ -102,6 +119,8 @@ footer{border-top:1px solid var(--line);padding:clamp(48px,8vw,96px) var(--pad) 
 .ok{transition:opacity .2s var(--ease),transform .2s var(--ease)}
 @starting-style{.ok{opacity:0;transform:translateY(4px)}}
 .fbot{display:flex;justify-content:space-between;margin-top:48px;color:var(--mu);font-size:13px;flex-wrap:wrap;gap:12px}
+/* Baustelle: nur Bühne, Demo, Kontakt und Rechtliches. Umschalten in config.js (BAUSTELLE) */
+.wip #p-home > :not(.stage),.wip nav.main,.wip .burger,.wip .fgrid > div:nth-child(2){display:none!important}
 /* Hover nur mit Maus: auf Touch bleibt der Hover-Zustand sonst nach dem Tippen hängen */
 @media(hover:hover) and (pointer:fine){
  nav.main a:hover{color:var(--tx)}
@@ -113,6 +132,7 @@ footer{border-top:1px solid var(--line);padding:clamp(48px,8vw,96px) var(--pad) 
  .art:hover{border-color:var(--line2)}
  .art:hover .ini{color:rgba(255,31,61,.35)}
  .news-row:hover h3{color:var(--rd)}
+ .strip a:hover b{color:var(--rd)}
  .fgrid a:hover{color:var(--rd)}
 }
 /* Weniger Bewegung: keine Verschiebungen, kurze Blenden bleiben */
@@ -130,9 +150,10 @@ footer{border-top:1px solid var(--line);padding:clamp(48px,8vw,96px) var(--pad) 
 
 <main>
 <section class="page" id="p-home">
-<div class="hero"><svg class="clock" viewBox="0 0 100 100"><use href="#ring"/><rect class="hand" id="hh" x="47" y="33" width="6" height="16" rx="1" fill="currentColor"/><rect class="hand" id="mh" x="47.5" y="24" width="5" height="25" rx="1" fill="currentColor"/></svg><div class="in"><h1 >Life is<span class="serif">short.</span></h1><p >Independent Label aus Halstenbek bei Hamburg. Wir bringen neue Artists raus mit fairen Deals.</p><div class="btnrow" style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="#demo">Demo schicken</a><a class="btn g" href="#artists">Artists ansehen</a></div></div></div>
+<div class="stage" id="stage"><div class="glow"></div><span id="foto"></span><svg class="clock" viewBox="0 0 100 100" role="img" aria-label="Uhrzeit"><use href="#ring"/><rect class="hand" id="hh" x="47" y="33" width="6" height="16" rx="1" fill="currentColor"/><rect class="hand" id="mh" x="47.5" y="24" width="5" height="25" rx="1" fill="currentColor"/><rect class="hand" id="sh" x="49.4" y="20" width="1.2" height="30" fill="var(--tx)"/></svg>
+<div class="in" id="stageIn"><h1>Life is<span class="serif">short.</span></h1><p class="lead">Independent Label aus Halstenbek bei Hamburg. Wir bringen neue Artists raus mit fairen Deals.</p><div class="btnrow"><a class="btn" href="#demo">Demo schicken</a><a class="btn g" href="#artists">Artists ansehen</a></div></div>
+<nav class="strip" id="strip" aria-label="Mehr von LIS Music"></nav></div>
 <div class="roster" id="roster"></div>
-<div class="sec" id="next"><div class="count"><div><div class="kick">Nächster Release</div><h2 style="font-size:clamp(40px,6vw,80px)" id="nextT">Artist Eins<br><span class="serif mu">Songtitel</span></h2></div><div class="cd" id="cd"></div></div></div>
 <div class="sec"><div class="kick">News</div><div id="newsHome"></div><a class="btn g" href="#news" style="margin-top:32px">Alle News</a></div>
 </section>
 
@@ -176,6 +197,12 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const url=u=>/^(https?:\/\/|\/media\/)/i.test(String(u||''))?u:'';
 const dt=d=>d?d.split('-').reverse().join('.'):'';
 let D={artists:[],releases:[],news:[]};
+// Baustellen-Modus: solange BAUSTELLE in config.js true ist, zeigt die Startseite "Wir bauen gerade". Mit ?voll in der Adresse sieht man trotzdem die ganze Seite.
+const WIP=!!(window.LIS_CONFIG||{}).BAUSTELLE&&!/[?&]voll\b/.test(location.search);
+if(WIP){document.documentElement.classList.add('wip');
+$('#stageIn').innerHTML=`<p class="line">Life is <span class="serif">short.</span><i>/</i>Bald geht's los</p><h1>LIS Music</h1><p class="ttl serif">Wir bauen gerade.</p><p class="lead">Independent Label aus Halstenbek bei Hamburg. Die ersten Releases sind in Arbeit. Bis dahin: Schick uns deine Demo oder trag dich unten ein, dann sagen wir Bescheid, wenn es losgeht.</p><div class="btnrow"><a class="btn" href="#demo">Demo schicken</a><button class="btn g" type="button" id="toNl">Benachrichtigen</button></div>`;
+$('#strip').innerHTML='<a href="#demo"><small>Demo</small><b>Wir suchen neue Artists</b><span>Rap, R&amp;B, Pop und alles dazwischen</span></a><a href="#kontakt"><small>Kontakt</small><b>Schreib uns</b><span>Booking, Fragen, Zusammenarbeit</span></a><a href="#about"><small>Standort</small><b>Halstenbek</b><span>20 Minuten bis Hamburg</span></a>';
+$('#toNl').onclick=()=>{const i=$('.nl input[type=email]');i.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});i.focus({preventScroll:true})}}
 const LINKS=[['spotify','Spotify'],['apple','Apple Music'],['instagram','Instagram'],['tiktok','TikTok'],['youtube','YouTube']];
 function ini(n){const w=String(n).trim().split(/\s+/);return esc((w[w.length-1]||'?')[0]||'?')}
 function render(){
@@ -185,15 +212,23 @@ $('#artGrid').innerHTML=A.map(a=>`<a class="art" href="#artist-${esc(a.slug)}">$
 $('#relGrid').innerHTML=R.map(r=>{const l=url(r.links&&(r.links.presave||r.links.spotify));return `<${l?`a href="${esc(l)}" target="_blank" rel="noopener"`:'div'} class="item"><div class="cover"><span class="tag">${esc(r.typ)}</span>${url(r.cover)?`<img src="${esc(r.cover)}" alt="Cover ${esc(r.titel)}" loading="lazy">`:'<svg><use href="#logo"/></svg>'}</div><h3>${esc(r.titel)}</h3><p>${esc(r.artist)} · ${r.datum?dt(r.datum):esc(r.datum_text||'bald')}</p></${l?'a':'div'}>`}).join('');
 const nr=n=>`<a class="news-row" href="#news"><span class="mu">${dt(n.datum)}</span><h3>${esc(n.titel)}</h3><span class="mu">${esc(n.kategorie)}</span></a>`;
 $('#newsHome').innerHTML=N.slice(0,3).map(nr).join('');$('#newsAll').innerHTML=N.map(nr).join('');
-// Nächster Release mit festem Datum in der Zukunft, sonst Bereich ausblenden
-const h=new Date().toISOString().slice(0,10),nx=R.filter(r=>r.datum&&r.datum>=h).sort((a,b)=>a.datum.localeCompare(b.datum))[0];
-$('#next').hidden=!nx;if(nx){$('#nextT').innerHTML=`${esc(nx.artist)}<br><span class="serif mu">${esc(nx.titel)}</span>`;ziel=new Date(nx.datum+'T00:00:00')}
+// Bühne: nächster Release mit festem Datum in der Zukunft, sonst bleibt der Claim stehen
+if(!WIP){const h=new Date().toISOString().slice(0,10),nx=R.filter(r=>r.datum&&r.datum>=h).sort((a,b)=>a.datum.localeCompare(b.datum))[0];
+if(nx){const l=url(nx.links&&(nx.links.presave||nx.links.spotify)),a=A.find(x=>x.slug===nx.artist_slug);
+$('#stageIn').innerHTML=`<p class="line">Life is <span class="serif">short.</span><i>/</i>Neue ${esc(nx.typ||'Single')} am ${dt(nx.datum)}</p><h1>${esc(nx.artist)}</h1><p class="ttl serif">${esc(nx.titel)}</p><div class="cd" id="cd"></div><div class="btnrow">${l?`<a class="btn" href="${esc(l)}" target="_blank" rel="noopener">Pre-Save</a>`:''}<a class="btn${l?' g':''}" href="#artist-${esc(nx.artist_slug)}">Artist ansehen</a></div>`;
+ziel=new Date(nx.datum+'T00:00:00');mkCd();
+if(a&&url(a.foto)){$('#foto').innerHTML=`<img class="foto" src="${esc(a.foto)}" alt="">`;$('#stage').classList.add('has-foto')}}
+// Leiste unten: was danach kommt, neueste News, Demo
+const dan=R.filter(r=>r!==nx).slice(0,2).map(r=>`<a href="#releases"><small>${nx?'Danach':'Release'}</small><b>${esc(r.titel)}</b><span>${esc(r.artist)} · ${r.datum?dt(r.datum):esc(r.datum_text||'bald')}</span></a>`);
+const nw=N[0]?[`<a href="#news"><small>News · ${dt(N[0].datum).slice(0,6)}</small><b>${esc(N[0].titel)}</b><span>${esc(N[0].kategorie)}</span></a>`]:[];
+$('#strip').innerHTML=[...dan,...nw,'<a href="#demo"><small>Demo</small><b>Wir suchen neue Artists</b><span>Schick uns deinen Track</span></a>'].join('')}
 route()}
 function artist(slug){const a=D.artists.find(x=>x.slug===slug);if(!a)return false;
 const links=LINKS.filter(([k])=>url(a.links&&a.links[k])).map(([k,t])=>`<div class="feat"><span>${t}</span><a href="${esc(a.links[k])}" target="_blank" rel="noopener">Öffnen</a></div>`).join('');
 $('#artDetail').innerHTML=`<h1 class="ph">${esc(a.name)}</h1><div class="wrap two" style="padding-bottom:96px"><div class="art" style="cursor:default">${url(a.foto)?`<img class="bg" src="${esc(a.foto)}" alt="${esc(a.name)}" style="opacity:1">`:`<span class="ini">${ini(a.name)}</span>`}</div><div><div class="kick">${esc(a.genre)}</div><p class="big">${a.bio?esc(a.bio):'Bio folgt.'}</p><div style="margin-top:32px">${links}<div class="feat"><span>Booking</span><a href="#kontakt">Anfragen</a></div></div><a class="btn g" href="#artists" style="margin-top:24px">Alle Artists</a></div></div>`;return true}
 function route(){let h=location.hash.slice(1)||'home';let id=h;if(h.startsWith('artist-')){id=artist(h.slice(7))?'artist':'artists'}
 if(!document.getElementById('p-'+id))id='home';
+if(WIP&&!['demo','kontakt','about','impressum','datenschutz'].includes(id))id='home';
 document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id==='p-'+id));
 document.querySelectorAll('nav.main a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+(id==='artist'?'artists':id)));
 $('#nav').classList.remove('open');scrollTo({top:0,behavior:'instant'})}
@@ -204,13 +239,13 @@ $('#bg').onclick=()=>$('#nav').classList.toggle('open');
 addEventListener('scroll',()=>$('#hdr').classList.toggle('s',scrollY>20),{passive:true});
 // Die Uhr zeigt die echte Uhrzeit in Deutschland: die Uhr läuft
 function tick(){const t=new Intl.DateTimeFormat('de-DE',{timeZone:'Europe/Berlin',hour:'numeric',minute:'numeric',second:'numeric',hour12:false}).formatToParts(new Date()),g=k=>+t.find(x=>x.type===k).value;
-const m=g('minute')+g('second')/60,h=g('hour')%12+m/60;$('#mh').style.transform=`rotate(${m*6}deg)`;$('#hh').style.transform=`rotate(${h*30}deg)`;$('.clock').setAttribute('aria-label',`Uhrzeit ${g('hour')}:${String(g('minute')).padStart(2,'0')}`)}
+const m=g('minute')+g('second')/60,h=g('hour')%12+m/60;$('#mh').style.transform=`rotate(${m*6}deg)`;$('#hh').style.transform=`rotate(${h*30}deg)`;$('#sh').style.transform=`rotate(${g('second')*6}deg)`;$('.clock').setAttribute('aria-label',`Uhrzeit ${g('hour')}:${String(g('minute')).padStart(2,'0')}`)}
 // Einmal beim Laden: Zeiger drehen von 12 Uhr auf die echte Zeit, danach springen sie ohne Animation
-{const c=$('.clock');c.classList.add('intro');requestAnimationFrame(()=>requestAnimationFrame(()=>{tick();setTimeout(()=>c.classList.remove('intro'),900)}))}setInterval(tick,10000);
+{const c=$('.clock');c.classList.add('intro');requestAnimationFrame(()=>requestAnimationFrame(()=>{tick();setTimeout(()=>c.classList.remove('intro'),900)}))}setInterval(tick,1000);
 let ziel=null;const p=n=>String(n).padStart(2,'0');
 // Countdown: Felder einmal bauen, danach nur geänderte Ziffern setzen
-const cdEl=$('#cd');cdEl.innerHTML=['Tage','Std','Min','Sek'].map(t=>`<div><b>00</b><small>${t}</small></div>`).join('');const cdB=[...cdEl.querySelectorAll('b')];
-function cd(){if(!ziel)return;let s=Math.max(0,(ziel-new Date())/1000|0);[s/86400|0,s%86400/3600|0,s%3600/60|0,s%60].forEach((v,i)=>{v=p(v);if(cdB[i].textContent!==v)cdB[i].textContent=v})}cd();setInterval(cd,1000);
+let cdB=[];function mkCd(){const e=$('#cd');if(!e)return;e.innerHTML=['Tage','Std','Min','Sek'].map(t=>`<div><b>00</b><small>${t}</small></div>`).join('');cdB=[...e.querySelectorAll('b')];cd()}
+function cd(){if(!ziel||!cdB.length)return;let s=Math.max(0,(ziel-new Date())/1000|0);[s/86400|0,s%86400/3600|0,s%3600/60|0,s%60].forEach((v,i)=>{v=p(v);if(cdB[i].textContent!==v)cdB[i].textContent=v})}cd();setInterval(cd,1000);
 // Netlify Forms: per fetch absenden, Bestätigung auf der Seite zeigen
 // Demo zusätzlich direkt in Backstage (Supabase), falls eingerichtet. Netlify Forms bleibt für die Mail.
 function insBackstage(f){const C=window.LIS_CONFIG||{};if(f.name!=='demo'||!C.SUPABASE_URL||!C.SUPABASE_ANON_KEY||f.querySelector('[name=bot-field]').value)return Promise.resolve();
