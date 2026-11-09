@@ -154,10 +154,10 @@ footer{border-top:1px solid var(--line);padding:clamp(48px,8vw,96px) var(--pad) 
 <form class="nf" name="demo" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-ok="Danke, ist angekommen."><input type="hidden" name="form-name" value="demo"><label class="hp">Nicht ausfüllen<input name="bot-field"></label><label>Artist-Name<input name="artist" required></label><label>E-Mail<input name="email" type="email" required></label><label>Genre<select name="genre"><option>Rap</option><option>Pop</option><option>R&amp;B</option><option>Anderes</option></select></label><label>Link zum Track<input name="link" type="url" placeholder="https://" required></label><label>Kurz über dich<textarea name="nachricht" rows="4"></textarea></label><button class="btn">Demo senden</button></form></div></section>
 
 <section class="page" id="p-kontakt"><h1 class="ph">Kontakt</h1>
-<div class="wrap two" style="padding-bottom:96px"><div><div class="feat"><span>Allgemein</span><a href="#">hallo@lismusic.de</a></div><div class="feat"><span>Booking</span><a href="#">booking@lismusic.de</a></div><div class="feat"><span>Instagram</span><a href="#">@lismusic</a></div></div>
+<div class="wrap two" style="padding-bottom:96px"><div><div class="feat"><span>Allgemein</span><a href="mailto:team@lismusic.de">team@lismusic.de</a></div><div class="feat"><span>Booking</span><a href="mailto:team@lismusic.de">team@lismusic.de</a></div><div class="feat"><span>Instagram</span><a href="#">@lismusic</a></div></div>
 <form class="nf" name="kontakt" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-ok="Danke, wir melden uns."><input type="hidden" name="form-name" value="kontakt"><label class="hp">Nicht ausfüllen<input name="bot-field"></label><label>Name<input name="name" required></label><label>E-Mail<input name="email" type="email" required></label><label>Nachricht<textarea name="nachricht" rows="5" required></textarea></label><button class="btn">Senden</button></form></div></section>
 
-<section class="page" id="p-impressum"><h1 class="ph">Impressum</h1><div class="wrap legal" style="padding-bottom:96px"><h3>Angaben gemäß § 5 DDG</h3><p>LIS Music GbR, Felix Nachname und Lasse Nachname<br>Straße Nr., 25469 Halstenbek</p><h3>Kontakt</h3><p>hallo@lismusic.de</p><p style="margin-top:20px">Platzhalter. Vor dem Livegang mit einem Impressum-Generator prüfen.</p></div></section>
+<section class="page" id="p-impressum"><h1 class="ph">Impressum</h1><div class="wrap legal" style="padding-bottom:96px"><h3>Angaben gemäß § 5 DDG</h3><p>LIS Music GbR, Felix Nachname und Lasse Nachname<br>Straße Nr., 25469 Halstenbek</p><h3>Kontakt</h3><p>team@lismusic.de</p><p style="margin-top:20px">Platzhalter. Vor dem Livegang mit einem Impressum-Generator prüfen.</p></div></section>
 <section class="page" id="p-datenschutz"><h1 class="ph">Datenschutz</h1><div class="wrap legal" style="padding-bottom:96px"><p>Platzhalter. Vor dem Livegang mit einem Datenschutz-Generator erstellen (Hosting, Formulare, Newsletter, eingebettete Inhalte).</p></div></section>
 </main>
 
@@ -219,6 +219,6 @@ return fetch(C.SUPABASE_URL.replace(/\/$/,'')+'/rest/v1/demos',{method:'POST',he
 document.querySelectorAll('form.nf').forEach(f=>f.addEventListener('submit',e=>{e.preventDefault();const backstage=insBackstage(f);
 fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(f)).toString()})
 .then(async r=>{if(!r.ok)throw 0;await backstage;f.innerHTML='<p class="big ok" role="status">'+f.dataset.ok+'</p>'})
-.catch(()=>alert('Senden hat nicht geklappt. Schreib uns bitte an hallo@lismusic.de.'))}));
+.catch(()=>alert('Senden hat nicht geklappt. Schreib uns bitte an team@lismusic.de.'))}));
 </script>
 </body></html>

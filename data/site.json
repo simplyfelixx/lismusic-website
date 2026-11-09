@@ -12,8 +12,6 @@
   {"titel": "Songtitel", "typ": "Single", "datum": null, "datum_text": "2027", "artist": "Artist Drei", "artist_slug": "artist-drei", "cover": null, "links": {}}
  ],
  "news": [
-  {"datum": "2026-11-20", "titel": "Erste Single kommt am 01.12.", "kategorie": "Release", "text": ""},
-  {"datum": "2026-11-04", "titel": "LIS Music ist gestartet", "kategorie": "Label", "text": ""},
-  {"datum": "2026-11-01", "titel": "Wir suchen neue Artists", "kategorie": "Demo", "text": ""}
+  {"datum": "2026-11-04", "titel": "LIS Music ist gestartet", "kategorie": "Label", "text": ""}
  ]
 }
