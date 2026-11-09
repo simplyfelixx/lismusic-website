@@ -39,3 +39,9 @@
   from = "/admin/*"
   to = "/backstage/"
   status = 301
+
+# Schriften ändern sich nie: lange cachen
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

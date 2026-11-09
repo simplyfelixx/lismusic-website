@@ -3,8 +3,16 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>LIS Music · Life Is Short</title>
 <meta name="description" content="LIS Music ist ein Independent Label aus Halstenbek bei Hamburg. Neue Artists, faire Deals.">
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="color-scheme" content="dark">
+<!-- Schriften liegen lokal (schneller, kein Schriftwechsel beim Laden, keine Daten an Google) -->
+<link rel="preload" href="/fonts/big-shoulders-display-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+@font-face{font-family:'Big Shoulders Display';font-style:normal;font-weight:700;font-display:block;src:url(/fonts/big-shoulders-display-700.woff2) format('woff2')}
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:block;src:url(/fonts/instrument-serif-italic.woff2) format('woff2')}
+@font-face{font-family:'Instrument Serif';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/instrument-serif.woff2) format('woff2')}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:400 600;font-display:swap;src:url(/fonts/manrope.woff2) format('woff2')}
 /* Überarbeitet nach unslop von Damir Sokolovsky (@heydamir), CC BY 4.0 */
 :root{--bg:#12110f;--panel:#1c1a18;--raised:#262421;--line:rgba(239,233,222,.08);--line2:rgba(239,233,222,.16);--tx:#efe9de;--se:#aaa398;--mu:#8a847a;--rd:#FF1F3D;--rd-ink:#E0112F;--ease:cubic-bezier(.23,1,.32,1);--ease-io:cubic-bezier(.77,0,.175,1);--rise:6px;--pad:clamp(16px,4vw,56px)}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -30,6 +38,7 @@ nav.main a.on::after{content:"";position:absolute;left:0;right:0;bottom:-8px;hei
 @media(max-width:900px){nav.main,.cta.d{display:none}.burger{display:block}
  nav.main.open{display:flex;position:fixed;inset:60px 0 0 0;background:var(--bg);flex-direction:column;padding:32px var(--pad);gap:16px;font-size:28px;transition:opacity .2s var(--ease),transform .2s var(--ease)}}
 @starting-style{nav.main.open{opacity:0;transform:translateY(calc(var(--rise) * -1.5))}}
+main:not(:has(.page.on))~footer{display:none}
 .page{display:none;min-height:100vh;padding-top:80px}
 .page.on{display:block;transition:opacity .2s var(--ease),transform .2s var(--ease)}
 @starting-style{.page.on{opacity:0;transform:translateY(var(--rise))}}
@@ -168,7 +177,7 @@ footer{border-top:1px solid var(--line);padding:clamp(48px,8vw,96px) var(--pad) 
 <div><h4>Info</h4><a href="#about">Über uns</a><a href="#kontakt">Kontakt</a><a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a></div></div>
 <div class="fbot"><span>© 2026 LIS Music · Life Is Short</span><span>Halstenbek, Hamburg</span></div></footer>
 
-<script src="/config.js"></script>
+<script src="/config.js" defer></script>
 <script>
 // Inhalte kommen aus data/site.json (wird in Backstage unter /backstage gepflegt und veröffentlicht)
 const $=s=>document.querySelector(s);
