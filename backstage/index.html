@@ -163,6 +163,43 @@ a.node:hover{border-color:var(--tx)}
 .bk-play:active{transform:scale(.95)}
 .bk-text{position:absolute;inset:34px 12px 8px;font-size:13px;color:var(--se);overflow:hidden;white-space:pre-wrap}
 .bk-in{padding:10px 12px 12px}.bk-t{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Song-Seite: Pfad, Kopf, Navigator und Schritte */
+.crumb{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--mu);margin-bottom:10px}
+.crumb a{color:var(--se);text-decoration:none}.crumb a:hover{color:var(--tx);text-decoration:underline}.crumb b{color:var(--tx);font-weight:600}
+.rkopf{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:16px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center}
+.rkopf h1{font-size:clamp(26px,5vw,38px)}
+.rsum{grid-column:1/-1;display:flex;gap:16px;flex-wrap:wrap;font-size:13px}
+.rbar{grid-column:1/-1;height:6px;background:var(--raised);border-radius:2px;overflow:hidden;display:flex}
+.rbar i{display:block;height:100%;transition:width .3s var(--ease)}.rbar .g{background:var(--ok)}.rbar .y{background:var(--warn)}.rbar .r{background:#ff5a6e}
+@media(max-width:620px){.rkopf{grid-template-columns:auto minmax(0,1fr)}.rkopf>.btn{grid-column:1/-1}}
+.rst{display:inline-flex;gap:6px;align-items:center;font-size:12px;font-weight:700;white-space:nowrap}
+.rst svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.s-ok.rst,.rm.s-ok{color:var(--ok)}.s-fehlt.rst,.rm.s-fehlt{color:var(--warn)}.s-falsch.rst,.rm.s-falsch{color:#ff5a6e}.s-optional.rst{color:var(--mu)}
+.dotok,.dotfehlt,.dotfalsch{width:10px;height:10px;border-radius:2px;display:inline-block;flex:none}
+.dotok{background:var(--ok)}.dotfehlt{background:var(--warn)}.dotfalsch{background:#ff5a6e}
+.rlayout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px;align-items:start}
+.rnav{position:sticky;top:12px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px}
+.rnav button{width:100%;display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;background:none;border:0;padding:11px 10px;border-radius:6px;cursor:pointer;min-height:46px}
+.rnav button[aria-current=true]{background:var(--raised);box-shadow:inset 0 0 0 1px var(--line2)}.rnav small{color:var(--mu);font-size:12px}
+.rgrp h2{margin:0 0 8px;display:flex;gap:10px;align-items:baseline}.rgrp h2 small{font:500 13px Manrope;text-transform:none;color:var(--mu)}
+.rstep{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin-bottom:8px}
+.rhead{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;text-align:left;background:none;border:0;padding:12px 14px;min-height:56px;cursor:default}
+.rt{min-width:0}.rt b{display:block;font-weight:700;line-height:1.35}.rt span{display:block}
+.rchev{display:none;transition:transform .2s var(--ease)}
+.rbody{padding:0 14px 14px}
+.rf{margin-bottom:12px}.rfn{font-size:13px;color:var(--se);margin-bottom:4px}
+.rf input[type=text]{width:100%;background:var(--bg);border:1.5px solid var(--line2);border-radius:6px;padding:9px 11px;font-size:15px}
+.rf[data-s=ok] input[type=text]{border-color:var(--ok)}.rf[data-s=fehlt] input[type=text]{border-color:var(--warn)}.rf[data-s=falsch] input[type=text]{border-color:#ff5a6e}
+.rm{font-size:13px;margin-top:5px;min-height:1.3em;overflow-wrap:anywhere}
+.rdl{display:grid;gap:6px;margin-bottom:6px}.rd{display:flex;gap:8px;align-items:center}.rdn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rdrop{display:block;border:1.5px dashed var(--line2);border-radius:8px;padding:14px;text-align:center;color:var(--se);cursor:pointer;position:relative;transition:border-color .15s}
+.rdrop:hover,.rdrop.ueber{border-color:var(--tx);color:var(--tx)}.rdrop input{position:absolute;opacity:0;width:1px;height:1px}
+.rdrop:focus-within{outline:2px solid var(--rd);outline-offset:2px}
+.rf[data-s=ok] .rdrop{border-style:solid;border-color:var(--ok)}.rf[data-s=falsch] .rdrop{border-color:#ff5a6e}.rf[data-s=fehlt] .rdrop{border-color:var(--warn)}
+.racts{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px}
+@media(min-width:801px){.rgrp:not(.sel){display:none}}
+@media(max-width:800px){.rlayout{grid-template-columns:minmax(0,1fr)}.rnav{display:none}.rgrp{margin-bottom:18px}
+.rhead{cursor:pointer;grid-template-columns:minmax(0,1fr) auto 18px}.rchev{display:block}.rstep.open .rchev{transform:rotate(180deg)}.rstep:not(.open) .rbody{display:none}}
 </style>
 </head>
 <body>
@@ -491,30 +528,179 @@ function vReleases() {
   <h2 style="margin-top:0">Geplant</h2><div class="liste">${kommend.map(releaseZeile).join('') || '<div class="leer">Nichts geplant.</div>'}</div>
   <h2>Veröffentlicht</h2><div class="liste">${raus.map(releaseZeile).join('') || '<div class="leer">Noch nichts veröffentlicht.</div>'}</div>`;
 }
+/* ---------- Song-Seite: Checkliste mit Feldern (Navigator am Rechner, Aufklappliste am Handy) ---------- */
+let relBereich = null, relBereichFuer = null; const relOffen = new Set();
+const ISRC_RE = /^[A-Z]{2}-?[A-Z0-9]{3}-?\d{2}-?\d{5}$/;
+const PRESAVE_RE = /(distrokid\.com|hyperfollow|hypeddit|toneden|feature\.fm|ffm\.to|linktr\.ee|smarturl\.it|fanlink|lnk\.to|orcd\.co|spotify\.com)/i;
+const AUDIO_RE = /\.(wav|flac|aiff?|mp3|m4a)$/i, LOSSLESS_RE = /\.(wav|flac|aiff?)$/i;
+const FELD_NAME = { isrc: 'ISRC', upc: 'UPC / EAN', presave: 'Pre-Save-Link' };
+const SCHRITTE = [
+  [/^Mix und Master/, { felder: [{ k: 'datei', art: 'master', t: 'Master' }] }],
+  [/^Instrumental/, { optional: true, felder: [{ k: 'datei', art: 'instrumental', t: 'Instrumental' }] }],
+  [/^Cover fertig/, { felder: [{ k: 'datei', art: 'cover', t: 'Cover' }] }],
+  [/^ISRC und UPC/, { felder: [{ k: 'isrc' }, { k: 'upc' }] }],
+  [/^Pre-Save-Link/, { felder: [{ k: 'presave' }], aktionen: [['HyperFollow bei DistroKid', 'https://distrokid.com/hyperfollow/']] }],
+  [/^Pressefoto/, { optional: true, felder: [{ k: 'datei', art: 'foto', t: 'Pressefotos' }] }],
+  [/^Bei DistroKid hochladen/, { aktionen: [['DistroKid öffnen', 'https://distrokid.com/new/']] }],
+  [/^Splits bei DistroKid/, { aktionen: [['DistroKid öffnen', 'https://distrokid.com/mymusic/']] }],
+  [/^Spotify-Pitch/, { aktionen: [['Spotify for Artists', 'https://artists.spotify.com/']] }],
+  [/^Release auf lismusic\.de/, { aktionen: [['Zum Website-Bereich', '#website']] }],
+];
+const schrittVon = titel => (SCHRITTE.find(([re]) => re.test(titel)) || [])[1] || {};
+function feldWert(f, r) {
+  if (f.k === 'isrc') return r.isrc || '';
+  if (f.k === 'upc') return r.upc || '';
+  if (f.k === 'presave') return r.links?.presave || '';
+  return S.dateien.filter(d => d.release_id === r.id && d.art === f.art);
+}
+function feldPruefen(f, r, wert = feldWert(f, r)) {
+  if (f.k === 'datei') {
+    if (!wert.length) return { s: 'fehlt', m: 'Noch keine Datei.' };
+    const d = wert[wert.length - 1];
+    if (f.art === 'master' && !LOSSLESS_RE.test(d.name)) return { s: 'falsch', m: 'Bitte WAV oder FLAC, kein MP3.' };
+    if (f.art === 'cover' && d.breite && d.hoehe) {
+      if (d.breite !== d.hoehe) return { s: 'falsch', m: `Das Cover muss quadratisch sein (ist ${d.breite} × ${d.hoehe}).` };
+      if (d.breite < 3000) return { s: 'falsch', m: `Mindestens 3000 × 3000 Pixel nötig (ist ${d.breite} × ${d.hoehe}).` };
+    }
+    return { s: 'ok', m: wert.length > 1 ? `${wert.length} Dateien, zuletzt ${d.name}` : d.name };
+  }
+  const v = String(wert).trim();
+  if (!v) return { s: 'fehlt', m: 'Noch nichts eingetragen.' };
+  if (f.k === 'isrc') return ISRC_RE.test(v.toUpperCase()) ? { s: 'ok', m: 'Format stimmt.' } : { s: 'falsch', m: 'Eine ISRC hat 12 Zeichen, z. B. DE-A1B-26-00001.' };
+  if (f.k === 'upc') return /^\d{12,13}$/.test(v) ? { s: 'ok', m: 'Format stimmt.' } : { s: 'falsch', m: 'Nur Ziffern, 12 oder 13 Stück.' };
+  if (f.k === 'presave') {
+    if (!/^https:\/\//i.test(v)) return { s: 'falsch', m: 'Der Link muss mit https:// beginnen.' };
+    return PRESAVE_RE.test(v) ? { s: 'ok', m: 'Link sieht gut aus.' } : { s: 'falsch', m: 'Das sieht nicht nach einem Pre-Save-Dienst aus (z. B. DistroKid HyperFollow).' };
+  }
+  return { s: 'ok', m: '' };
+}
+function schrittStatus(x, r) {
+  const c = schrittVon(x.titel);
+  if (c.felder) {
+    const rs = c.felder.map(f => feldPruefen(f, r).s);
+    if (rs.includes('falsch')) return 'falsch';
+    if (rs.every(s => s === 'ok') || x.erledigt) return 'ok';
+    if (c.optional && rs.every(s => s === 'fehlt')) return 'optional';
+    return 'fehlt';
+  }
+  if (x.erledigt) return 'ok';
+  return 'fehlt';   // überfällig steht in der Zeile darunter; rot bleibt für falsche Eingaben
+}
+const ST_ICON = { ok: '<svg viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5"/></svg>', fehlt: '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M8 5v3.4M8 11h.01"/></svg>', falsch: '<svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg>', optional: '<svg viewBox="0 0 16 16"><path d="M4 8h8"/></svg>' };
+function stWort(s, hatFeld) { return s === 'ok' ? (hatFeld ? 'Passt' : 'Erledigt') : s === 'fehlt' ? (hatFeld ? 'Fehlt noch' : 'Offen') : s === 'falsch' ? (hatFeld ? 'Bitte prüfen' : 'Überfällig') : 'Optional'; }
+const stHtml = (s, hatFeld) => `<span class="rst s-${s}">${ST_ICON[s]}${stWort(s, hatFeld)}</span>`;
+function feldHtml(f, r) {
+  const w = feldWert(f, r), z = feldPruefen(f, r, w), name = f.t || FELD_NAME[f.k];
+  let h;
+  if (f.k === 'datei') {
+    const acc = f.art === 'cover' || f.art === 'foto' ? 'image/*' : 'audio/*';
+    h = `${w.length ? `<div class="rdl">${w.map(d => `<div class="rd"><span class="rdn">${esc(d.name)}${d.breite ? ` <span class="sm mu">${d.breite} × ${d.hoehe}</span>` : ''}</span><button type="button" class="btn g k" data-open-datei="${d.id}">Öffnen</button><button type="button" class="btn g k" data-fdel="${d.id}" aria-label="${esc(d.name)} entfernen">Entfernen</button></div>`).join('')}</div>` : ''}
+      <label class="rdrop" data-rdrop="${f.art}"><input type="file" accept="${acc}" data-ff="${f.art}" multiple><span>${w.length ? 'Weitere Datei hierher ziehen oder klicken' : 'Datei hierher ziehen oder klicken'}</span></label>`;
+  } else {
+    h = `<input data-fv="${f.k}" type="text" autocomplete="off" aria-label="${esc(name)}" inputmode="${f.k === 'upc' ? 'numeric' : f.k === 'presave' ? 'url' : 'text'}" placeholder="${f.k === 'presave' ? 'https://' : f.k === 'isrc' ? 'DE-A1B-26-00001' : '12 oder 13 Ziffern'}" value="${esc(w)}">`;
+  }
+  return `<div class="rf" data-s="${z.s}" data-key="${f.k}"><div class="rfn">${esc(name)}</div>${h}<div class="rm s-${z.s}" role="status">${esc(z.m)}</div></div>`;
+}
+function schrittHtml(x, r) {
+  const c = schrittVon(x.titel), s = schrittStatus(x, r), h = iso(heute()), offen = relOffen.has(x.id);
+  const aktionen = (c.aktionen || []).map(([t, u]) => `<a class="btn g k" href="${esc(u)}" ${u.startsWith('http') ? 'target="_blank" rel="noopener"' : ''}>${esc(t)}${u.startsWith('http') ? ' ↗' : ''}</a>`).join('');
+  return `<div class="rstep s-${s} ${offen ? 'open' : ''}"><button type="button" class="rhead" data-rstep="${x.id}" aria-expanded="${offen}"><span class="rt"><b>${esc(x.titel)}</b>${x.faellig ? `<span class="sm mu">fällig ${dt(x.faellig)}${!x.erledigt && x.faellig < h ? ' · überfällig' : ''}</span>` : ''}</span>${stHtml(s, !!c.felder)}<svg class="rchev" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6l5 5 5-5"/></svg></button>
+  <div class="rbody">${(c.felder || []).map(f => feldHtml(f, r)).join('')}
+    <div class="racts"><label class="cb" style="margin:0"><input type="checkbox" data-erledigt="${x.id}" ${x.erledigt ? 'checked' : ''}> Als erledigt abhaken</label>${aktionen}<button type="button" class="btn g k" data-edit-aufgabe="${x.id}">Bearbeiten</button></div></div></div>`;
+}
 function vRelease(id) {
   const r = releaseVon(id); if (!r) return '<p class="leer">Release nicht gefunden.</p>';
   const ar = artistVon(r.artist_id), auf = S.aufgaben.filter(x => x.release_id === r.id).sort((a, b) => (a.faellig || '9').localeCompare(b.faellig || '9') || a.sortierung - b.sortierung);
-  const f = fortschritt(r.id), cont = S.content.filter(c => c.release_id === r.id);
+  const cont = S.content.filter(c => c.release_id === r.id);
   const gruppen = Object.keys(BEREICH).map(b => [b, auf.filter(x => x.bereich === b)]).filter(([, l]) => l.length);
+  const stat = Object.fromEntries(auf.map(x => [x.id, schrittStatus(x, r)])), n = auf.length || 1;
+  const zaehl = k => auf.filter(x => stat[x.id] === k).length;
+  const pg = b => { const l = gruppen.find(g => g[0] === b)[1].map(x => stat[x.id]); return l.includes('falsch') ? 'falsch' : l.includes('fehlt') ? 'fehlt' : 'ok'; };
+  if (relBereichFuer !== r.id || !gruppen.some(g => g[0] === relBereich)) {
+    relBereichFuer = r.id; relBereich = (gruppen.find(([b]) => pg(b) !== 'ok') || gruppen[0] || [])[0] || null;
+    relOffen.clear(); const erst = auf.find(x => stat[x.id] === 'falsch' || stat[x.id] === 'fehlt'); if (erst) relOffen.add(erst.id);
+  }
   const links = LINKS_RELEASE.filter(([k]) => okUrl(r.links?.[k])).map(([k, t]) => `<a class="pill" href="${esc(r.links[k])}" target="_blank" rel="noopener">${t}</a>`).join(' ');
-  return `<p><a href="${ar ? `#artist/${ar.id}` : '#releases'}" class="sm mu">← ${esc(ar?.name || 'Releases')}</a></p>
-  <div class="kopf"><div><h1>${esc(r.titel)}</h1><p class="mu">${esc(r.typ)} · ${esc(ar?.name || 'ohne Artist')} · ${r.datum ? `${dt(r.datum)} (${relTag(r.datum)})` : esc(r.datum_text || 'ohne Datum')}</p></div><button class="btn g" data-edit-release="${r.id}">Bearbeiten</button></div>
-  <div class="zwei"><div><div class="big-thumb">${img(r.cover, 'Cover') || '♪'}</div>
-   <div class="card" style="margin-top:12px"><span class="pill ${r.status === 'veroeffentlicht' ? 'gruen' : ''}">${RELEASE_STATUS[r.status]}</span> ${r.oeffentlich ? '<span class="pill">auf Website</span>' : '<span class="pill">nicht auf Website</span>'}
-   ${r.isrc || r.upc ? `<p class="sm" style="margin-top:8px">${r.isrc ? `ISRC <code>${esc(r.isrc)}</code><br>` : ''}${r.upc ? `UPC <code>${esc(r.upc)}</code>` : ''}</p>` : ''}
-   ${links ? `<p style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">${links}</p>` : ''}
-   ${r.notizen ? `<p class="sm mu" style="margin-top:10px;white-space:pre-wrap">${esc(r.notizen)}</p>` : ''}</div></div>
-  <div><div class="kopf" style="margin:0 0 8px"><h2 style="margin:0">Checkliste ${f !== null ? `<span class="mu" style="font-size:18px">${f} %</span>` : ''}</h2>
-    <div style="display:flex;gap:6px">${!auf.length ? `<button class="btn k" data-vorlage="${r.id}">Checkliste anlegen</button>` : ''}<button class="btn g k" data-neu="aufgabe" data-release="${r.id}">+ Aufgabe</button></div></div>
-   ${f !== null ? `<div class="balken" style="margin-bottom:12px"><i style="width:${f}%"></i></div>` : ''}
-   ${!auf.length ? `<div class="card mu">Noch keine Checkliste. ${r.datum ? 'Die Vorlage legt alle Schritte vom Master bis zu den TikToks mit Fristen an.' : 'Trag zuerst ein Release-Datum ein, dann bekommen die Schritte Fristen.'}</div>` : ''}
-   ${gruppen.map(([b, l]) => `<h3 style="margin:16px 0 6px" class="mu">${BEREICH[b]}</h3><div class="liste">${l.map(x => aufgabeZeile(x)).join('')}</div>`).join('')}
-   <h2>TikTok & Content</h2><div class="liste">${cont.map(contentZeile).join('') || '<div class="leer">Noch kein Content geplant.</div>'}</div>
+  return `<nav class="crumb" aria-label="Pfad"><a href="#artists">Artists</a><span aria-hidden="true">›</span>${ar ? `<a href="#artist/${ar.id}">${esc(ar.name)}</a>` : '<a href="#releases">Releases</a>'}<span aria-hidden="true">›</span><b aria-current="page">${esc(r.titel)}</b></nav>
+  <div class="rkopf"><div class="thumb" style="width:64px;height:64px;border-radius:6px">${img(r.cover, 'Cover') || '♪'}</div>
+    <div class="wachs"><h1>${esc(r.titel)}</h1><p class="mu">${esc(r.typ)} · ${esc(ar?.name || 'ohne Artist')} · ${r.datum ? `${dt(r.datum)} (${relTag(r.datum)})` : esc(r.datum_text || 'ohne Datum')}</p>
+      <p style="margin-top:6px"><span class="pill ${r.status === 'veroeffentlicht' ? 'gruen' : ''}">${RELEASE_STATUS[r.status]}</span> ${r.oeffentlich ? '<span class="pill">auf Website</span>' : '<span class="pill">nicht auf Website</span>'} ${links}</p></div>
+    <button class="btn g" data-edit-release="${r.id}">Bearbeiten</button>
+    ${auf.length ? `<div class="rsum"><span class="rst s-ok">${ST_ICON.ok}<b>${zaehl('ok')}</b> passt</span><span class="rst s-fehlt">${ST_ICON.fehlt}<b>${zaehl('fehlt')}</b> fehlt</span><span class="rst s-falsch">${ST_ICON.falsch}<b>${zaehl('falsch')}</b> prüfen</span></div>
+    <div class="rbar" aria-hidden="true"><i class="g" style="width:${zaehl('ok') / n * 100}%"></i><i class="r" style="width:${zaehl('falsch') / n * 100}%"></i><i class="y" style="width:${zaehl('fehlt') / n * 100}%"></i></div>` : ''}</div>
+  ${!auf.length ? `<div class="card mu" style="margin-bottom:16px">Noch keine Checkliste. ${r.datum ? 'Die Vorlage legt alle Schritte vom Master bis zu den TikToks mit Fristen an.' : 'Trag zuerst ein Release-Datum ein, dann bekommen die Schritte Fristen.'} <p style="margin-top:10px"><button class="btn" data-vorlage="${r.id}">Checkliste anlegen</button></p></div>` : `
+  <div class="rlayout"><nav class="rnav" aria-label="Bereiche">${gruppen.map(([b, l]) => `<button type="button" data-rb="${b}" aria-current="${relBereich === b}"><span class="dot${pg(b)}"></span><span>${BEREICH[b]}</span><small>${l.filter(x => stat[x.id] === 'ok').length}/${l.length}</small></button>`).join('')}</nav>
+    <div class="rsteps">${gruppen.map(([b, l]) => `<section class="rgrp ${relBereich === b ? 'sel' : ''}"><h2>${BEREICH[b]}<small>${l.filter(x => stat[x.id] === 'ok').length} von ${l.length}</small></h2>${l.map(x => schrittHtml(x, r)).join('')}</section>`).join('')}
+    <p><button class="btn g k" data-neu="aufgabe" data-release="${r.id}">+ Eigener Schritt</button></p></div></div>`}
+  <h2>TikTok & Content</h2><div class="liste">${cont.map(contentZeile).join('') || '<div class="leer">Noch kein Content geplant.</div>'}</div>
    <p style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><button class="btn g k" data-neu="content" data-release="${r.id}">+ Content-Idee</button><button class="btn g k" data-content-vorschlag="${r.id}">Content-Vorschläge anlegen</button></p>
    ${dateienHtml(r)}
    ${biblioKurz(null, r.id)}
-  </div></div>`;
+   ${r.notizen ? `<h2>Notizen</h2><div class="card sm mu" style="white-space:pre-wrap">${esc(r.notizen)}</div>` : ''}`;
 }
+async function autoErledigt(r) {
+  for (const x of S.aufgaben.filter(a => a.release_id === r.id && !a.erledigt)) {
+    const c = schrittVon(x.titel); if (!c.felder) continue;
+    if (c.felder.every(f => feldPruefen(f, r).s === 'ok')) {
+      const w = { erledigt: true, erledigt_am: new Date().toISOString() };
+      const { error } = await sb.from('aufgaben').update(w).eq('id', x.id); if (!error) Object.assign(x, w);
+    }
+  }
+}
+async function feldSpeichern(rid, key, wert) {
+  const r = releaseVon(rid); wert = wert.trim(); let w;
+  if (key === 'isrc') w = { isrc: wert.toUpperCase() };
+  else if (key === 'upc') w = { upc: wert };
+  else if (key === 'presave') { const l = { ...(r.links || {}) }; if (wert) l.presave = wert; else delete l.presave; w = { links: l }; }
+  else return;
+  const { error } = await sb.from('releases').update(w).eq('id', rid);
+  if (error) return toast('Speichern fehlgeschlagen: ' + error.message);
+  Object.assign(r, w); await autoErledigt(r); render();
+}
+async function stepDateien(rid, art, files) {
+  const r = releaseVon(rid); let n = 0;
+  for (const f of files) {
+    if (f.size > 50 * 1024 * 1024) { toast(`${f.name} ist über 50 MB. Bitte als Link ablegen.`); continue; }
+    toast(`Lädt ${f.name} hoch …`);
+    let breite = null, hoehe = null;
+    if ((f.type || '').startsWith('image')) { try { const b = await createImageBitmap(f); breite = b.width; hoehe = b.height; } catch {} }
+    const pfad = `dateien/${rid}/${Date.now()}-${f.name.replace(/[^a-zA-Z0-9._-]+/g, '-')}`;
+    const up = await sb.storage.from('medien').upload(pfad, f, { contentType: f.type || undefined });
+    if (up.error) { toast(`${f.name}: ${up.error.message}`); continue; }
+    const row = { release_id: rid, art, name: f.name, pfad, groesse: f.size };
+    let ins = await sb.from('dateien').insert({ ...row, breite, hoehe }).select().single();
+    if (ins.error) ins = await sb.from('dateien').insert(row).select().single();   // Größenspalten gibt es erst nach update-04.sql
+    if (ins.error) { toast('Fehler: ' + ins.error.message); continue; }
+    S.dateien.push(ins.data); n++;
+    if (art === 'cover' && breite) { try { const p = await bildHochladen(f, 'covers'); const u = await sb.from('releases').update({ cover: p }).eq('id', rid); if (!u.error) r.cover = p; } catch {} }
+  }
+  if (n) { await autoErledigt(r); toast(`${n} Datei${n > 1 ? 'en' : ''} gespeichert`); }
+  render();
+}
+async function stepDateiLoeschen(id) {
+  const d = S.dateien.find(x => x.id === id); if (!d || !confirm('Datei wirklich entfernen?')) return;
+  if (d.pfad) await sb.storage.from('medien').remove([d.pfad]);
+  const { error } = await sb.from('dateien').delete().eq('id', id); if (error) return toast('Fehler: ' + error.message);
+  S.dateien = S.dateien.filter(x => x.id !== id); render();
+}
+function bindRelDrops() {
+  const rid = +location.hash.split('/')[1];
+  $$('[data-rdrop]').forEach(el => {
+    el.ondragover = e => { e.preventDefault(); el.classList.add('ueber'); };
+    el.ondragleave = () => el.classList.remove('ueber');
+    el.ondrop = e => { e.preventDefault(); el.classList.remove('ueber'); stepDateien(rid, el.dataset.rdrop, [...e.dataTransfer.files]); };
+  });
+}
+document.addEventListener('input', e => {
+  const k = e.target.dataset?.fv; if (!k) return;
+  const r = releaseVon(+location.hash.split('/')[1]), box = e.target.closest('.rf'); if (!r || !box) return;
+  const z = feldPruefen({ k }, r, e.target.value); box.dataset.s = z.s; const m = box.querySelector('.rm'); m.className = 'rm s-' + z.s; m.textContent = z.m;
+});
+document.addEventListener('change', e => {
+  const t = e.target, rid = +location.hash.split('/')[1];
+  if (t.dataset?.fv) feldSpeichern(rid, t.dataset.fv, t.value);
+  else if (t.dataset?.ff) { const f = [...t.files]; t.value = ''; stepDateien(rid, t.dataset.ff, f); }
+});
 async function vorlageAnlegen(rid) {
   const r = releaseVon(rid);
   const zeilen = VORLAGE.map(([bereich, tage, titel], i) => ({ release_id: rid, bereich, tage, titel, sortierung: i, faellig: r.datum ? plusTage(r.datum, tage) : null }));
@@ -1006,7 +1192,7 @@ function render() {
   const h = location.hash.slice(1) || 'heute', [v, id] = h.split('/');
   const views = { heute: vHeute, pipeline: vPipeline, artists: vArtists, artist: () => vArtist(+id), releases: vReleases, release: () => vRelease(+id), content: vContent, bibliothek: vBibliothek, news: vNews, demos: vDemos, website: vWebsite };
   $('#view').innerHTML = (views[v] || vHeute)();
-  bindDateien(); bindBib();
+  bindDateien(); bindBib(); bindRelDrops();
   const aktiv = v === 'artist' ? 'artists' : v === 'release' ? 'releases' : (views[v] ? v : 'heute');
   $$('#menu a[data-v]').forEach(a => a.classList.toggle('on', a.dataset.v === aktiv));
   $('#mehrbtn').classList.toggle('on', !!$(`#menu a.sek[data-v="${aktiv}"]`)); mehrZu();
@@ -1039,6 +1225,9 @@ $('#main').addEventListener('click', async e => {
   else if (ds.neu === 'datei-link') dateiForm({}, { release_id: +ds.release });
   else if (ds.editDatei) dateiForm(S.dateien.find(x => x.id === +ds.editDatei));
   else if (ds.openDatei) dateiOeffnen(+ds.openDatei);
+  else if (ds.rb) { relBereich = ds.rb; render(); }
+  else if (ds.rstep) { const i = +ds.rstep; relOffen.has(i) ? relOffen.delete(i) : relOffen.add(i); render(); }
+  else if (ds.fdel) stepDateiLoeschen(+ds.fdel);
   else if (ds.contentVorschlag) contentVorschlaege(+ds.contentVorschlag);
   else if (ds.pv) { pipeAnsicht = ds.pv; try { localStorage.setItem('pipeAnsicht', ds.pv); } catch {} render(); }
   else if (ds.move) {

@@ -27,7 +27,9 @@ Einmalig ca. 30 Minuten. Reihenfolge einhalten.
 
 **Dann `supabase/update-03.sql`** (Bibliothek: Beats per Link oder Datei mit BPM, Texte). Ohne diese Datei zeigt der Menüpunkt Bibliothek nur einen Hinweis.
 
-Spätere Änderungen kommen als `update-04.sql` … und werden genauso ausgeführt.
+**Zuletzt `supabase/update-04.sql`** (Bildgröße bei Dateien, damit Backstage das Cover auf 3000 × 3000 Pixel prüfen kann). Ohne die Datei läuft alles, nur diese Prüfung fehlt.
+
+Spätere Änderungen kommen als `update-05.sql` … und werden genauso ausgeführt.
 
 ## 3. Accounts für Felix und Lasse
 
